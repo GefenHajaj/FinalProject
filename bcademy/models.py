@@ -10,7 +10,7 @@ class Subject(models.Model):
 
 class Test(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    date_created = models.DateTimeField('Date Created')
+    date_created = models.DateTimeField('Date Created', auto_now_add=True)
     date_taken = models.DateTimeField('Date due')
     # In the future - will be a summerize object:
     summerize = models.CharField(max_length=1000)
