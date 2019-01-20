@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:bcademy/tests_page.dart';
+import 'package:bcademy/placeholder.dart';
 
 /// The function that's called when we run the app
 void main() => runApp(BCademy());
@@ -19,6 +21,7 @@ class BCademy extends StatelessWidget {
   }
 }
 
+/// The home page of the app
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
@@ -32,69 +35,33 @@ class _HomePageState extends State<HomePage> {
 
   // All main pages in the app
   final _mainPages = [
-    Text('Index 0: Home'),
-    Text('Index 1: Feed'),
-    Text('Index 2: Upload'),
-    Text('Index 3: Study'),
-    Text('Index 4: Profile')
+    TestsPage(),
+    placeHolder("Feed Page"),
+    placeHolder("Upload Page"),
+    placeHolder("Study Page"),
+    placeHolder("Profile Page"),
   ];
 
+
+
+  // Changing the shown page
   void _onIconTap(int pageIndex) {
     setState(() {
       _selectedPageIndex = pageIndex;
     });
   }
 
-  Widget _placeHolder(String title) {
-    const _padding = EdgeInsets.all(16.0);
-
-    return SingleChildScrollView(
-      child: Container(
-        constraints: BoxConstraints.expand(height: 400, width: 800),
-        margin: _padding,
-        padding: _padding,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.0),
-          color: Colors.blue,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.build,
-                size: 180.0,
-                color: Colors.white,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "$title\nUnder Construction!",
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline.copyWith(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BCademy', textAlign: TextAlign.center,),
+        title: Text('BCademy', textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
         centerTitle: true,
         elevation: 0.0,
+        backgroundColor: Colors.lightBlueAccent,
       ),
       body: Center(
-        child: _placeHolder(_mainPages[_selectedPageIndex].data),
+        child: _mainPages[_selectedPageIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
