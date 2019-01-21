@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:bcademy/tests_page.dart';
 import 'package:bcademy/placeholder.dart';
+import 'package:bcademy/study_page.dart';
+import 'package:bcademy/test.dart';
 
 /// The function that's called when we run the app
 void main() => runApp(BCademy());
@@ -31,24 +33,49 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // The default page
-  int _selectedPageIndex = 1;
+  int _selectedPageIndex = 0;
 
-  // All main pages in the app
-  final _mainPages = [
-    TestsPage(),
-    placeHolder("Feed Page"),
-    placeHolder("Upload Page"),
-    placeHolder("Study Page"),
-    placeHolder("Profile Page"),
-  ];
-
-
-
-  // Changing the shown page
+  /// Changing the shown page
   void _onIconTap(int pageIndex) {
     setState(() {
+      print(pageIndex);
       _selectedPageIndex = pageIndex;
     });
+  }
+
+  /// When tapping a test, we are sent to the studying page!
+  void _onTestTap(Test test) {
+    setState(() {
+      Navigator.of(context).push(MaterialPageRoute<Null>(
+        builder: (BuildContext context) {
+          return StudyPage(test: test);
+        }
+      ));
+    });
+  }
+
+  /// All main pages in the app
+  Widget _getPage(int index) {
+    switch (index) {
+      case 0: {
+          return TestsPage(onTestTap: _onTestTap);
+        }
+        break;
+      case 1: {
+        return placeHolder("Feed Page");
+      }
+      break;
+      case 2: {
+        return placeHolder("Upload Page");
+      }
+      break;
+      case 3: {
+        return placeHolder("Profile Page");
+      }
+      break;
+    }
+
+    return Text("Got an index out of range 0-3. Woops!");
   }
 
   @override
@@ -61,14 +88,13 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: Center(
-        child: _mainPages[_selectedPageIndex],
+        child: _getPage(_selectedPageIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
             BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('Feed')),
             BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('Upload')),
-            BottomNavigationBarItem(icon: Icon(Icons.book), title: Text('Study')),
             BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('Profile')),
           ],
         currentIndex: _selectedPageIndex,

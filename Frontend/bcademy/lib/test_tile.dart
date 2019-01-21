@@ -4,7 +4,7 @@ import 'package:bcademy/test.dart';
 
 const _rowHeight = 100.0;
 final _borderRadius = BorderRadius.circular(20.0);
-final _Color = Colors.blue;
+final _color = Colors.blue;
 final _highlightColor = Colors.lightBlue;
 final _splashColor = Colors.lightBlueAccent;
 
@@ -25,11 +25,11 @@ class TestTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Material(
-        color: _Color,
+        color: _color,
         borderRadius: _borderRadius,
         child: InkWell(
           borderRadius: _borderRadius,
-          onTap: () => print("TAP!"),
+          onTap: () {this.onTap(this.test);},
           highlightColor: _highlightColor,
           splashColor: _splashColor,
           child: Container(
