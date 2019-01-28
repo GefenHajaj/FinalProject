@@ -140,10 +140,6 @@ class SmallTopicViews:
         return HttpResponse(json.dumps(info, ensure_ascii=False))
 
 
-
-
-
-
 def test_details(request, pk):
     """
     Specific test details.
@@ -163,33 +159,3 @@ def test_details(request, pk):
         'small_topics': str(small_topics_pks)
     }
     return HttpResponse(json.dumps(one_test_details))
-
-
-
-
-
-def get_all_small_topics(request, pk):
-    """
-
-    :param pk: int, subject pk
-    """
-    subject = get_object_or_404(Subject, pk=pk)
-    all_small_topics = {}
-    for small_topic in subject.smalltopic_set.all():
-        all_small_topics[small_topic.pk] = small_topic.title
-    return HttpResponse(json.dumps(all_small_topics, ensure_ascii=False))
-
-
-def get_small_topic(request, pk):
-    """
-    Returns the small topic's order num and text.
-    URL: bcademy/smalltopic/(pk)
-    :param pk: int, SmallTopic's pk
-    """
-    small_topic = get_object_or_404(SmallTopic, pk=pk)
-    info = {small_topic.order: small_topic.info}
-    return HttpResponse(json.dumps(info, ensure_ascii=False))
-
-###############################################################################
-# POST REQUESTS
-###############################################################################
