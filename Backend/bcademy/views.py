@@ -1,13 +1,9 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import reverse, get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils import timezone
 import json
 from.models import *
-from django.views.decorators.csrf import csrf_exempt
-
-###############################################################################
-# GET REQUESTS
-###############################################################################
 
 
 def index(request):
@@ -17,8 +13,6 @@ def index(request):
     """
     urlpatterns = {
         'index': reverse('index'),
-        'get_future_tests': reverse('get_future_tests'),
-        'test_details': 'bcademy/tests/int-pk/'
     }
     json_obj = json.dumps(urlpatterns)
     return HttpResponse(json_obj)
@@ -137,6 +131,22 @@ class SmallTopicViews:
         info = {}
         for small_topic in small_topics:
             info[small_topic.pk] = small_topic.title
+        return HttpResponse(json.dumps(info, ensure_ascii=False))
+
+
+class QuestionViews:
+    @staticmethod
+    def get_test_questions(request, pk):
+        """
+        Get all pk and texts of questions of a specific test.
+        Very useful.
+        """
+        test = get_object_or_404(Test, pk=pk)
+        all_small_topics = test.small_topics.all()
+        info = {}
+        for small_topic in all_small_topics:
+            for question in small_topic.question_set.all():
+                info[question.pk] = question.question_text
         return HttpResponse(json.dumps(info, ensure_ascii=False))
 
 

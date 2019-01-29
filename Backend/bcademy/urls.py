@@ -44,4 +44,9 @@ urlpatterns = [
     path('tests/<int:pk>/smalltopics/',
          views.SmallTopicViews.get_test_small_topics,
          name='get_test_small_topics'),
+
+    # EX: bcademy/tests/1/questions/
+    path('tests/<int:pk>/questions/',
+         views.QuestionViews.get_test_questions,
+         name='get_test_questions'),
 ]
