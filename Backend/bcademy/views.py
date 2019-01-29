@@ -1,13 +1,11 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import reverse, get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils import timezone
+from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
 import json
 from.models import *
-from django.views.decorators.csrf import csrf_exempt
-
-###############################################################################
-# GET REQUESTS
-###############################################################################
 
 
 def index(request):
@@ -17,8 +15,6 @@ def index(request):
     """
     urlpatterns = {
         'index': reverse('index'),
-        'get_future_tests': reverse('get_future_tests'),
-        'test_details': 'bcademy/tests/int-pk/'
     }
     json_obj = json.dumps(urlpatterns)
     return HttpResponse(json_obj)
@@ -84,8 +80,8 @@ class UserViews:
                                     email_address=info['email'],
                                     password=info['password'])
                 return HttpResponse("User created successfully.")
-        except KeyError:
-            return HttpResponseBadRequest("Could not create user.")
+        except KeyError as e:
+            return HttpResponseBadRequest("Could not create user. " + str(e))
 
 
 class SubjectViews:
@@ -140,22 +136,82 @@ class SmallTopicViews:
         return HttpResponse(json.dumps(info, ensure_ascii=False))
 
 
-def test_details(request, pk):
-    """
-    Specific test details.
-    URL: bcademy/tests/(pk)/
-    """
-    test = get_object_or_404(Test, pk=pk)
-    small_topics_pks = []
-    for small_topic in test.small_topics.all():
-        small_topics_pks.append(small_topic.pk)
+class QuestionViews:
+    @staticmethod
+    def get_test_questions(request, pk):
+        """
+        Get all pk and texts of questions of a specific test.
+        Very useful.
+        """
+        test = get_object_or_404(Test, pk=pk)
+        all_small_topics = test.small_topics.all()
+        info = {}
+        for small_topic in all_small_topics:
+            for question in small_topic.question_set.all():
+                info[question.pk] = question.question_text
+        return HttpResponse(json.dumps(info, ensure_ascii=False))
 
-    one_test_details = {
-        'subject': test.subject.name,
-        'date_created': str(test.date_created.date()),
-        'date_taken': str(test.date_taken.date()),
-        'summerize': test.summerize,
-        'user_pk': test.user.pk,
-        'small_topics': str(small_topics_pks)
-    }
-    return HttpResponse(json.dumps(one_test_details))
+    @staticmethod
+    def get_question(request, pk):
+        """
+        Get all the information about a specific question.
+        """
+        question = get_object_or_404(Question, pk=pk)
+        info = {
+            'text': str(question.question_text),
+            'answer1': str(question.answer1),
+            'answer2': str(question.answer2),
+            'answer3': str(question.answer3),
+            'answer4': str(question.answer4)
+        }
+        return HttpResponse(json.dumps(info, ensure_ascii=False))
+
+
+class TestViews:
+    @staticmethod
+    def get_test(request, pk):
+        """
+        Get all info about a given test.
+        """
+        test = get_object_or_404(Test, pk=pk)
+        small_topics_pks = []
+        for small_topic in test.small_topics.all():
+            small_topics_pks.append(small_topic.pk)
+
+        info = {
+            'subject': str(test.subject.name),
+            'date_created': str(test.date_created.date()),
+            'date_taken': str(test.date_taken.date()),
+            'small_topics': small_topics_pks
+        }
+        return HttpResponse(json.dumps(info, ensure_ascii=False))
+
+    @staticmethod
+    @csrf_exempt
+    def create_test(request):
+        """
+        Create a new test!
+        """
+        new_test = 0
+        try:
+            info = json.loads(request.body)
+            new_test = Test(subject=get_object_or_404(Subject,
+                                                      pk=info['subject']),
+                            user=get_object_or_404(User, pk=info['user']),
+                            date_taken=datetime(info['year'],
+                                                info['month'],
+                                                info['day']),
+                            )
+            new_test.save()
+            small_topics_pks = list(info['small_topics'])
+
+            for small_topic_pk in small_topics_pks:
+                new_test.small_topics.add(SmallTopic.objects.
+                                          get(pk=small_topic_pk))
+
+            new_test.save()
+            return HttpResponse("Test created successfully")
+        except (KeyError, ValueError, ObjectDoesNotExist) as e:
+            if isinstance(new_test, Test):
+                new_test.delete()
+            return HttpResponseBadRequest("Could not create test. " + str(e))

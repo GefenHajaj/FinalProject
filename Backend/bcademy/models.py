@@ -45,8 +45,6 @@ class Test(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField('Date Created', auto_now_add=True)
     date_taken = models.DateTimeField('Date due')
-    # In the future - a list of small topics:
-    summerize = models.CharField(max_length=1000)
     small_topics = models.ManyToManyField(SmallTopic)
 
     def __str__(self):

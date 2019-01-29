@@ -44,4 +44,24 @@ urlpatterns = [
     path('tests/<int:pk>/smalltopics/',
          views.SmallTopicViews.get_test_small_topics,
          name='get_test_small_topics'),
+
+    # EX: bcademy/tests/1/questions/
+    path('tests/<int:pk>/questions/',
+         views.QuestionViews.get_test_questions,
+         name='get_test_questions'),
+
+    # EX: bcademy/questions/1/
+    path('questions/<int:pk>/',
+         views.QuestionViews.get_question,
+         name='get_question'),
+
+    # EX: bcademy/tests/1/
+    path('tests/<int:pk>/',
+         views.TestViews.get_test,
+         name='get_test'),
+
+    # EX: bcademy/tests/create/
+    path('tests/create/',
+         views.TestViews.create_test,
+         name='create_test'),
 ]
