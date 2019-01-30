@@ -67,3 +67,11 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+
+  fonts:
+    - family: PatrickHand
+      fonts:
+        - asset: fonts/PatrickHand-Regular.ttf
+    - family: Norican
+      fonts:
+        - asset: fonts/Norican-Regular.ttf

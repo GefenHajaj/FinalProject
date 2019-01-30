@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bcademy/tests_page.dart';
 import 'package:bcademy/placeholder.dart';
-import 'package:bcademy/study_page.dart';
+import 'package:bcademy/navigator_page.dart';
 import 'package:bcademy/test.dart';
 
 /// The function that's called when we run the app
@@ -16,6 +16,7 @@ class BCademy extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'BCademy',
       theme: ThemeData(
+        backgroundColor: Color(0xffffebee),
         primarySwatch: Colors.blue,
       ),
       home: HomePage(),
@@ -48,7 +49,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute<Null>(
         builder: (BuildContext context) {
-          return StudyPage(test: test);
+          return NavigatorPage(test: test);
         }
       ));
     });
@@ -82,10 +83,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BCademy', textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
+        title: Text('BCademy', textAlign: TextAlign.center, style: TextStyle(color: Colors.black, fontFamily: 'Norican', fontSize: 30.0),),
         centerTitle: true,
         elevation: 0.0,
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Color(0xff80d8ff),
       ),
       body: Center(
         child: _getPage(_selectedPageIndex),

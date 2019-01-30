@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:bcademy/placeholder.dart';
 
-class StudyPage extends StatefulWidget {
-  const StudyPage();
+class QuizPage extends StatefulWidget {
+  const QuizPage();
 
   @override
-  _StudyPageState createState() => _StudyPageState();
+  _QuizPageState createState() => _QuizPageState();
 }
 
-class _StudyPageState extends State<StudyPage> {
+class _QuizPageState extends State<QuizPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Study Page"),
+        title: Text("Quiz Page"),
       ),
       body: Center(
-        child: placeHolder("Study Page"),
+        child: placeHolder("Quiz Page"),
       ),
     );
   }

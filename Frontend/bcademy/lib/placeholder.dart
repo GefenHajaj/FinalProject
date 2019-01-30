@@ -32,7 +32,7 @@ Widget placeHolder(String title) {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 24.0
+                fontSize: 24.0,
               ),
             ),
           ),
