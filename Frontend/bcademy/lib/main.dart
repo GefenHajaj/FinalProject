@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:bcademy/tests_page.dart';
 import 'package:bcademy/placeholder.dart';
 import 'package:bcademy/navigator_page.dart';
-import 'package:bcademy/test.dart';
+import 'package:bcademy/structures.dart';
+import 'package:bcademy/api.dart';
 
 /// The function that's called when we run the app
 void main() => runApp(BCademy());
@@ -35,6 +36,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // The default page
   int _selectedPageIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    Data.startApp(userPk: 1);
+  }
 
   /// Changing the shown page
   void _onIconTap(int pageIndex) {
@@ -94,7 +101,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
-            BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('Feed')),
+            BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('Search')),
             BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('Upload')),
             BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('Profile')),
           ],

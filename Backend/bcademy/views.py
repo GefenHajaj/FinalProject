@@ -180,6 +180,7 @@ class TestViews:
 
         info = {
             'subject': str(test.subject.name),
+            'subject_pk': str(test.subject.pk),
             'date_created': str(test.date_created.date()),
             'date_taken': str(test.date_taken.date()),
             'small_topics': small_topics_pks

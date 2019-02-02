@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:bcademy/test.dart';
+import 'package:bcademy/structures.dart';
 
 const _rowHeight = 100.0;
 final _borderRadius = BorderRadius.circular(20.0);
-final _color = Colors.blue;
+final _color = Color(0xff29b6f6);
 final _highlightColor = Colors.lightBlue;
 final _splashColor = Colors.lightBlueAccent;
 
@@ -42,7 +42,7 @@ class TestTile extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.all(16.0),
-                    child: Icon(this.test.iconData, size: 50.0,),
+                    child: Icon(this.test.icon, size: 50.0,),
                   ),
                   Center(
                     child: Column(
@@ -50,7 +50,7 @@ class TestTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         Text(
-                          "מבחן ב${this.test.subject}",
+                          "מבחן ב${this.test.subject.name}",
                           textDirection: TextDirection.rtl,
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 24.0, fontFamily: 'Gisha'),

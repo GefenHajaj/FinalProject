@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:bcademy/test.dart';
+import 'package:bcademy/structures.dart';
 import 'package:bcademy/test_tile.dart';
+import 'package:bcademy/api.dart';
 
 class TestsPage extends StatefulWidget {
   final onTestTap; // A function to call when tapping a test
@@ -14,20 +15,7 @@ class TestsPage extends StatefulWidget {
 
 class _TestsPageState extends State<TestsPage> {
   // Just until we connect to the server...
-  var _demoTests = [
-    Test(
-        subject: "אזרחות",
-        dateCreated: DateTime.now(),
-        dateTaken: DateTime.utc(2019, 1, 29),
-        link: r"https://drive.google.com/open?id=0B6KYqL7wjzm0YW1BTmZScHJORm8",
-        iconData: Icons.person),
-    Test(
-        subject: "היסטוריה",
-        dateCreated: DateTime.now(),
-        dateTaken: DateTime.utc(2019, 1, 25),
-        link: r"https://drive.google.com/open?id=0B6KYqL7wjzm0YW1BTmZScHJORm8",
-        iconData: Icons.history),
-  ];
+  var _demoTests = Data.allTests;
 
   /// Returns a [ListView] of [TestTile]s.
   Widget _buildTestsWidgetsList() {

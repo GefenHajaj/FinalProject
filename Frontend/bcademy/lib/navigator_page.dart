@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:bcademy/test.dart';
+import 'package:bcademy/structures.dart';
 import 'package:bcademy/study_page.dart';
 import 'package:bcademy/quiz_page.dart';
 
@@ -17,9 +17,9 @@ class NavigatorPage extends StatefulWidget {
 class _NavigatorPageState extends State<NavigatorPage> {
 
   String studyButtonText = "Time to Study!";
-  Color studyButtonColor = Color(0xff18ffff);
+  Color studyButtonColor = Color(0xff00acc1);
   String quizButtonText = "Take a Quiz!";
-  Color quizButtonColor = Color(0xffb2ff59);
+  Color quizButtonColor = Color(0xff81c784);
 
   Color appBarColor = Color(0xff80d8ff);
 
@@ -55,7 +55,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute<Null>(
           builder: (BuildContext context) {
-            return StudyPage();
+            return StudyPage(test: widget.test);
           }
       ));
     });
@@ -78,7 +78,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
     return Scaffold(
       backgroundColor: Color(0xffffebee),
       appBar: AppBar(
-        title: Text("מבחן ב${widget.test.subject}", style: TextStyle(color: Colors.black),),
+        title: Text("מבחן ב${widget.test.subject.name}", style: TextStyle(color: Colors.black),),
         elevation: 0.0,
         centerTitle: true,
         backgroundColor: appBarColor,
