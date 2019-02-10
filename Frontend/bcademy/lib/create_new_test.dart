@@ -46,15 +46,25 @@ class _ChooseSubjectPageState extends State<ChooseSubjectPage> {
               child: Container(
                 alignment: Alignment.centerRight,
                 height: _subjectHeight,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                      _subjects[index].name,
-                    textDirection: TextDirection.ltr,
-                    style: TextStyle(
-                      fontSize: _fontSize
+                child: Row(
+                  textDirection: TextDirection.rtl,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Icon(Icons.star, size: 50.0,),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                          _subjects[index].name,
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(
+                          fontSize: _fontSize
+                        ),
+                      ),
+                    ),
+                  ],
                 )
               ),
             ),
@@ -71,7 +81,7 @@ class _ChooseSubjectPageState extends State<ChooseSubjectPage> {
         backgroundColor: Color(0xffff3d00),
         elevation: 0.0,
         centerTitle: true,
-        title: Text(_appBarText, textDirection: TextDirection.ltr,),
+        title: Text(_appBarText, textDirection: TextDirection.rtl,),
       ),
       body: _getSubjectsList()
     );
@@ -93,6 +103,7 @@ class ChooseSmallTopics extends StatefulWidget {
 }
 
 class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
+  List smallTopics; // [(1, "decision 181"), (2, "the war"),]
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +111,7 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
           backgroundColor: Color(0xffff3d00),
           elevation: 0.0,
           centerTitle: true,
-          title: Text("מבחן ב${widget.subjectName} - בחר נושאים", textDirection: TextDirection.ltr,),
+          title: Text("מבחן ב${widget.subjectName} - בחר נושאים", textDirection: TextDirection.rtl,),
         ),
         body: Container()
     );
