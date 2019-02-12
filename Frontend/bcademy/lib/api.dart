@@ -104,6 +104,46 @@ class Api {
       return null;
     }
   }
+
+  /// Returns all the small topics of a given subject
+  Future<List> getAllSubjectSmallTopics(int subjectPk) async {
+    final url = Uri.http(_url, '/bcademy/subjects/$subjectPk/smalltopics/');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final allSmallTopics = json.decode(response.body);
+      List smallTopicsInfo = [];
+      for (String pk in allSmallTopics.keys) {
+        final tempTopicList = [int.parse(pk), allSmallTopics[pk]];
+        smallTopicsInfo.add(tempTopicList);
+      }
+      return smallTopicsInfo;
+    }
+    else {
+      print("Something went wrong with getting all subject's small topics.");
+      return null;
+    }
+  }
+
+  /// Creating a new test!
+  Future<int> createTest(int subjectPk, int userPk, int year, int month, int day, List smallTopicsList) async {
+    final url = Uri.http(_url, '/bcademy/tests/create/');
+    final testInfo = {
+      'subject': subjectPk,
+      'user': userPk,
+      'year': year,
+      'month': month,
+      'day': day,
+      'small_topics': smallTopicsList
+    };
+    final response = await http.post(url, body: json.encode(testInfo));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+    else {
+      print("Sonething went wrong with creating that test...");
+      return -1;
+    }
+  }
 }
 
 

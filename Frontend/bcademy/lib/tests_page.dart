@@ -30,9 +30,15 @@ class _TestsPageState extends State<TestsPage> {
   Widget _buildTestsWidgetsList() {
     return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
-          return TestTile(test: tests[index], onTap: widget.onTestTap);
+          if (index != tests.length) {
+            return TestTile(test: tests[index], onTap: widget.onTestTap);
+          }
+          else {
+            // Another blank tile to be able to see the last test.
+            return Container(height: 130.0,);
+          }
         },
-        itemCount: tests == null ? 0 : tests.length,
+        itemCount: tests == null ? 0 : tests.length + 1,
     );
   }
 

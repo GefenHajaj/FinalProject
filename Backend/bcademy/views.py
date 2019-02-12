@@ -201,7 +201,8 @@ class TestViews:
                             user=get_object_or_404(User, pk=info['user']),
                             date_taken=datetime(info['year'],
                                                 info['month'],
-                                                info['day']),
+                                                info['day'],
+                                                5),
                             )
             new_test.save()
             small_topics_pks = list(info['small_topics'])
@@ -211,7 +212,7 @@ class TestViews:
                                           get(pk=small_topic_pk))
 
             new_test.save()
-            return HttpResponse("Test created successfully")
+            return HttpResponse(str(new_test.pk))
         except (KeyError, ValueError, ObjectDoesNotExist) as e:
             if isinstance(new_test, Test):
                 new_test.delete()
