@@ -66,7 +66,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute<Null>(
           builder: (BuildContext context) {
-            return QuizPage();
+            return QuizPage(test: widget.test,);
           }
       ));
     });

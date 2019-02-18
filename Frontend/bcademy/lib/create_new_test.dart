@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
-import 'package:bcademy/main.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 /// When choosing a subject for the new test.
 class ChooseSubjectPage extends StatefulWidget {
@@ -216,11 +216,14 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          _smallTopics[index][1],
-                          textDirection: TextDirection.rtl,
-                          style: TextStyle(
-                              fontSize: _fontSize
+                        child: Container(
+                          child: AutoSizeText(
+                            _smallTopics[index][1],
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(
+                                fontSize: _fontSize
+                            ),
+                            maxLines: 2,
                           ),
                         ),
                       ),

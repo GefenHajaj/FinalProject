@@ -144,6 +144,43 @@ class Api {
       return -1;
     }
   }
+  
+  Future<List> getQuestion(int qPk) async {
+    final url = Uri.http(_url, '/bcademy/questions/$qPk/');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final info = json.decode(response.body);
+      final answer = [
+        info['text'],
+        [1, info['answer1']],
+        [2, info['answer2']],
+        [3, info['answer3']],
+        [4, info['answer4']]
+      ];
+      return answer;
+    }
+    else {
+      print("Something went wrong with getting question $qPk");
+      return null;
+    }
+  }
+
+  Future<List> getTestAllQuestions(int testPk) async {
+    final url = Uri.http(_url, '/bcademy/tests/$testPk/questions/');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final info = json.decode(response.body);
+      List allQuestions = [];
+      for (String pk in info.keys) {
+        allQuestions.add(await getQuestion(int.parse(pk)));
+      }
+      return allQuestions;
+    }
+    else {
+      print("Something went wrong with getting all questions for test $testPk");
+      return null;
+    }
+  }
 }
 
 

@@ -202,7 +202,9 @@ class TestViews:
                             date_taken=datetime(info['year'],
                                                 info['month'],
                                                 info['day'],
-                                                5),
+                                                23,
+                                                59
+                                                ),
                             )
             new_test.save()
             small_topics_pks = list(info['small_topics'])
