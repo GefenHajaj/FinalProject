@@ -5,7 +5,7 @@ from django.utils import timezone
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 import json
-from.models import *
+from .models import *
 
 
 def index(request):
@@ -219,3 +219,23 @@ class TestViews:
             if isinstance(new_test, Test):
                 new_test.delete()
             return HttpResponseBadRequest("Could not create test. " + str(e))
+
+
+class DocumentViews:
+
+    @staticmethod
+    @csrf_exempt
+    def upload_file(request, user_pk, subject_pk):
+        """
+        Uploads a file for a specific user (user pk).
+        """
+        user = get_object_or_404(User, pk=user_pk)
+        subject = get_object_or_404(Subject, pk=subject_pk)
+        new_file = Document(user=user,
+                            subject=subject,
+                            is_public=request.POST['is_public'] == 'True',
+                            info=request.POST['info'])
+        for key in request.FILES.keys():
+            new_file.save_file(request.FILES[key], key)
+        new_file.save()
+        return HttpResponse(json.dumps(new_file.pk))

@@ -6,6 +6,7 @@ admin.site.register(SmallTopic)
 admin.site.register(Test)
 admin.site.register(Subject)
 admin.site.register(User)
+admin.site.register(Document)
 
 
 

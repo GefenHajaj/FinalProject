@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 
 /// This class takes care of communicating with the server.
 class Api {
@@ -180,6 +182,21 @@ class Api {
       print("Something went wrong with getting all questions for test $testPk");
       return null;
     }
+  }
+
+  /// Uploading a new file to server
+  Future<void> uploadFile(int subjectPk, String path, String info, bool isPublic) async {
+    int userPk = 1;
+    final url = Uri.http(_url, '/bcademy/$userPk/$subjectPk/upload/');
+    var request = http.MultipartRequest("POST", url);
+    print((path.split(".")).last);
+    request.files.add(await http.MultipartFile.fromPath((path.split(".")).last, path,));
+    request.fields['info'] = info;
+    request.fields['is_public'] = isPublic ? 'True' : 'False';
+    request.send().then((response) {
+      if (response.statusCode == 200)
+        print("Uploaded!");
+    });
   }
 }
 

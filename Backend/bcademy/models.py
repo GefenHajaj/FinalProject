@@ -1,4 +1,6 @@
 from django.db import models
+from finalproj import settings
+import mimetypes
 
 
 class Subject(models.Model):
@@ -65,3 +67,19 @@ class Question(models.Model):
 
     def __str__(self):
         return str(self.question_text) + str(self.pk)
+
+
+class Document(models.Model):
+    """
+    A file that the user can upload.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    file = models.FileField(upload_to=settings.MEDIA_ROOT)
+    date_created = models.DateTimeField('Date Created', auto_now_add=True)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    info = models.CharField(max_length=100)
+    is_public = models.BooleanField()
+
+    def save_file(self, file_data, content_type):
+        self.file.save("name." + content_type,
+                       file_data)

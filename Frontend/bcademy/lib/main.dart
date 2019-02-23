@@ -4,6 +4,7 @@ import 'package:bcademy/placeholder.dart';
 import 'package:bcademy/navigator_page.dart';
 import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
+import 'package:bcademy/upload_page.dart';
 
 /// The function that's called when we run the app
 void main() => runApp(BCademy());
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
       }
       break;
       case 2: {
-        return placeHolder("Upload Page");
+        return UploadFilePage();
       }
       break;
       case 3: {

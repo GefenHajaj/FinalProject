@@ -64,4 +64,9 @@ urlpatterns = [
     path('tests/create/',
          views.TestViews.create_test,
          name='create_test'),
+
+    # EX: bcademy/1/1/upload/
+    path('<int:user_pk>/<int:subject_pk>/upload/',
+         views.DocumentViews.upload_file,
+         name='upload_file'),
 ]
