@@ -22,6 +22,23 @@ class _UploadFilePageState extends State<UploadFilePage> {
   FileType _pickingType;
   TextEditingController _controller = new TextEditingController();
 
+  var _color = Color(0xffffff00);
+  var _text = "העלה קובץ נבחר";
+  var _height = 60.0;
+  var _width = 220.0;
+  var _size = 24.0;
+
+  final Color _buttonColor = Color(0xffffff00);
+  final Color _warningColor = Colors.red;
+  final String _buttonText = "העלה קובץ נבחר";
+  final String _warningText = "לא נבחר קובץ!";
+  final double _buttonHeight = 60.0;
+  final double _warningHeight = 90.0;
+  final double _buttonWidth = 220.0;
+  final double _warningWidth = 250.0;
+  final double _fontSize = 24.0;
+  final double _warningFont = 28.0;
+
   @override
   void initState() {
     super.initState();
@@ -40,12 +57,45 @@ class _UploadFilePageState extends State<UploadFilePage> {
 
       setState(() {
         _fileName = _path != null ? _path.split('/').last : 'סוג קובץ נבחר לא תקין';
+        _color = _buttonColor;
+        _height = _buttonHeight;
+        _width = _buttonWidth;
+        _size = _fontSize;
+        _text = _buttonText;
       });
     }
   }
 
   void _uploadFile() {
-    Api().uploadFile(_subjectPk, _path, _info, _isPublic);
+    if (_path != '') {
+      if (_info == '') {
+        if (_pickingType == FileType.IMAGE || _pickingType == FileType.CAMERA)
+          _info = "תמונה";
+        else if (_pickingType == FileType.VIDEO)
+          _info = "סרטון";
+        else
+          _info = "קובץ";
+      }
+      Api().uploadFile(_subjectPk, _path, _info, _isPublic);
+      setState(() {
+        _text = "הקובץ עלה!\nהעלה קובץ נוסף";
+        _color = Color(0xff32CD32);
+        _height = _warningHeight;
+        _width = _warningWidth;
+        _path = '';
+        _info = '';
+        _fileName = 'לא נבחר קובץ';
+      });
+    }
+    else {
+      setState(() {
+        _color = _warningColor;
+        _height = _warningHeight;
+        _width = _warningWidth;
+        _size = _warningFont;
+        _text = _warningText;
+      });
+    }
   }
 
   List<DropdownMenuItem> _getSubjectsList() {
@@ -212,21 +262,24 @@ class _UploadFilePageState extends State<UploadFilePage> {
                       elevation: 10.0,
                       borderRadius: BorderRadius.circular(50.0),
                       color: Colors.transparent,
-                      child: Container(
-                        height: 60.0,
-                        width: 220.0,
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 100),
+                        height: _height,
+                        width: _width,
                         decoration: BoxDecoration(
-                            color: Color(0xffffff00),
+                            color: _color,
                             borderRadius: BorderRadius.circular(50.0)
                         ),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(50.0),
                           onTap: () {_uploadFile();},
                           child: Center(
-                            child: Text("העלה קובץ נבחר",
+                            child: Text(_text,
+                              textAlign: TextAlign.center,
+                              textDirection: TextDirection.rtl,
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 24.0
+                                  fontSize: _size
                               ),
                             ),
                           ),
