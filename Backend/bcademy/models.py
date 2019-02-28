@@ -77,7 +77,7 @@ class Document(models.Model):
     file = models.FileField(upload_to=settings.MEDIA_ROOT)
     date_created = models.DateTimeField('Date Created', auto_now_add=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    info = models.CharField(max_length=100)
+    info = models.CharField(max_length=100, default="")
     is_public = models.BooleanField()
 
     def save_file(self, file_data, content_type):

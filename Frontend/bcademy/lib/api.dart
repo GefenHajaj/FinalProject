@@ -198,6 +198,20 @@ class Api {
         print("Uploaded!");
     });
   }
+  
+  /// Getting info of all files of a specific user
+  Future<Map> getUserFiles() async {
+    int userPk = 1;
+    final url = Uri.http(_url, '/bcademy/allfiles/$userPk/');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+    else {
+      print("Something went wrong with getting all files of user $userPk");
+      return null;
+    }
+  }
 }
 
 

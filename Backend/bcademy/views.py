@@ -239,3 +239,22 @@ class DocumentViews:
             new_file.save_file(request.FILES[key], key)
         new_file.save()
         return HttpResponse(json.dumps(new_file.pk))
+
+    @staticmethod
+    def get_all_files(request, user_pk):
+        """
+        Getting all info about the files of a specific user.
+        """
+        user = get_object_or_404(User, pk=user_pk)
+        user_files = user.document_set.order_by('date_created')
+        files_info = {}
+        for file in user_files:
+            files_info[file.pk] = {
+                'subject_name': file.subject.name,
+                'day': str(file.date_created.day),
+                'month': str(file.date_created.month),
+                'year': str(file.date_created.year),
+                'info': str(file.info),
+                'is_public': file.is_public
+            }
+        return HttpResponse(json.dumps(files_info, ensure_ascii=False))

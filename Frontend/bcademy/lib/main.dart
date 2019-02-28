@@ -5,6 +5,7 @@ import 'package:bcademy/navigator_page.dart';
 import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
 import 'package:bcademy/upload_page.dart';
+import 'package:bcademy/profile_page.dart';
 
 /// The function that's called when we run the app
 void main() => runApp(BCademy());
@@ -79,7 +80,7 @@ class _HomePageState extends State<HomePage> {
       }
       break;
       case 3: {
-        return placeHolder("Profile Page");
+        return ProfilePage();
       }
       break;
     }
