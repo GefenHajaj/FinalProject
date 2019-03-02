@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// This class takes care of communicating with the server.
 class Api {
@@ -189,16 +190,18 @@ class Api {
     int userPk = 1;
     final url = Uri.http(_url, '/bcademy/$userPk/$subjectPk/upload/');
     var request = http.MultipartRequest("POST", url);
-    print((path.split(".")).last);
-    request.files.add(await http.MultipartFile.fromPath((path.split(".")).last, path,));
+    print((path));
+    request.files.add(await http.MultipartFile.fromPath('file', path,));
     request.fields['info'] = info;
     request.fields['is_public'] = isPublic ? 'True' : 'False';
+    request.fields['file_name'] = path.split('/').last;
+    print(path.split('/').last);
     request.send().then((response) {
       if (response.statusCode == 200)
         print("Uploaded!");
     });
   }
-  
+
   /// Getting info of all files of a specific user
   Future<Map> getUserFiles() async {
     int userPk = 1;
@@ -212,12 +215,32 @@ class Api {
       return null;
     }
   }
+
+  Future<String> downloadFile(filePk, fileName) async {
+    final url = Uri.http(_url, '/bcademy/download/$filePk/');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      var fileNameParts = fileName.split(".");
+      fileName = fileNameParts[0] + (Data.fileNum++).toString() + "." + fileNameParts[1];
+      var bytes = response.bodyBytes;
+      String dir = (await getExternalStorageDirectory()).path + '/Download';
+      File file = new File('$dir/$fileName');
+      await file.writeAsBytes(bytes);
+      print("Check for hello!");
+      return '$dir/$fileName';
+    }
+    else {
+      print("Something ent wrong downloading the file.");
+      return '';
+    }
+  }
 }
 
 
 /// This class saves data that's important for the entire app.
 class Data {
   static List<Subject> allSubjects;
+  static int fileNum = 0;
 
   /// This function should be called when first opening the app.
   static void startApp({int userPk}) async {

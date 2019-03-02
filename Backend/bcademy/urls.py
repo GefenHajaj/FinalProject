@@ -74,4 +74,9 @@ urlpatterns = [
     path('allfiles/<int:user_pk>/',
          views.DocumentViews.get_all_files,
          name='get_all_files'),
+
+    # EX: bcademy/download/1/
+    path('download/<int:doc_pk>/',
+         views.DocumentViews.download_file,
+         name='download_file')
 ]

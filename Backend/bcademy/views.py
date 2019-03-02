@@ -6,6 +6,8 @@ from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 import json
 from .models import *
+import os
+import mimetypes
 
 
 def index(request):
@@ -236,7 +238,7 @@ class DocumentViews:
                             is_public=request.POST['is_public'] == 'True',
                             info=request.POST['info'])
         for key in request.FILES.keys():
-            new_file.save_file(request.FILES[key], key)
+            new_file.save_file(request.FILES[key], request.POST['file_name'])
         new_file.save()
         return HttpResponse(json.dumps(new_file.pk))
 
@@ -246,15 +248,37 @@ class DocumentViews:
         Getting all info about the files of a specific user.
         """
         user = get_object_or_404(User, pk=user_pk)
-        user_files = user.document_set.order_by('date_created')
+        user_files = user.document_set.order_by('-date_created')
         files_info = {}
         for file in user_files:
             files_info[file.pk] = {
+                'pk': file.pk,
                 'subject_name': file.subject.name,
                 'day': str(file.date_created.day),
                 'month': str(file.date_created.month),
                 'year': str(file.date_created.year),
                 'info': str(file.info),
-                'is_public': file.is_public
+                'is_public': file.is_public,
+                'name': str(file.file.url.split('/')[-1])
             }
         return HttpResponse(json.dumps(files_info, ensure_ascii=False))
+
+    @staticmethod
+    def download_file(request, doc_pk):
+        """
+        Uploading a file for the user to download.
+        """
+        doc = get_object_or_404(Document, pk=doc_pk)
+        doc_path = doc.file.url.split('/')[2:]
+        doc_path = ("\\".join(doc_path)).replace("%3A", ":")
+        if os.path.isfile(doc_path):
+            with open(doc_path, 'rb') as f:
+                response = HttpResponse(
+                    f.read(),
+                    content_type=mimetypes.guess_type(doc_path)[0]
+                )
+                response['Content-Disposition'] = \
+                    'inline; filename=' + os.path.basename(doc_path)
+                return response
+        else:
+            return HttpResponse(doc_path)

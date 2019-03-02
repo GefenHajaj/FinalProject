@@ -80,6 +80,5 @@ class Document(models.Model):
     info = models.CharField(max_length=100, default="")
     is_public = models.BooleanField()
 
-    def save_file(self, file_data, content_type):
-        self.file.save("name." + content_type,
-                       file_data)
+    def save_file(self, file_data, file_name):
+        self.file.save(file_name, file_data)

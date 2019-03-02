@@ -215,7 +215,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                   ),
                 ),
                 Text(
-                  _fileName,
+                  _path,
                   textAlign: TextAlign.center,
                 ),
                 Divider(height: 15.0,),
@@ -252,7 +252,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Checkbox(value: _isPublic, onChanged: (value) => setState(() => _isPublic = value)),
-                    Text('לפרסם באופן פובמי', textDirection: TextDirection.rtl, style: TextStyle(fontSize: 16.0),)
+                    Text('לפרסם באופן פומבי', textDirection: TextDirection.rtl, style: TextStyle(fontSize: 16.0),)
                   ],
                 ),
                 Divider(height: 0.0,),
