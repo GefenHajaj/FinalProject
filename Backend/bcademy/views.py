@@ -137,6 +137,23 @@ class SmallTopicViews:
             info[small_topic.pk] = small_topic.title
         return HttpResponse(json.dumps(info, ensure_ascii=False))
 
+    @staticmethod
+    @csrf_exempt
+    def search_small_topics(request):
+        """
+        Returns pks and info about small topics related to the search word.
+        """
+        search = json.loads(request.body)['search']
+        subject_related = SmallTopic.objects.filter(subject__name=search)
+        topics_related = SmallTopic.objects.filter(title__contains=search).\
+            order_by('subject')
+        final_result = {}
+        for result in subject_related:
+            final_result[result.pk] = [result.title, result.subject.name]
+        for result in topics_related:
+            final_result[result.pk] = [result.title, result.subject.name]
+        return HttpResponse(json.dumps(final_result, ensure_ascii=False))
+
 
 class QuestionViews:
     @staticmethod
@@ -259,9 +276,24 @@ class DocumentViews:
                 'year': str(file.date_created.year),
                 'info': str(file.info),
                 'is_public': file.is_public,
-                'name': str(file.file.url.split('/')[-1])
+                'name': file.file.name.split('/')[-1]
             }
         return HttpResponse(json.dumps(files_info, ensure_ascii=False))
+
+    @staticmethod
+    def get_file(request, pk):
+        file = get_object_or_404(Document, pk=pk)
+        doc_info = {
+            'pk': file.pk,
+            'subject_name': file.subject.name,
+            'day': str(file.date_created.day),
+            'month': str(file.date_created.month),
+            'year': str(file.date_created.year),
+            'info': str(file.info),
+            'is_public': file.is_public,
+            'name': file.file.name.split('/')[-1]
+        }
+        return HttpResponse(json.dumps(doc_info, ensure_ascii=False))
 
     @staticmethod
     def download_file(request, doc_pk):
@@ -282,3 +314,27 @@ class DocumentViews:
                 return response
         else:
             return HttpResponse(doc_path)
+
+    @staticmethod
+    @csrf_exempt
+    def search_file(request):
+        search = json.loads(request.body)['search']
+        all_public_docs = Document.objects.filter(is_public=True).\
+            order_by('date_created')
+        final_result = {}
+
+        for file in all_public_docs:
+            if search in file.file.name or file.subject.name == search \
+                    or search in file.info:
+                final_result[file.pk] = {
+                    'pk': file.pk,
+                    'subject_name': file.subject.name,
+                    'day': str(file.date_created.day),
+                    'month': str(file.date_created.month),
+                    'year': str(file.date_created.year),
+                    'info': str(file.info),
+                    'is_public': file.is_public,
+                    'name': file.file.name.split('/')[-1]
+                }
+
+        return HttpResponse(json.dumps(final_result, ensure_ascii=False))

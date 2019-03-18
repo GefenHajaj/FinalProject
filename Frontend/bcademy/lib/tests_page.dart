@@ -5,11 +5,10 @@ import 'package:bcademy/test_tile.dart';
 import 'package:bcademy/api.dart';
 import 'dart:async';
 import 'package:bcademy/create_new_test.dart';
+import 'package:bcademy/navigator_page.dart';
 
 class TestsPage extends StatefulWidget {
-  final onTestTap; // A function to call when tapping a test
-
-  const TestsPage({@required this.onTestTap});
+  const TestsPage();
   
   @override
   _TestsPageState createState() => _TestsPageState();
@@ -26,12 +25,23 @@ class _TestsPageState extends State<TestsPage> {
     });
   }
 
+  /// When tapping a test, we are sent to the studying page!
+  void _onTestTap(Test test) {
+    setState(() {
+      Navigator.of(context).push(MaterialPageRoute<Null>(
+          builder: (BuildContext context) {
+            return NavigatorPage(test: test);
+          }
+      ));
+    });
+  }
+
   /// Returns a [ListView] of [TestTile]s.
   Widget _buildTestsWidgetsList() {
     return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
           if (index != tests.length) {
-            return TestTile(test: tests[index], onTap: widget.onTestTap);
+            return TestTile(test: tests[index], onTap: _onTestTap);
           }
           else {
             // Another blank tile to be able to see the last test.

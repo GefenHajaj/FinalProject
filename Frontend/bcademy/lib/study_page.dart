@@ -68,15 +68,23 @@ class _StudyPageState extends State<StudyPage> {
   Widget build(BuildContext context) {
     if (smallTopics == null) {
       _getAllSmallTopics();
+      return Container(
+        height: 50,
+        width: 50,
+        child: CircularProgressIndicator(),
+      );
     }
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Color(0xff00acc1),
-        centerTitle: true,
-        title: Text("לומדים למבחן ב${widget.test.subject.name}", style: TextStyle(fontSize: 22.0,),),
-      ),
-      body: _getSummary()
-    );
+    else {
+      return Scaffold(
+          appBar: AppBar(
+            elevation: 0.0,
+            backgroundColor: Color(0xff00acc1),
+            centerTitle: true,
+            title: Text("לומדים למבחן ב${widget.test.subject.name}",
+              style: TextStyle(fontSize: 22.0,),),
+          ),
+          body: _getSummary()
+      );
+    }
   }
 }

@@ -52,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: <Widget>[
                   AutoSizeText("קובץ במקצוע:\n ${_files[pk]['subject_name']}", textDirection: TextDirection.rtl, style: TextStyle(fontSize: 24.0), textAlign: TextAlign.center,),
                   Container(height: 5.0,),
-                  AutoSizeText(_files[pk]['info'], style: TextStyle(fontSize: 20.0),),
+                  AutoSizeText(_files[pk]['info'], textDirection: TextDirection.rtl, style: TextStyle(fontSize: 20.0),),
                   Container(height: 5.0,),
                   AutoSizeText("${_files[pk]['day']}.${_files[pk]['month']}.${_files[pk]['year']}", style: TextStyle(fontSize: 16.0),),
                   AutoSizeText("${_files[pk]['name']}", style: TextStyle(fontSize: 16.0), textAlign: TextAlign.center,)

@@ -6,6 +6,7 @@ import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
 import 'package:bcademy/upload_page.dart';
 import 'package:bcademy/profile_page.dart';
+import 'package:bcademy/search_page.dart';
 
 /// The function that's called when we run the app
 void main() => runApp(BCademy());
@@ -53,26 +54,17 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  /// When tapping a test, we are sent to the studying page!
-  void _onTestTap(Test test) {
-    setState(() {
-      Navigator.of(context).push(MaterialPageRoute<Null>(
-        builder: (BuildContext context) {
-          return NavigatorPage(test: test);
-        }
-      ));
-    });
-  }
+
 
   /// All main pages in the app
   Widget _getPage(int index) {
     switch (index) {
       case 0: {
-          return TestsPage(onTestTap: _onTestTap);
+          return TestsPage();
         }
         break;
       case 1: {
-        return placeHolder("Feed Page");
+        return SearchPage();
       }
       break;
       case 2: {

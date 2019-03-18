@@ -78,5 +78,20 @@ urlpatterns = [
     # EX: bcademy/download/1/
     path('download/<int:doc_pk>/',
          views.DocumentViews.download_file,
-         name='download_file')
+         name='download_file'),
+
+    # EX: bcademy/search/topics/
+    path('search/topics/',
+         views.SmallTopicViews.search_small_topics,
+         name='search_small_topics'),
+
+    # EX: bcademy/search/files/
+    path('search/files/',
+         views.DocumentViews.search_file,
+         name='search_file'),
+
+    # EX: bcademy/file/1/
+    path('file/<int:pk>/',
+         views.DocumentViews.get_file,
+         name='get_file'),
 ]

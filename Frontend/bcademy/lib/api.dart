@@ -216,6 +216,7 @@ class Api {
     }
   }
 
+  /// Download a file to the phone
   Future<String> downloadFile(filePk, fileName) async {
     final url = Uri.http(_url, '/bcademy/download/$filePk/');
     var response = await http.get(url);
@@ -232,6 +233,32 @@ class Api {
     else {
       print("Something ent wrong downloading the file.");
       return '';
+    }
+  }
+
+  /// Search for small topics and get results
+  Future<Map> searchTopics(search) async {
+    final url = Uri.http(_url, '/bcademy/search/topics/');
+    var response = await http.post(url, body: json.encode({'search': search}));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+    else {
+      print('Something went wrong with searching small topics.');
+      return null;
+    }
+  }
+
+  /// Search for files and docs on the cloud and get results - your files and others'!
+  Future<Map> searchFiles(search) async {
+    final url = Uri.http(_url, '/bcademy/search/files/');
+    var response = await http.post(url, body: json.encode({'search': search}));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+    else {
+      print("Something went wrong with searchong for files");
+      return null;
     }
   }
 }
