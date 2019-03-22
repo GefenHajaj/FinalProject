@@ -24,17 +24,17 @@ class _UploadFilePageState extends State<UploadFilePage> {
 
   var _color = Color(0xffffff00);
   var _text = "העלה קובץ נבחר";
-  var _height = 60.0;
-  var _width = 220.0;
+  var _height = 70.0;
+  var _width = 240.0;
   var _size = 24.0;
 
   final Color _buttonColor = Color(0xffffff00);
   final Color _warningColor = Colors.red;
   final String _buttonText = "העלה קובץ נבחר";
   final String _warningText = "לא נבחר קובץ!";
-  final double _buttonHeight = 60.0;
+  final double _buttonHeight = 70.0;
   final double _warningHeight = 90.0;
-  final double _buttonWidth = 220.0;
+  final double _buttonWidth = 240.0;
   final double _warningWidth = 250.0;
   final double _fontSize = 24.0;
   final double _warningFont = 28.0;
@@ -239,12 +239,15 @@ class _UploadFilePageState extends State<UploadFilePage> {
                 Divider(height: 15.0,),
                 Padding(
                   padding: const EdgeInsets.only(right: 60.0, left: 60.0),
-                  child: TextFormField(
-                    maxLength: 100,
-                    decoration: InputDecoration(labelText: '                    מידע נוסף על הקובץ (לא חובה)', labelStyle: TextStyle()),
-                    keyboardType: TextInputType.text,
+                  child: Directionality(
                     textDirection: TextDirection.rtl,
-                    onFieldSubmitted: (value) => setState(() => _info = value),
+                    child: TextFormField(
+                      maxLength: 100,
+                      decoration: InputDecoration(labelText: 'מידע נוסף על הקובץ (לא חובה)', labelStyle: TextStyle()),
+                      keyboardType: TextInputType.text,
+                      textDirection: TextDirection.rtl,
+                      onFieldSubmitted: (value) => setState(() => _info = value),
+                    ),
                   ),
                 ),
                 Divider(height: 15.0,),
@@ -255,7 +258,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                     Text('לפרסם באופן פומבי', textDirection: TextDirection.rtl, style: TextStyle(fontSize: 16.0),)
                   ],
                 ),
-                Divider(height: 0.0,),
+                Divider(height: 20.0,),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                   child: Material(

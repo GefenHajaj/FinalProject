@@ -237,7 +237,7 @@ class Api {
   }
 
   /// Search for small topics and get results
-  Future<Map> searchTopics(search) async {
+  Future<Map> searchTopics(String search) async {
     final url = Uri.http(_url, '/bcademy/search/topics/');
     var response = await http.post(url, body: json.encode({'search': search}));
     if (response.statusCode == 200) {
@@ -250,7 +250,7 @@ class Api {
   }
 
   /// Search for files and docs on the cloud and get results - your files and others'!
-  Future<Map> searchFiles(search) async {
+  Future<Map> searchFiles(String search) async {
     final url = Uri.http(_url, '/bcademy/search/files/');
     var response = await http.post(url, body: json.encode({'search': search}));
     if (response.statusCode == 200) {

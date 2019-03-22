@@ -54,8 +54,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-
-
   /// All main pages in the app
   Widget _getPage(int index) {
     switch (index) {

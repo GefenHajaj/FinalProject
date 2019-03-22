@@ -88,3 +88,75 @@ class _StudyPageState extends State<StudyPage> {
     }
   }
 }
+
+
+class ViewTopic extends StatefulWidget {
+  final int topicPk;
+
+  const ViewTopic({
+    @required this.topicPk
+  }): assert(topicPk != null);
+
+  @override
+  _ViewTopicState createState() => _ViewTopicState();
+}
+
+class _ViewTopicState extends State<ViewTopic> {
+  var topicInfo;
+
+  Future<void> _getTopic() async {
+    var tempInfo = await Api().getSmallTopic(widget.topicPk);
+    setState(() {
+      topicInfo = tempInfo;
+    });
+  }
+
+  /// Gets a list of all the info
+  Widget _getPage() {
+    if (topicInfo != null) {
+      return Column(
+        textDirection: TextDirection.rtl,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(topicInfo['title'], textDirection: TextDirection.rtl,
+              style: TextStyle(fontSize: 26.0),),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Text(topicInfo['info'], textDirection: TextDirection.rtl,
+              style: TextStyle(fontSize: 18.0),),
+          )
+        ],
+      );
+    }
+    else {
+      return Container();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (topicInfo == null) {
+      _getTopic();
+      return Container(
+        height: 50,
+        width: 50,
+        child: CircularProgressIndicator(),
+      );
+    }
+    else {
+      return Scaffold(
+          appBar: AppBar(
+            elevation: 0.0,
+            backgroundColor: Color(0xff00acc1),
+            centerTitle: true,
+            title: Text("צפייה בחומר",
+              style: TextStyle(fontSize: 22.0,),),
+          ),
+          body: _getPage()
+      );
+    }
+  }
+}
