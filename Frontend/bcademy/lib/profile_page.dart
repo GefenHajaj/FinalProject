@@ -71,20 +71,21 @@ class _ProfilePageState extends State<ProfilePage> {
       lastPart = [Container(height: 200,), Center(child: Text("עדיין אין שום קבצים 😧", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),)];
     }
     else {
-      lastPart = [Directionality(
-        textDirection: TextDirection.rtl,
-        child: GridView.count(
-          primary: true,
-          shrinkWrap: true,
-          crossAxisSpacing: 0,
-          crossAxisCount: 2,
-          children: fileTiles,
+      lastPart = [Expanded(
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: GridView.count(
+            primary: true,
+            shrinkWrap: true,
+            crossAxisSpacing: 0,
+            crossAxisCount: 2,
+            children: fileTiles,
+          ),
         ),
       )];
     }
-    return ListView(
-      shrinkWrap: true,
-      primary: false,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Row(
           textDirection: TextDirection.rtl,

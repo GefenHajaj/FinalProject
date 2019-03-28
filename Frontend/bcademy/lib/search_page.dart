@@ -78,9 +78,16 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _getFileResultsPage() {
     if (search == '' || files == null) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 200.0),
-        child: Center(child: Text('נסה לחפש משהו!', textDirection: TextDirection.rtl, style: TextStyle(fontSize: 28.0),),),
+      return Expanded(
+        child: ListView(
+            physics: const NeverScrollableScrollPhysics(),
+            primary: false,
+            shrinkWrap: true,
+            children: [
+              Container(height: 200.0,),
+              Center(child: Text("נסה לחפש משהו...", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),),
+            ]
+        ),
       );
     }
     else {
@@ -116,20 +123,29 @@ class _SearchPageState extends State<SearchPage> {
       }
 
       if (fileTiles.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 200.0),
-          child: Center(child: Text("לא מצאנו קבצים מתאימים\n😧", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),),
+        return Expanded(
+          child: ListView(
+              physics: const NeverScrollableScrollPhysics(),
+            primary: false,
+            shrinkWrap: true,
+            children: [
+              Container(height: 200.0,),
+              Center(child: Text("לא מצאנו קבצים מתאימים\n😧", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),),
+            ]
+          ),
         );
       }
       else {
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: GridView.count(
-            primary: false,
-            shrinkWrap: true,
-            crossAxisSpacing: 0,
-            crossAxisCount: 2,
-            children: fileTiles,
+        return Expanded(
+          child: Directionality(
+            textDirection: TextDirection.rtl,
+            child: GridView.count(
+              primary: true,
+              shrinkWrap: true,
+              crossAxisSpacing: 0,
+              crossAxisCount: 2,
+              children: fileTiles,
+            ),
           ),
         );
       }
@@ -138,16 +154,30 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _getTopicsPageResults() {
     if (search == '' || topics == null) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 200.0),
-        child: Center(child: Text('נסה לחפש משהו!', textDirection: TextDirection.rtl, style: TextStyle(fontSize: 28.0),),),
+      return Expanded(
+        child: ListView(
+            physics: const NeverScrollableScrollPhysics(),
+            primary: false,
+            shrinkWrap: true,
+            children: [
+              Container(height: 200.0,),
+              Center(child: Text("נסה לחפש משהו...", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),),
+            ]
+        ),
       );
     }
     else {
       if (topics.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 200.0),
-          child: Center(child: Text("לא מצאנו נושאים מתאימים\n😧", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),),
+        return Expanded(
+          child: ListView(
+              physics: const NeverScrollableScrollPhysics(),
+              primary: false,
+              shrinkWrap: true,
+              children: [
+                Container(height: 200.0,),
+                Center(child: Text("לא מצאנו נושאים מתאימים\n😧", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),),
+              ]
+          ),
         );
       }
       else {
@@ -197,10 +227,12 @@ class _SearchPageState extends State<SearchPage> {
           )
           );
         }
-        return ListView(
-          shrinkWrap: true,
-          primary: false,
-          children: listOfResults,
+        return Expanded(
+          child: ListView(
+            shrinkWrap: true,
+            primary: true,
+            children: listOfResults,
+          ),
         );
       }
     }
@@ -209,7 +241,6 @@ class _SearchPageState extends State<SearchPage> {
   Widget _getPage() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      textDirection: TextDirection.rtl,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(8.0),

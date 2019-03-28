@@ -22,13 +22,13 @@ class _UploadFilePageState extends State<UploadFilePage> {
   FileType _pickingType;
   TextEditingController _controller = new TextEditingController();
 
-  var _color = Color(0xffffff00);
+  var _color = Color(0xff81d4fa);
   var _text = "העלה קובץ נבחר";
   var _height = 70.0;
   var _width = 240.0;
   var _size = 24.0;
 
-  final Color _buttonColor = Color(0xffffff00);
+  final Color _buttonColor = Color(0xff81d4fa);
   final Color _warningColor = Colors.red;
   final String _buttonText = "העלה קובץ נבחר";
   final String _warningText = "לא נבחר קובץ!";
@@ -187,7 +187,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                         height: 50.0,
                         width: 200.0,
                         decoration: BoxDecoration(
-                            color: Color(0xffffeb3b),
+                            color: Color(0xffb3e5fc),
                             borderRadius: BorderRadius.circular(50.0)
                         ),
                         child: InkWell(
@@ -215,7 +215,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                   ),
                 ),
                 Text(
-                  _path,
+                  _fileName,
                   textAlign: TextAlign.center,
                 ),
                 Divider(height: 15.0,),

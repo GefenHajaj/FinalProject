@@ -82,3 +82,6 @@ flutter:
     - family: Norican
       fonts:
         - asset: fonts/Norican-Regular.ttf
+    - family: Rubik
+      fonts:
+        - asset: fonts/Rubik-Regular.ttf

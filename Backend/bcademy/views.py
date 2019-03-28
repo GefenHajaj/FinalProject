@@ -33,7 +33,6 @@ class UserViews:
         user_info = {
             'date_created': str(user.date_created.date()),
             'name': str(user.name),
-            'email': str(user.email_address),
             'password': str(user.password)
         }
         return HttpResponse(json.dumps(user_info))
@@ -71,17 +70,44 @@ class UserViews:
         """
         Create a new user.
         """
+        new_user = 0
         try:
             info = json.loads(request.body)
-            if User.objects.filter(name=info['name']).count() > 0:
-                return HttpResponseBadRequest("Username Taken")
-            elif User.objects.filter(email_address=info['email']).count() > 0:
-                return HttpResponseBadRequest("Email Taken")
+            if User.objects.filter(name=info['user_name']).count() > 0:
+                return HttpResponse(json.dumps({"error": "username taken"}))
             else:
-                User.objects.create(name=info['name'],
-                                    email_address=info['email'],
-                                    password=info['password'])
-                return HttpResponse("User created successfully.")
+                new_user = User(name=info['name'],
+                                user_name=info['user_name'],
+                                password=info['password'])
+                new_user.save()
+                return HttpResponse(json.dumps({
+                    'name': new_user.name,
+                    'pk': new_user.pk
+                }))
+        except KeyError as e:
+            if isinstance(new_user, User):
+                new_user.delete()
+            return HttpResponseBadRequest("Could not create user. " + str(e))
+
+    @staticmethod
+    @csrf_exempt
+    def sign_in_user(request):
+        """
+        Allow the user to sign in.
+        """
+        try:
+            info = json.loads(request.body)
+            response = {}
+            if User.objects.filter(user_name=info['user_name'],
+                                   password=info['password']).count():
+                user = User.objects.get(user_name=info['user_name'],
+                                        password=info['password'])
+                response['name'] = user.name
+                response['pk'] = user.pk
+            else:
+                response['error'] = 'user name or password incorrect.'
+            return HttpResponse(json.dumps(response))
+
         except KeyError as e:
             return HttpResponseBadRequest("Could not create user. " + str(e))
 

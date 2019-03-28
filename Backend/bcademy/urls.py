@@ -25,6 +25,11 @@ urlpatterns = [
          views.UserViews.create_user,
          name='create_user'),
 
+    # EX: bcademy/users/signin/
+    path('users/signin/',
+         views.UserViews.sign_in_user,
+         name='sign_in_user'),
+
     # EX: bcademy/subjects/
     path('subjects/',
          views.SubjectViews.get_all_subjects,

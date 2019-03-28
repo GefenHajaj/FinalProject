@@ -192,8 +192,8 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
     }
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
-        if (index == _smallTopics.length) {
-          return Container(height: _tileHeight,);
+        if (index >= _smallTopics.length) {
+          return Container(height: 75.0,);
         }
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -234,7 +234,7 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
           ),
         );
       },
-      itemCount: _smallTopics.length + 1,
+      itemCount: _smallTopics.length + 2,
     );
   }
 

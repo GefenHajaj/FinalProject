@@ -19,7 +19,7 @@ class User(models.Model):
     """
     date_created = models.DateTimeField('Date Created', auto_now_add=True)
     name = models.CharField(max_length=100)
-    email_address = models.EmailField()
+    user_name = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
 
     def __str__(self):

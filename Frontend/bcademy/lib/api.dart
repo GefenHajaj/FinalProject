@@ -261,6 +261,25 @@ class Api {
       return null;
     }
   }
+  
+  /// Create new user
+  /// return 1 for success. return 0 for failure.
+  Future<int> register(Map userInfo, bool signIn) async {
+    var url;
+    signIn ? url = Uri.http(_url, 'bcademy/users/signin/') : url = Uri.http(_url, 'bcademy/users/create/');
+    var response = await http.post(url, body: json.encode(userInfo));
+
+    if (response.statusCode == 200) {
+      var info = json.decode(response.body);
+      Data.userName = info['name'];
+      Data.userPk = info['pk'];
+      return 1;
+    }
+    else {
+      print("Could not create user");
+      return 0;
+    }
+  }
 }
 
 
@@ -268,6 +287,8 @@ class Api {
 class Data {
   static List<Subject> allSubjects;
   static int fileNum = 0;
+  static String userName;
+  static int userPk;
 
   /// This function should be called when first opening the app.
   static void startApp({int userPk}) async {
