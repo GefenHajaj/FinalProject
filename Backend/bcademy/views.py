@@ -74,7 +74,7 @@ class UserViews:
         try:
             info = json.loads(request.body)
             if User.objects.filter(name=info['user_name']).count() > 0:
-                return HttpResponse(json.dumps({"error": "username taken"}))
+                return HttpResponseBadRequest(json.dumps({"error": "username taken"}))
             else:
                 new_user = User(name=info['name'],
                                 user_name=info['user_name'],
@@ -99,14 +99,15 @@ class UserViews:
             info = json.loads(request.body)
             response = {}
             if User.objects.filter(user_name=info['user_name'],
-                                   password=info['password']).count():
+                                   password=info['password']).count() > 0:
                 user = User.objects.get(user_name=info['user_name'],
                                         password=info['password'])
                 response['name'] = user.name
                 response['pk'] = user.pk
+                return HttpResponse(json.dumps(response))
             else:
                 response['error'] = 'user name or password incorrect.'
-            return HttpResponse(json.dumps(response))
+                return HttpResponseBadRequest(json.dumps(response))
 
         except KeyError as e:
             return HttpResponseBadRequest("Could not create user. " + str(e))
