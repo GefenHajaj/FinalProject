@@ -58,8 +58,8 @@ class Api {
   }
 
   /// Returns all the tests for a given user.
-  Future<List<Test>> getAllTests(int userPk) async {
-    final url = Uri.http(_url, '/bcademy/users/futuretests/$userPk/');
+  Future<List<Test>> getAllTests() async {
+    final url = Uri.http(_url, '/bcademy/users/futuretests/${Data.userPk}/');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final allTests = json.decode(response.body);
@@ -70,8 +70,7 @@ class Api {
       return tests;
     }
     else {
-      print("Something went wrong with getting all tests for user (pk) "
-          "$userPk. Try to check the server.");
+      print("Something went wrong with getting all tests. Try to check the server.");
       return null;
     }
   }
@@ -128,11 +127,11 @@ class Api {
   }
 
   /// Creating a new test!
-  Future<int> createTest(int subjectPk, int userPk, int year, int month, int day, List smallTopicsList) async {
+  Future<int> createTest(int subjectPk, int year, int month, int day, List smallTopicsList) async {
     final url = Uri.http(_url, '/bcademy/tests/create/');
     final testInfo = {
       'subject': subjectPk,
-      'user': userPk,
+      'user': Data.userPk,
       'year': year,
       'month': month,
       'day': day,
@@ -187,8 +186,7 @@ class Api {
 
   /// Uploading a new file to server
   Future<void> uploadFile(int subjectPk, String path, String info, bool isPublic) async {
-    int userPk = 1;
-    final url = Uri.http(_url, '/bcademy/$userPk/$subjectPk/upload/');
+    final url = Uri.http(_url, '/bcademy/${Data.userPk}/$subjectPk/upload/');
     var request = http.MultipartRequest("POST", url);
     print((path));
     request.files.add(await http.MultipartFile.fromPath('file', path,));
@@ -204,14 +202,13 @@ class Api {
 
   /// Getting info of all files of a specific user
   Future<Map> getUserFiles() async {
-    int userPk = 1;
-    final url = Uri.http(_url, '/bcademy/allfiles/$userPk/');
+    final url = Uri.http(_url, '/bcademy/allfiles/${Data.userPk}/');
     var response = await http.get(url);
     if (response.statusCode == 200) {
       return json.decode(response.body);
     }
     else {
-      print("Something went wrong with getting all files of user $userPk");
+      print("Something went wrong with getting all files of user ${Data.userPk}");
       return null;
     }
   }

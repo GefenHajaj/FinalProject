@@ -9,6 +9,7 @@ import 'package:bcademy/profile_page.dart';
 import 'package:bcademy/search_page.dart';
 import 'package:bcademy/home_page.dart';
 import 'package:bcademy/sign_in_page.dart';
+import 'package:bcademy/sign_up_page.dart';
 
 /// The function that's called when we run the app
 void main() => runApp(BCademy());

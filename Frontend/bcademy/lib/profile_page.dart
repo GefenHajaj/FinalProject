@@ -9,6 +9,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:open_file/open_file.dart';
 import 'package:bcademy/file_page.dart';
+import 'package:bcademy/sign_in_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage();
@@ -32,6 +33,16 @@ class _ProfilePageState extends State<ProfilePage> {
       Navigator.of(context).push(MaterialPageRoute<Null>(
           builder: (BuildContext context) {
             return FilePage(fileData: fileData);
+          }
+      ));
+    });
+  }
+
+  void _goToSignInPage() {
+    setState(() {
+      Navigator.of(context).pushReplacement(MaterialPageRoute<Null>(
+          builder: (BuildContext context) {
+            return SignInPage();
           }
       ));
     });
@@ -89,22 +100,42 @@ class _ProfilePageState extends State<ProfilePage> {
       children: <Widget>[
         Row(
           textDirection: TextDirection.rtl,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text("שם משתמש", style: TextStyle(fontSize: 24.0),),
+              child: Icon(Icons.person, size: 36.0,),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.person),
-            )
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Text(Data.userName, style: TextStyle(fontSize: 24.0),),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: InkWell(
+                onTap: () {_goToSignInPage();},
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.transparent,),
+                      borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.redAccent
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text("התנתק", style: TextStyle(fontWeight: FontWeight.bold),),
+                  ),),
+              ),
+            ),
           ],
         ),
+        Container(color: Colors.black, height: 1.0,),
         Divider(height: 5.0,),
         Row(
           textDirection: TextDirection.rtl,
-          children: <Widget>[Text("כל הקבצים שלי", style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),)],
+          children: <Widget>[Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Text("כל הקבצים שלי", style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),),
+          )],
         ),
         Divider(height: 10.0,),
       ] + lastPart,

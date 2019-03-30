@@ -360,7 +360,7 @@ class _ChooseDateState extends State<ChooseDate> {
     final yesterday = new DateTime(now.year, now.month, now.day - 1);
     if (!_selectedDate.isBefore(yesterday)) {
       Api().createTest(
-          widget.subjectPk, 1,
+          widget.subjectPk,
           _selectedDate.year,
           _selectedDate.month,
           _selectedDate.day,

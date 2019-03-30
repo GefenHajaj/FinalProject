@@ -219,6 +219,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                   textAlign: TextAlign.center,
                 ),
                 Divider(height: 15.0,),
+                Container(color: Colors.grey, height: 1.0,),
                 Container(height: 10.0,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -251,6 +252,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                   ),
                 ),
                 Divider(height: 15.0,),
+                Container(color: Colors.grey, height: 1.0,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -258,6 +260,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                     Text('לפרסם באופן פומבי', textDirection: TextDirection.rtl, style: TextStyle(fontSize: 16.0),)
                   ],
                 ),
+                Container(color: Colors.grey, height: 1.0,),
                 Divider(height: 20.0,),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),

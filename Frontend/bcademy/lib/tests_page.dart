@@ -19,7 +19,7 @@ class _TestsPageState extends State<TestsPage> {
   List<Test> tests;
 
   Future<void> _getAllTests() async {
-    final tempTests = await Api().getAllTests(1);
+    final tempTests = await Api().getAllTests();
     setState(() {
       tests = tempTests;
     });
@@ -38,7 +38,8 @@ class _TestsPageState extends State<TestsPage> {
 
   /// Returns a [ListView] of [TestTile]s.
   Widget _buildTestsWidgetsList() {
-    return ListView.builder(
+    if (tests.isNotEmpty) {
+      return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
           if (index != tests.length) {
             return TestTile(test: tests[index], onTap: _onTestTap);
@@ -49,7 +50,16 @@ class _TestsPageState extends State<TestsPage> {
           }
         },
         itemCount: tests == null ? 0 : tests.length + 1,
-    );
+      );
+    }
+    else {
+      return Align(
+        alignment: Alignment(0, -0.2),
+        child: SingleChildScrollView(
+          child: Text("עדיין לא יצרת מבחנים!", style: TextStyle(fontSize: 34.0), textDirection: TextDirection.rtl,),
+        ),
+      );
+    }
   }
 
   /// Go to create a new test!

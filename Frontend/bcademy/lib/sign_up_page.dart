@@ -8,18 +8,18 @@ import 'package:bcademy/upload_page.dart';
 import 'package:bcademy/profile_page.dart';
 import 'package:bcademy/search_page.dart';
 import 'package:bcademy/home_page.dart';
-import 'package:bcademy/sign_up_page.dart';
+import 'package:bcademy/sign_in_page.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({Key key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key key}) : super(key: key);
 
   @override
-  _SignInPageState createState() => _SignInPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignUpPageState extends State<SignUpPage> {
   var _buttonColor = Color(0xff98ee99);
-  var _buttonText = "היכנס";
+  var _buttonText = "הירשם";
   var _buttonHeight = 75.0;
   var _buttonWidth = 300.0;
   var _normalButtonHeight = 75.0;
@@ -27,17 +27,19 @@ class _SignInPageState extends State<SignInPage> {
   var _warningButtonHeight = 100.0;
   var _warningButtonWidth = 325.0;
   var _normalButtonColor = Color(0xff98ee99);
-  var _normalButtonText = "היכנס";
+  var _normalButtonText = "הירשם";
   var _warningButtonColor = Colors.red;
-  var _warningButtonText = "שם המשתמש או הססמא\nאינם נכונים!";
-  var _valueNotFoundText = "אתה חייב להכניס\nשם משתמש וססמא!";
+  var _warningButtonText = "שם המשתמש או הססמא\nכבר בשימוש!";
+  var _valueNotFoundText = "אתה חייב להכניס\nשם מלא, שם משתמש וססמא!";
+  double _heightDiff = 30.0;
 
   String userName = "";
   String password = "";
+  String name = "";
 
-  void _trySignIn() {
-    if (userName != "" && password != "") {
-      _signIn();
+  void _trySignUp() {
+    if (userName != "" && password != "" && name != "") {
+      _signUp();
     }
     else {
       setState(() {
@@ -49,9 +51,9 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
-  Future<void> _signIn() async {
+  Future<void> _signUp() async {
     int result = await Api().register(
-        {'user_name': userName, 'password': password}, true);
+        {'user_name': userName, 'password': password, 'name': name}, false);
     if (result == 1) {
       setState(() {
         Navigator.of(context).pushReplacement(MaterialPageRoute<Null>(
@@ -71,11 +73,11 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
-  void _goToSignUpPage() {
+  void _goToSignInPage() {
     setState(() {
       Navigator.of(context).pushReplacement(MaterialPageRoute<Null>(
           builder: (BuildContext context) {
-            return SignUpPage();
+            return SignInPage();
           }
       ));
     });
@@ -88,8 +90,44 @@ class _SignInPageState extends State<SignInPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(height: 75.0,),
-          Center(child: Text("ברוכים הבאים!", style: TextStyle(fontSize: 44.0), textDirection: TextDirection.rtl,)),
-          Container(height: 75.0,),
+          Center(child: Text("בואו נירשם!", style: TextStyle(fontSize: 44.0), textDirection: TextDirection.rtl,)),
+          Container(height: 50.0,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            textDirection: TextDirection.rtl,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("שם מלא: ",style: TextStyle(fontSize: 24.0), textDirection: TextDirection.rtl,),
+              ),
+              Directionality(
+                textDirection: TextDirection.rtl,
+                child: Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 8, 8, 8),
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        hintText: 'השם היפה שלי (שלא יראו)',
+                      ),
+                      textDirection: TextDirection.rtl,
+                      maxLength: 100,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+                      onChanged: (input) {
+                        setState(() {
+                          name = input;
+                          _buttonWidth = _normalButtonWidth;
+                          _buttonText = _normalButtonText;
+                          _buttonColor = _normalButtonColor;
+                          _buttonHeight = _normalButtonHeight;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Container(height: _heightDiff),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             textDirection: TextDirection.rtl,
@@ -106,7 +144,7 @@ class _SignInPageState extends State<SignInPage> {
                     child: TextField(
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                       decoration: const InputDecoration(
-                        hintText: 'השם שלי',
+                        hintText: 'שם המשתמש שלי (שיראו)',
                       ),
                       textDirection: TextDirection.rtl,
                       maxLength: 100,
@@ -125,7 +163,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ],
           ),
-          Container(height: 50.0,),
+          Container(height: _heightDiff),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             textDirection: TextDirection.rtl,
@@ -161,7 +199,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ],
           ),
-          Container(height: 140.0,),
+          Container(height: 75.0,),
           Material(
               elevation: 10.0,
               borderRadius: BorderRadius.circular(50.0),
@@ -176,7 +214,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(50.0),
-                  onTap: () {_trySignIn();},
+                  onTap: () {_trySignUp();},
                   child: Center(
                     child: Text(_buttonText,
                       textAlign: TextAlign.center,
@@ -193,22 +231,22 @@ class _SignInPageState extends State<SignInPage> {
           Container(height: 20.0),
           Material(
             elevation: 17.0,
-            shadowColor: Colors.blue,
+            shadowColor: Colors.green,
             color: Colors.transparent,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
-                onTap: () {_goToSignUpPage();},
+                onTap: () {_goToSignInPage();},
                 child: Container(
                   width: 150.0,
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.transparent,),
                       borderRadius: BorderRadius.circular(25.0),
-                      color: Colors.lightBlue[600]
+                      color: Colors.lightGreen[600]
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Text("אין לי משתמש!", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold,)),
+                    child: Text("כבר יש לי משתמש!", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold,),),
                   ),),
               ),
             ),
@@ -228,10 +266,10 @@ class _SignInPageState extends State<SignInPage> {
           end: Alignment.bottomLeft,
           stops: [0.05, 0.3, 0.7, 0.9],
           colors: [
-            Colors.lightBlue[400],
-            Colors.lightBlue[500],
-            Colors.lightBlue[600],
-            Colors.lightBlue[700],
+            Colors.lightGreen[400],
+            Colors.lightGreen[500],
+            Colors.lightGreen[600],
+            Colors.lightGreen[700],
           ],
         ),
       ),
