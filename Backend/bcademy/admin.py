@@ -7,6 +7,7 @@ admin.site.register(Test)
 admin.site.register(Subject)
 admin.site.register(User)
 admin.site.register(Document)
+admin.site.register(Quiz)
 
 
 

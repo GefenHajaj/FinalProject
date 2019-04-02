@@ -365,3 +365,82 @@ class DocumentViews:
                 }
 
         return HttpResponse(json.dumps(final_result, ensure_ascii=False))
+
+
+class QuizViews:
+
+    @staticmethod
+    def get_quizzes_for_user(request, user_pk):
+        """
+        Get all the quizzes for a specific user.
+        """
+
+        quizzes_info = {}
+        for quiz in Quiz.objects.all():
+            if quiz.users_that_played.filter(pk=user_pk).count() == 0:
+                quizzes_info[quiz.pk] = quiz.title
+        return HttpResponse(json.dumps(quizzes_info, ensure_ascii=False))
+
+    @staticmethod
+    def get_quiz_info(request, quiz_pk):
+        """
+        Get all info about a specific quiz.
+        """
+        quiz = get_object_or_404(Quiz, pk=quiz_pk)
+        top_three = json.loads(quiz.top_three_users_pks)
+        top_three_names = []
+        for i in range(len(top_three)):
+            top_three_names.append(
+                get_object_or_404(User, pk=top_three[i]).name
+            )
+
+        quiz_info = {
+            'pk': quiz.pk,
+            'title': quiz.title,
+            'subject': quiz.subject.name,
+            'num_questions': quiz.questions.count(),
+            'top_three_users': json.loads(quiz.top_three_users_pks),
+            'top_three_names': top_three_names,
+            'top_three_scores': json.loads(quiz.top_three_scores),
+        }
+        return HttpResponse(json.dumps(quiz_info, ensure_ascii=False))
+
+    @staticmethod
+    def get_quiz_questions(request, quiz_pk):
+        """
+        Get all the questions and their pks for a specific quiz.
+        """
+        quiz = get_object_or_404(Quiz, pk=quiz_pk)
+        questions = {}
+        for q in quiz.questions.all():
+            questions[q.question_text] = [
+                q.answer1,
+                q.answer2,
+                q.answer3,
+                q.answer4
+            ]
+        return HttpResponse(json.dumps(questions, ensure_ascii=False))
+
+    @staticmethod
+    @csrf_exempt
+    def set_new_score(request, quiz_pk):
+        """
+        Set a new score for a quiz.
+        """
+        quiz = get_object_or_404(Quiz, pk=quiz_pk)
+        info = json.loads(request.body)
+        quiz.top_three_users_pks = json.dumps(info['users'])
+        quiz.top_three_scores = json.dumps(info['scores'])
+        quiz.save()
+        return HttpResponse("OK")
+
+    @staticmethod
+    @csrf_exempt
+    def set_quiz_users(request, quiz_pk):
+        info = json.loads(request.body)
+        user_pk = info['user_pk']
+        quiz = get_object_or_404(Quiz, pk=quiz_pk)
+        user = get_object_or_404(User, pk=user_pk)
+        quiz.users_that_played.add(user)
+        quiz.save()
+        return HttpResponse("OK")

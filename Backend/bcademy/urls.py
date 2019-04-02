@@ -99,4 +99,29 @@ urlpatterns = [
     path('file/<int:pk>/',
          views.DocumentViews.get_file,
          name='get_file'),
+
+    # EX: bcademy/quiz/user/1/
+    path('quiz/user/<int:user_pk>/',
+         views.QuizViews.get_quizzes_for_user,
+         name='get_quizzes_for_user'),
+
+    # EX: bcademy/quiz/1/
+    path('quiz/<int:quiz_pk>/',
+         views.QuizViews.get_quiz_info,
+         name='get_quiz_info'),
+
+    # EX: bcademy/quiz/1/questions/
+    path('quiz/<int:quiz_pk>/questions/',
+         views.QuizViews.get_quiz_questions,
+         name='get_quiz_questions'),
+
+    # EX: bcademy/quiz/1/setscore/
+    path('quiz/<int:quiz_pk>/setscore/',
+         views.QuizViews.set_new_score,
+         name='set_new_score'),
+
+    # EX: bcademy/quiz/1/adduser/1/
+    path('quiz/<int:quiz_pk>/adduser/',
+         views.QuizViews.set_quiz_users,
+         name='set_quiz_users'),
 ]

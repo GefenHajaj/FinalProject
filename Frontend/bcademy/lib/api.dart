@@ -277,6 +277,59 @@ class Api {
       return 0;
     }
   }
+  
+  /// A function that gets all the quizzes for a user
+  Future<Map> getQuizzes() async {
+    final url = Uri.http(_url, 'bcademy/quiz/user/${Data.userPk}/');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+    else {
+      print("could not get the quiz for the user.");
+      return null;
+    }
+  }
+
+  /// Gets all the info about a specific quiz.
+  Future<Map> getQuiz(quizPk) async {
+    final url = Uri.http(_url, 'bcademy/quiz/$quizPk/');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+    else {
+      print("could not get quiz $quizPk.");
+      return null;
+    }
+  }
+
+  /// Gets all the questions of a specific quiz.
+  Future<Map> getQuizQuestions(quizPk) async {
+    final url = Uri.http(_url, 'bcademy/quiz/$quizPk/questions/');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+    else {
+      print("could not get quiz $quizPk questions.");
+      return null;
+    }
+  }
+
+  /// Set new scores for a quiz.
+  Future<void> setQuizNewScore(quizPk, usersPks, scores) async {
+    final url = Uri.http(_url, 'bcademy/quiz/$quizPk/setscore/');
+    var postBody = {'users': usersPks, 'scores': scores};
+    http.post(url, body: json.encode(postBody));
+  }
+
+  /// Tell the server a specific user has played a specific quiz.
+  Future<void> setQuizUser(quizPk) async {
+    final url = Uri.http(_url, 'bcademy/quiz/$quizPk/adduser/');
+    var postBody = {'user_pk': Data.userPk};
+    http.post(url, body: json.encode(postBody));
+  }
 }
 
 

@@ -82,3 +82,15 @@ class Document(models.Model):
 
     def save_file(self, file_data, file_name):
         self.file.save(file_name, file_data)
+
+
+class Quiz(models.Model):
+    """
+    A quiz that users can take and compete against others.
+    """
+    title = models.CharField(max_length=250)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    questions = models.ManyToManyField(Question)
+    users_that_played = models.ManyToManyField(User)
+    top_three_users_pks = models.CharField(max_length=1000)
+    top_three_scores = models.CharField(max_length=1000)
