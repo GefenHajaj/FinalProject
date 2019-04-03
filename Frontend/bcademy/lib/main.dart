@@ -27,7 +27,7 @@ class BCademy extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Rubik',
       ),
-      home: SignInPage(),
+      home: HomePage(), // remember to change
     );
   }
 }

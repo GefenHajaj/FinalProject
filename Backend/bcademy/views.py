@@ -376,9 +376,9 @@ class QuizViews:
         """
 
         quizzes_info = {}
-        for quiz in Quiz.objects.all():
+        for quiz in Quiz.objects.all().order_by('-date_created'):
             if quiz.users_that_played.filter(pk=user_pk).count() == 0:
-                quizzes_info[quiz.pk] = quiz.title
+                quizzes_info[quiz.pk] = [quiz.title, quiz.subject.name]
         return HttpResponse(json.dumps(quizzes_info, ensure_ascii=False))
 
     @staticmethod

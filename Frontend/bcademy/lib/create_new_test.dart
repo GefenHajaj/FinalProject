@@ -366,7 +366,10 @@ class _ChooseDateState extends State<ChooseDate> {
           _selectedDate.day,
           widget.smallTopics
       );
-      Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
+
     }
     else {
       setState(() {

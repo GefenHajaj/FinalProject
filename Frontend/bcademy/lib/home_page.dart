@@ -7,6 +7,7 @@ import 'package:bcademy/api.dart';
 import 'package:bcademy/upload_page.dart';
 import 'package:bcademy/profile_page.dart';
 import 'package:bcademy/search_page.dart';
+import 'package:bcademy/quizzes_page.dart';
 
 /// The home page of the app
 class HomePage extends StatefulWidget {
@@ -46,16 +47,19 @@ class _HomePageState extends State<HomePage> {
       }
       break;
       case 2: {
+        return QuizzesPage();
+      }
+      case 3: {
         return UploadFilePage();
       }
       break;
-      case 3: {
+      case 4: {
         return ProfilePage();
       }
       break;
     }
 
-    return Text("Got an index out of range 0-3. Woops!");
+    return Text("Got an index out of range 0-4. Woops!");
   }
 
   @override
@@ -74,6 +78,7 @@ class _HomePageState extends State<HomePage> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
           BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('Search')),
+          BottomNavigationBarItem(icon: Icon(Icons.help_outline), title: Text('Quizzes')),
           BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('Upload')),
           BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('Profile')),
         ],

@@ -292,7 +292,7 @@ class Api {
   }
 
   /// Gets all the info about a specific quiz.
-  Future<Map> getQuiz(quizPk) async {
+  Future<Map> getQuiz(int quizPk) async {
     final url = Uri.http(_url, 'bcademy/quiz/$quizPk/');
     var response = await http.get(url);
     if (response.statusCode == 200) {
@@ -305,7 +305,7 @@ class Api {
   }
 
   /// Gets all the questions of a specific quiz.
-  Future<Map> getQuizQuestions(quizPk) async {
+  Future<Map> getQuizQuestions(int quizPk) async {
     final url = Uri.http(_url, 'bcademy/quiz/$quizPk/questions/');
     var response = await http.get(url);
     if (response.statusCode == 200) {
@@ -318,14 +318,14 @@ class Api {
   }
 
   /// Set new scores for a quiz.
-  Future<void> setQuizNewScore(quizPk, usersPks, scores) async {
+  Future<void> setQuizNewScore(int quizPk, usersPks, scores) async {
     final url = Uri.http(_url, 'bcademy/quiz/$quizPk/setscore/');
     var postBody = {'users': usersPks, 'scores': scores};
     http.post(url, body: json.encode(postBody));
   }
 
   /// Tell the server a specific user has played a specific quiz.
-  Future<void> setQuizUser(quizPk) async {
+  Future<void> setQuizUser(int quizPk) async {
     final url = Uri.http(_url, 'bcademy/quiz/$quizPk/adduser/');
     var postBody = {'user_pk': Data.userPk};
     http.post(url, body: json.encode(postBody));
@@ -337,8 +337,8 @@ class Api {
 class Data {
   static List<Subject> allSubjects;
   static int fileNum = 0;
-  static String userName;
-  static int userPk;
+  static String userName = "גפן"; // remember to change this
+  static int userPk = 1; // remember to change
 
   /// This function should be called when first opening the app.
   static void startApp({int userPk}) async {

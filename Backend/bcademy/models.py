@@ -94,3 +94,7 @@ class Quiz(models.Model):
     users_that_played = models.ManyToManyField(User)
     top_three_users_pks = models.CharField(max_length=1000)
     top_three_scores = models.CharField(max_length=1000)
+    date_created = models.DateTimeField('Date Created', auto_now_add=True)
+
+    def __str__(self):
+        return str(self.title) + str(self.pk)
