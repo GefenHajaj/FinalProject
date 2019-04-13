@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:bcademy/structures.dart';
 import 'package:bcademy/test_tile.dart';
 import 'package:bcademy/api.dart';

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:bcademy/placeholder.dart';
 import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bcademy/home_page.dart';
+import 'dart:async';
 
 class QuizPage extends StatefulWidget {
   final Test test; // use this if this is a quiz fot a test

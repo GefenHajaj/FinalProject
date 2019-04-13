@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-import 'package:bcademy/structures.dart';
-import 'package:bcademy/test_tile.dart';
 import 'package:bcademy/api.dart';
 import 'dart:async';
-import 'package:bcademy/create_new_test.dart';
-import 'package:bcademy/navigator_page.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bcademy/quiz_info_page.dart';
 

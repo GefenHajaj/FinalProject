@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:bcademy/api.dart';
-import 'package:bcademy/structures.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:path_provider/path_provider.dart';
 import 'dart:async';
-import 'dart:io';
 import 'package:open_file/open_file.dart';
 
 

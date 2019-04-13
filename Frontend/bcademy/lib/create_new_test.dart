@@ -3,6 +3,7 @@ import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'dart:async';
 
 /// When choosing a subject for the new test.
 class ChooseSubjectPage extends StatefulWidget {

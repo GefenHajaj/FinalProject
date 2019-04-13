@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:bcademy/tests_page.dart';
-import 'package:bcademy/placeholder.dart';
-import 'package:bcademy/navigator_page.dart';
-import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
 import 'package:bcademy/upload_page.dart';
 import 'package:bcademy/profile_page.dart';

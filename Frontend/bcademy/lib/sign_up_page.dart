@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:bcademy/tests_page.dart';
-import 'package:bcademy/placeholder.dart';
-import 'package:bcademy/navigator_page.dart';
-import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
-import 'package:bcademy/upload_page.dart';
-import 'package:bcademy/profile_page.dart';
-import 'package:bcademy/search_page.dart';
 import 'package:bcademy/home_page.dart';
 import 'package:bcademy/sign_in_page.dart';
+import 'dart:async';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key key}) : super(key: key);

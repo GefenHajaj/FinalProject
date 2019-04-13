@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:bcademy/api.dart';
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
