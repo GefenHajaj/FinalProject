@@ -217,13 +217,18 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          child: AutoSizeText(
-                            _smallTopics[index][1],
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(
-                                fontSize: _fontSize
+                          height: _tileHeight,
+                          width: MediaQuery.of(context).size.width/1.3,
+                          child: Align(
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: AutoSizeText(
+                              _smallTopics[index][1],
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                  fontSize: _fontSize
+                              ),
+                              maxLines: 2,
                             ),
-                            maxLines: 2,
                           ),
                         ),
                       ),
@@ -366,9 +371,7 @@ class _ChooseDateState extends State<ChooseDate> {
           _selectedDate.day,
           widget.smallTopics
       );
-      Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.pop(context);
+      Navigator.of(context).pushNamedAndRemoveUntil('/tests', (Route<dynamic> route) => false);
 
     }
     else {

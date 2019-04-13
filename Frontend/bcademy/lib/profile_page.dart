@@ -159,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
               title: Text("הפרופיל שלי"),
               centerTitle: true,
               backgroundColor: Color(0xff29b6f6),
-              elevation: 0.0,
+              elevation: 5.0,
             )
         ),
       );

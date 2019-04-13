@@ -411,14 +411,11 @@ class QuizViews:
         Get all the questions and their pks for a specific quiz.
         """
         quiz = get_object_or_404(Quiz, pk=quiz_pk)
-        questions = {}
+        questions = []
         for q in quiz.questions.all():
-            questions[q.question_text] = [
-                q.answer1,
-                q.answer2,
-                q.answer3,
-                q.answer4
-            ]
+            questions.append([q.question_text, [1, q.answer1], [2, q.answer2],
+                              [3, q.answer3], [4, q.answer4]])
+
         return HttpResponse(json.dumps(questions, ensure_ascii=False))
 
     @staticmethod

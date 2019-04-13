@@ -11,7 +11,8 @@ import 'package:bcademy/quizzes_page.dart';
 
 /// The home page of the app
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  final int startPage;
+  HomePage({Key key, this.startPage}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -20,11 +21,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // The default page
   int _selectedPageIndex = 0;
+  final _testsPage = TestsPage();
+  final _searchPage = SearchPage();
+  final _quizzesPage = QuizzesPage();
+  final _uploadPage = UploadFilePage();
+  final _profilePage = ProfilePage();
 
   @override
   void initState() {
     super.initState();
-    Data.startApp(userPk: 1);
+    if (widget.startPage != null) {
+      _selectedPageIndex = widget.startPage;
+    }
+    Data.startApp();
   }
 
   /// Changing the shown page
@@ -39,22 +48,22 @@ class _HomePageState extends State<HomePage> {
   Widget _getPage(int index) {
     switch (index) {
       case 0: {
-        return TestsPage();
+        return _testsPage;
       }
       break;
       case 1: {
-        return SearchPage();
+        return _searchPage;
       }
       break;
       case 2: {
-        return QuizzesPage();
+        return _quizzesPage;
       }
       case 3: {
-        return UploadFilePage();
+        return _uploadPage;
       }
       break;
       case 4: {
-        return ProfilePage();
+        return _profilePage;
       }
       break;
     }
@@ -68,7 +77,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('BCademy', textAlign: TextAlign.center, style: TextStyle(color: Colors.black, fontFamily: 'Norican', fontSize: 30.0),),
         centerTitle: true,
-        elevation: 0.0,
+        elevation: 1.0,
         backgroundColor: Color(0xff80d8ff),
       ),
       body: Center(

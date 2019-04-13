@@ -28,6 +28,10 @@ class BCademy extends StatelessWidget {
         fontFamily: 'Rubik',
       ),
       home: HomePage(), // remember to change
+      routes: <String, WidgetBuilder> {
+        '/tests': (BuildContext context) => new HomePage(),
+        '/quizzes': (BuildContext context) => new HomePage(startPage: 2,),
+      },
     );
   }
 }

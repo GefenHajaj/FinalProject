@@ -207,11 +207,18 @@ class _SearchPageState extends State<SearchPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          AutoSizeText(
-                            "${topics[pk][0]}",
-                            textDirection: TextDirection.rtl,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 22.0, fontFamily: 'Gisha'),
+                          Container(
+                            height: _rowHeight / 2.5,
+                            width: MediaQuery.of(context).size.width/1.3,
+                            child: Align(
+                              alignment: AlignmentDirectional.centerEnd,
+                              child: AutoSizeText(
+                                "${topics[pk][0]}",
+                                textDirection: TextDirection.rtl,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(fontSize: 22.0, fontFamily: 'Gisha'),
+                              ),
+                            ),
                           ),
                           Text(
                             "מקצוע: ${topics[pk][1]}",
@@ -287,7 +294,7 @@ class _SearchPageState extends State<SearchPage> {
             title: Text("חיפוש"),
             centerTitle: true,
             backgroundColor: Color(0xff29b6f6),
-            elevation: 0.0,
+            elevation: 5.0,
           )
       ),
       body: _getPage(),

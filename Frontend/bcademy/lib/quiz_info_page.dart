@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:bcademy/create_new_test.dart';
 import 'package:bcademy/navigator_page.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bcademy/quiz_page.dart';
 
 class QuizInfoPage extends StatefulWidget {
   final int quizPk;
@@ -25,6 +26,30 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
     setState(() {
       quizInfo = tempQuizInfo;
     });
+  }
+
+  void _goToQuizPage() {
+    setState(() {
+      Navigator.of(context).push(MaterialPageRoute<Null>(
+          builder: (BuildContext context) {
+            return QuizPage(quizPk: quizInfo['pk'], subject: quizInfo['subject'],
+              topThreeUsersPks: quizInfo['top_three_users'], topThreeUsersScores: quizInfo['top_three_scores'],);
+          }
+      ));
+    });
+  }
+
+  String _getTopScoresText() {
+    List topThreeNames = quizInfo['top_three_names'];
+    List topThreeScores = quizInfo['top_three_scores'];
+    String text = 'השחקנים הכי טובים:\n';
+    for (int i = 0; i < topThreeNames.length; i++) {
+      text += topThreeNames[i] + ' עם תוצאה של ' + topThreeScores[i].toString() + ' שניות\n';
+    }
+    if (text == 'השחקנים הכי טובים:\n') {
+      text = 'עדיין לא שיחקו בשאלון הזה!\nתהיו הראשונים לשחק!';
+    }
+    return text;
   }
 
   Widget _getButton() {
@@ -49,7 +74,7 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
             ),
             child: InkWell(
               borderRadius: BorderRadius.circular(50.0),
-              onTap: () {print("התחל בשאלון!");},
+              onTap: () {_goToQuizPage();},
               child: Center(
                 child: Text(text,
                   textDirection: TextDirection.rtl,
@@ -95,10 +120,10 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
                 ),
                 Padding(
                   padding: EdgeInsets.all(16.0),
-                  child: Text("פה יהיו רשימת המצליחים",
+                  child: Text(_getTopScoresText(),
                       textDirection: TextDirection.rtl,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 24.0)),
+                      textAlign: TextAlign.start,
+                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
                 ),
                 Container(height: 100.0,),
                 _getButton()

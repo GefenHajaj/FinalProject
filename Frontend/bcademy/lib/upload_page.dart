@@ -106,6 +106,189 @@ class _UploadFilePageState extends State<UploadFilePage> {
     return allSubjects;
   }
 
+  Widget _getBody() {
+    return SingleChildScrollView(
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          child: Column(
+            textDirection: TextDirection.rtl,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: DropdownButton(
+                    isExpanded: false,
+                    hint: Text('מאיפה לבחור את הקובץ?', textDirection: TextDirection.rtl,),
+                    value: _pickingType,
+                    items: <DropdownMenuItem>[
+                      DropdownMenuItem(
+                        child: Text('צלם תמונה'),
+                        value: FileType.CAMERA,
+                      ),
+                      DropdownMenuItem(
+                        child: Text('בחר תמונה'),
+                        value: FileType.IMAGE,
+                      ),
+                      DropdownMenuItem(
+                        child: Text('בחר סרטון'),
+                        value: FileType.VIDEO,
+                      ),
+                      DropdownMenuItem(
+                        child: Text('כל הקבצים'),
+                        value: FileType.ANY,
+                      ),
+                      DropdownMenuItem(
+                        child: Text('פורמט אחר'),
+                        value: FileType.CUSTOM,
+                      ),
+                    ],
+                    onChanged: (value) => setState(() => _pickingType = value)),
+              ),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 150.0),
+                child: _pickingType == FileType.CUSTOM
+                    ? TextFormField(
+                  maxLength: 20,
+                  autovalidate: true,
+                  controller: _controller,
+                  decoration: InputDecoration(labelText: 'הכנס סוג קובץ', labelStyle: TextStyle()),
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.none,
+                  validator: (value) {
+                    RegExp reg = RegExp(r'[^a-zA-Z0-9]');
+                    if (reg.hasMatch(value)) {
+                      _hasValidMime = false;
+                      return 'Invalid format';
+                    }
+                    _hasValidMime = true;
+                  },
+                )
+                    : Container(height: 0.5,),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child:Material(
+                    elevation: 10.0,
+                    borderRadius: BorderRadius.circular(50.0),
+                    color: Colors.transparent,
+                    child: Container(
+                      height: 50.0,
+                      width: 200.0,
+                      decoration: BoxDecoration(
+                          color: Color(0xffb3e5fc),
+                          borderRadius: BorderRadius.circular(50.0)
+                      ),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(50.0),
+                        onTap: _openFileExplorer,
+                        child: Center(
+                          child: Text("פתח את בוחר הקבצים",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.0
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Text(
+                  'שם הקובץ:',
+                  textDirection: TextDirection.rtl,
+                  textAlign: TextAlign.end,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+              Text(
+                _fileName,
+                textAlign: TextAlign.center,
+              ),
+              Divider(height: 15.0,),
+              Container(color: Colors.grey, height: 1.0,),
+              Container(height: 10.0,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(8.0, 8.0, 25.0, 8.0),
+                    child: DropdownButton(
+                        value: _subjectPk,
+                        items: _getSubjectsList(),
+                        onChanged: (value) => setState(() => _subjectPk = value)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 45.0),
+                    child: Text('בחר נושא מתאים:', textDirection: TextDirection.rtl, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
+                  ),
+                ],
+              ),
+              Divider(height: 15.0,),
+              Padding(
+                padding: const EdgeInsets.only(right: 60.0, left: 60.0),
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: TextFormField(
+                    maxLength: 100,
+                    decoration: InputDecoration(labelText: 'מידע נוסף על הקובץ (לא חובה)', labelStyle: TextStyle()),
+                    keyboardType: TextInputType.text,
+                    textDirection: TextDirection.rtl,
+                    onFieldSubmitted: (value) => setState(() => _info = value),
+                  ),
+                ),
+              ),
+              Divider(height: 15.0,),
+              Container(color: Colors.grey, height: 1.0,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Checkbox(value: _isPublic, onChanged: (value) => setState(() => _isPublic = value)),
+                  Text('לפרסם באופן פומבי', textDirection: TextDirection.rtl, style: TextStyle(fontSize: 16.0),)
+                ],
+              ),
+              Container(color: Colors.grey, height: 1.0,),
+              Divider(height: 20.0,),
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+                child: Material(
+                    elevation: 10.0,
+                    borderRadius: BorderRadius.circular(50.0),
+                    color: Colors.transparent,
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 100),
+                      height: _height,
+                      width: _width,
+                      decoration: BoxDecoration(
+                          color: _color,
+                          borderRadius: BorderRadius.circular(50.0)
+                      ),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(50.0),
+                        onTap: () {_uploadFile();},
+                        child: Center(
+                          child: Text(_text,
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: _size
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,189 +298,10 @@ class _UploadFilePageState extends State<UploadFilePage> {
             title: Text("העלאת קובץ"),
             centerTitle: true,
             backgroundColor: Color(0xff29b6f6),
-            elevation: 0.0,
+            elevation: 5.0,
           )
       ),
-      body: SingleChildScrollView(
-        child: Align(
-          alignment: Alignment.center,
-          child: Container(
-            child: Column(
-              textDirection: TextDirection.rtl,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: DropdownButton(
-                    isExpanded: false,
-                      hint: Text('מאיפה לבחור את הקובץ?', textDirection: TextDirection.rtl,),
-                      value: _pickingType,
-                      items: <DropdownMenuItem>[
-                        DropdownMenuItem(
-                          child: Text('צלם תמונה'),
-                          value: FileType.CAMERA,
-                        ),
-                        DropdownMenuItem(
-                          child: Text('בחר תמונה'),
-                          value: FileType.IMAGE,
-                        ),
-                        DropdownMenuItem(
-                          child: Text('בחר סרטון'),
-                          value: FileType.VIDEO,
-                        ),
-                        DropdownMenuItem(
-                          child: Text('כל הקבצים'),
-                          value: FileType.ANY,
-                        ),
-                        DropdownMenuItem(
-                          child: Text('פורמט אחר'),
-                          value: FileType.CUSTOM,
-                        ),
-                      ],
-                      onChanged: (value) => setState(() => _pickingType = value)),
-                ),
-                ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 150.0),
-                  child: _pickingType == FileType.CUSTOM
-                      ? TextFormField(
-                    maxLength: 20,
-                    autovalidate: true,
-                    controller: _controller,
-                    decoration: InputDecoration(labelText: 'הכנס סוג קובץ', labelStyle: TextStyle()),
-                    keyboardType: TextInputType.text,
-                    textCapitalization: TextCapitalization.none,
-                    validator: (value) {
-                      RegExp reg = RegExp(r'[^a-zA-Z0-9]');
-                      if (reg.hasMatch(value)) {
-                        _hasValidMime = false;
-                        return 'Invalid format';
-                      }
-                      _hasValidMime = true;
-                    },
-                  )
-                      : Container(height: 0.5,),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child:Material(
-                      elevation: 10.0,
-                      borderRadius: BorderRadius.circular(50.0),
-                      color: Colors.transparent,
-                      child: Container(
-                        height: 50.0,
-                        width: 200.0,
-                        decoration: BoxDecoration(
-                            color: Color(0xffb3e5fc),
-                            borderRadius: BorderRadius.circular(50.0)
-                        ),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(50.0),
-                          onTap: _openFileExplorer,
-                          child: Center(
-                            child: Text("פתח את בוחר הקבצים",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.0
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Text(
-                    'שם הקובץ:',
-                    textDirection: TextDirection.rtl,
-                    textAlign: TextAlign.end,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                ),
-                Text(
-                  _fileName,
-                  textAlign: TextAlign.center,
-                ),
-                Divider(height: 15.0,),
-                Container(color: Colors.grey, height: 1.0,),
-                Container(height: 10.0,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(8.0, 8.0, 25.0, 8.0),
-                      child: DropdownButton(
-                          value: _subjectPk,
-                          items: _getSubjectsList(),
-                          onChanged: (value) => setState(() => _subjectPk = value)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 45.0),
-                      child: Text('בחר נושא מתאים:', textDirection: TextDirection.rtl, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
-                    ),
-                  ],
-                ),
-                Divider(height: 15.0,),
-                Padding(
-                  padding: const EdgeInsets.only(right: 60.0, left: 60.0),
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: TextFormField(
-                      maxLength: 100,
-                      decoration: InputDecoration(labelText: 'מידע נוסף על הקובץ (לא חובה)', labelStyle: TextStyle()),
-                      keyboardType: TextInputType.text,
-                      textDirection: TextDirection.rtl,
-                      onFieldSubmitted: (value) => setState(() => _info = value),
-                    ),
-                  ),
-                ),
-                Divider(height: 15.0,),
-                Container(color: Colors.grey, height: 1.0,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Checkbox(value: _isPublic, onChanged: (value) => setState(() => _isPublic = value)),
-                    Text('לפרסם באופן פומבי', textDirection: TextDirection.rtl, style: TextStyle(fontSize: 16.0),)
-                  ],
-                ),
-                Container(color: Colors.grey, height: 1.0,),
-                Divider(height: 20.0,),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                  child: Material(
-                      elevation: 10.0,
-                      borderRadius: BorderRadius.circular(50.0),
-                      color: Colors.transparent,
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 100),
-                        height: _height,
-                        width: _width,
-                        decoration: BoxDecoration(
-                            color: _color,
-                            borderRadius: BorderRadius.circular(50.0)
-                        ),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(50.0),
-                          onTap: () {_uploadFile();},
-                          child: Center(
-                            child: Text(_text,
-                              textAlign: TextAlign.center,
-                              textDirection: TextDirection.rtl,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: _size
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      body: _getBody()
     );
   }
 }

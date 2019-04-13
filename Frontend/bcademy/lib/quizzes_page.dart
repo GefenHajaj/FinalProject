@@ -24,6 +24,8 @@ class _QuizzesPageState extends State<QuizzesPage> {
   final _highlightColor = Colors.lightBlueAccent;
   final _splashColor = Colors.lightBlueAccent;
 
+
+
   Future<void> _getQuizzes() async {
     final tempQuizzes = await Api().getQuizzes();
     setState(() {
@@ -43,7 +45,13 @@ class _QuizzesPageState extends State<QuizzesPage> {
 
   Widget _getPage() {
     if (quizzes.isEmpty) {
-      return Center(child: Text("עדיין אין שאלונים שמתאימים לך!", style: TextStyle(fontSize: 30.0), textDirection: TextDirection.rtl,),);
+      return Center(
+        child: Text(
+          "אנחנו עובדים על עוד שאלונים...\nחכו עוד קצת!",
+          style: TextStyle(fontSize: 30.0),
+          textDirection: TextDirection.rtl,
+          textAlign: TextAlign.center,
+        ),);
     }
     else {
       final quizzesInfo = quizzes.values.toList();
@@ -121,7 +129,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
               title: Text("שאלונים תחרותיים"),
               centerTitle: true,
               backgroundColor: Color(0xff29b6f6),
-              elevation: 0.0,
+              elevation: 5.0,
             )
         ),
       );

@@ -122,7 +122,7 @@ class _TestsPageState extends State<TestsPage> {
               title: Text("המבחנים שלי"),
               centerTitle: true,
               backgroundColor: Color(0xff29b6f6),
-              elevation: 0.0,
+              elevation: 5.0,
             )
         ),
       );

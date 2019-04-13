@@ -305,7 +305,7 @@ class Api {
   }
 
   /// Gets all the questions of a specific quiz.
-  Future<Map> getQuizQuestions(int quizPk) async {
+  Future<List> getQuizQuestions(int quizPk) async {
     final url = Uri.http(_url, 'bcademy/quiz/$quizPk/questions/');
     var response = await http.get(url);
     if (response.statusCode == 200) {
@@ -341,7 +341,7 @@ class Data {
   static int userPk = 1; // remember to change
 
   /// This function should be called when first opening the app.
-  static void startApp({int userPk}) async {
+  static void startApp() async {
     final api = Api();
     Data.allSubjects = await api.getAllSubjects();
   }
