@@ -2,9 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # EX: bcademy/
-    path('', views.index, name='index'),
-
     # EX: bcademy/users/2/
     path('users/<int:pk>/',
          views.UserViews.get_user_info,

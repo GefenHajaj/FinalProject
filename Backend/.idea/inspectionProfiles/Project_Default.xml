@@ -1,0 +1,19 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="django.db.models.fields.DateTimeField.date" />
+          <option value="django.db.models.fields.files.FileField.save" />
+          <option value="bcademy.models.Test.objects" />
+          <option value="bcademy.models.User.objects" />
+          <option value="bcademy.models.Subject.objects" />
+          <option value="bcademy.models.SmallTopic.objects" />
+          <option value="bcademy.models.Document.objects" />
+          <option value="bcademy.models.Quiz.objects" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

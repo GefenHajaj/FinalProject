@@ -1,5 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import reverse, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils import timezone
 from datetime import datetime
@@ -8,18 +8,6 @@ import json
 from .models import *
 import os
 import mimetypes
-
-
-def index(request):
-    """
-    Get all available links.
-    URL: bcademy/
-    """
-    urlpatterns = {
-        'index': reverse('index'),
-    }
-    json_obj = json.dumps(urlpatterns)
-    return HttpResponse(json_obj)
 
 
 class UserViews:

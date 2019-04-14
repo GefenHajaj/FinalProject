@@ -1,6 +1,5 @@
 from django.db import models
 from finalproj import settings
-import mimetypes
 
 
 class Subject(models.Model):
