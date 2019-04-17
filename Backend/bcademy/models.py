@@ -82,6 +82,9 @@ class Document(models.Model):
     def save_file(self, file_data, file_name):
         self.file.save(file_name, file_data)
 
+    def __str__(self):
+        return str(self.info) + str(self.pk)
+
 
 class Quiz(models.Model):
     """
