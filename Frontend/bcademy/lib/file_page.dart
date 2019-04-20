@@ -29,24 +29,36 @@ class _FilePageState extends State<FilePage> {
     OpenFile.open(_filePath);
   }
 
+  /// Get a the button for downloading
   Widget _getButton() {
-    double height = 75.0;
-    double width = 300.0;
-    Color color = Color(0xffa7ffeb);
-    String text = "הורד קובץ";
-    var func;
+    double height = 75.0;             // height of button
+    double width = 300.0;             // width of button
+    Color color = Color(0xffa7ffeb);  // color of button
+    String text = "הורד קובץ";        // text of button
+    var func;                         // the func that'll execute on press
 
-    if (_afterDownload) {
+    // In case the download went successfully (after first press)
+    if (_afterDownload && _filePath != '') {
       height = 100.0;
       width = 350.0;
       color = Colors.lightGreenAccent;
       text = "הקובץ ירד!\nפתח אותו";
       func = _openFile;
     }
+    // In case download went wrong
+    else if (_afterDownload && _filePath == '') {
+      height = 100.0;
+      width = 350.0;
+      color = Colors.redAccent;
+      text = "משהו לא הסתדר...\nנסה שוב!";
+      func = _downloadFile;
+    }
+    // In case we did not press the button yet
     else {
       func = _downloadFile;
     }
 
+    // The button widget itself:
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Material(
@@ -63,10 +75,11 @@ class _FilePageState extends State<FilePage> {
             ),
             child: InkWell(
               borderRadius: BorderRadius.circular(50.0),
-              onTap: func,
+              onTap: func,  // on tap execute the function
               child: Center(
                 child: Text(text,
                   textDirection: TextDirection.rtl,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 24.0

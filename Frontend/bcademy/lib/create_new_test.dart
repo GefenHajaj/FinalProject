@@ -403,6 +403,45 @@ class _ChooseDateState extends State<ChooseDate> {
     );
   }
 
+  Widget _getBody() {
+    return Stack(
+      children: <Widget>[
+        _getCalender(),
+        Align(
+          alignment: Alignment(0, 0.8),
+          child: Material(
+              elevation: 10.0,
+              borderRadius: BorderRadius.circular(50.0),
+              color: Colors.transparent,
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 100),
+                height: _buttonHeight,
+                width: _buttonWidth,
+                decoration: BoxDecoration(
+                    color: _buttonColor,
+                    borderRadius: BorderRadius.circular(50.0)
+                ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(50.0),
+                  onTap: _finishCreatingTest,
+                  child: Center(
+                    child: Text(_buttonText,
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 24.0
+                      ),
+                    ),
+                  ),
+                ),
+              )
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -413,42 +452,7 @@ class _ChooseDateState extends State<ChooseDate> {
         title: Text("מבחן ב${widget.subjectName} - בחר תאריך",
           textDirection: TextDirection.rtl,),
       ),
-      body: Stack(
-        children: <Widget>[
-          _getCalender(),
-          Align(
-            alignment: Alignment(0, 0.8),
-            child: Material(
-                elevation: 10.0,
-                borderRadius: BorderRadius.circular(50.0),
-                color: Colors.transparent,
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 100),
-                  height: _buttonHeight,
-                  width: _buttonWidth,
-                  decoration: BoxDecoration(
-                      color: _buttonColor,
-                      borderRadius: BorderRadius.circular(50.0)
-                  ),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(50.0),
-                    onTap: _finishCreatingTest,
-                    child: Center(
-                      child: Text(_buttonText,
-                        textAlign: TextAlign.center,
-                        textDirection: TextDirection.rtl,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 24.0
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-            ),
-          ),
-        ],
-      )
+      body: _getBody()
     );
   }
 }

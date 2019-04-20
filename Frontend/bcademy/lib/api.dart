@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:bcademy/structures.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:bcademy/structures.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
@@ -13,7 +13,7 @@ class Api {
   /// Returns all subjects!
   Future<List<Subject>> getAllSubjects() async {
     final url = Uri.http(_url, "/bcademy/subjects/");
-    final  response = await http.get(url);
+    final response = await http.get(url);
     if (response.statusCode == 200) {
       final subjectsMap = json.decode(response.body);
       List<Subject> subjects = [];
@@ -21,17 +21,17 @@ class Api {
         subjects.add(Subject(pk: int.parse(pk), name: subjectsMap[pk]));
       }
       return subjects;
-    }
-    else {
+    } else {
       print("Error retreiving all subjects. Check the server...");
       return null;
     }
   }
-  
+
   /// Returns a Test object of the specific pk.
   Future<Test> getTest(int testPk) async {
     final url = Uri.http(_url, '/bcademy/tests/$testPk/');
     final response = await http.get(url);
+
     if (response.statusCode == 200) {
       final testInfo = json.decode(response.body);
       final dateCreatedUtc = testInfo['date_created'].split("-");
@@ -39,15 +39,14 @@ class Api {
       return Test(
           pk: testPk,
           subject: Data.getSubjectByPk(int.parse(testInfo['subject_pk'])),
-          dateCreated: DateTime.utc(
-              int.parse(dateCreatedUtc[0]), int.parse(dateCreatedUtc[1]), int.parse(dateCreatedUtc[2])),
-          dateTaken: DateTime.utc(
-              int.parse(dateTakenUtc[0]), int.parse(dateTakenUtc[1]), int.parse(dateTakenUtc[2])),
+          dateCreated: DateTime.utc(int.parse(dateCreatedUtc[0]),
+              int.parse(dateCreatedUtc[1]), int.parse(dateCreatedUtc[2])),
+          dateTaken: DateTime.utc(int.parse(dateTakenUtc[0]),
+              int.parse(dateTakenUtc[1]), int.parse(dateTakenUtc[2])),
           smallTopicsPks: testInfo['small_topics'].cast<int>(),
-          icon: Icons.grade
-      );
-    }
-    else {
+          icon: Icons.grade);
+
+    } else {
       print("Error getting test (pk = $testPk. Try to check the server.");
       return null;
     }
@@ -57,6 +56,7 @@ class Api {
   Future<List<Test>> getAllTests() async {
     final url = Uri.http(_url, '/bcademy/users/futuretests/${Data.userPk}/');
     final response = await http.get(url);
+
     if (response.statusCode == 200) {
       final allTests = json.decode(response.body);
       List<Test> tests = [];
@@ -64,22 +64,24 @@ class Api {
         tests.add(await getTest(int.parse(pk)));
       }
       return tests;
-    }
-    else {
-      print("Something went wrong with getting all tests. Try to check the server.");
+
+    } else {
+      print(
+          "Something went wrong with getting all tests. Try to check the server.");
       return null;
     }
   }
-  
+
   Future<Map<String, String>> getSmallTopic(int smallTopicPk) async {
     final url = Uri.http(_url, 'bcademy/smalltopics/$smallTopicPk/');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final tempSmallTopic = json.decode(response.body);
       return {'title': tempSmallTopic['title'], 'info': tempSmallTopic['info']};
-    }
-    else {
-      print("Something went wrong with getting small topic (pk) $smallTopicPk. Check the server.");
+
+    } else {
+      print(
+          "Something went wrong with getting small topic (pk) $smallTopicPk. Check the server.");
       return null;
     }
   }
@@ -96,9 +98,9 @@ class Api {
         smallTopics[tempSmallTopic['title']] = tempSmallTopic['info'];
       }
       return smallTopics;
-    }
-    else {
-      print("Something went wrong with getting all topics for test (pk) $testPk. Check the server.");
+    } else {
+      print(
+          "Something went wrong with getting all topics for test (pk) $testPk. Check the server.");
       return null;
     }
   }
@@ -115,15 +117,15 @@ class Api {
         smallTopicsInfo.add(tempTopicList);
       }
       return smallTopicsInfo;
-    }
-    else {
+    } else {
       print("Something went wrong with getting all subject's small topics.");
       return null;
     }
   }
 
   /// Creating a new test!
-  Future<int> createTest(int subjectPk, int year, int month, int day, List smallTopicsList) async {
+  Future<int> createTest(
+      int subjectPk, int year, int month, int day, List smallTopicsList) async {
     final url = Uri.http(_url, '/bcademy/tests/create/');
     final testInfo = {
       'subject': subjectPk,
@@ -136,13 +138,12 @@ class Api {
     final response = await http.post(url, body: json.encode(testInfo));
     if (response.statusCode == 200) {
       return json.decode(response.body);
-    }
-    else {
+    } else {
       print("Sonething went wrong with creating that test...");
       return -1;
     }
   }
-  
+
   Future<List> getQuestion(int qPk) async {
     final url = Uri.http(_url, '/bcademy/questions/$qPk/');
     final response = await http.get(url);
@@ -156,8 +157,7 @@ class Api {
         [4, info['answer4']]
       ];
       return answer;
-    }
-    else {
+    } else {
       print("Something went wrong with getting question $qPk");
       return null;
     }
@@ -173,26 +173,28 @@ class Api {
         allQuestions.add(await getQuestion(int.parse(pk)));
       }
       return allQuestions;
-    }
-    else {
+    } else {
       print("Something went wrong with getting all questions for test $testPk");
       return null;
     }
   }
 
   /// Uploading a new file to server
-  Future<void> uploadFile(int subjectPk, String path, String info, bool isPublic) async {
+  Future<void> uploadFile(
+      int subjectPk, String path, String info, bool isPublic) async {
     final url = Uri.http(_url, '/bcademy/${Data.userPk}/$subjectPk/upload/');
     var request = http.MultipartRequest("POST", url);
     print((path));
-    request.files.add(await http.MultipartFile.fromPath('file', path,));
+    request.files.add(await http.MultipartFile.fromPath(
+      'file',
+      path,
+    ));
     request.fields['info'] = info;
     request.fields['is_public'] = isPublic ? 'True' : 'False';
     request.fields['file_name'] = path.split('/').last;
     print(path.split('/').last);
     request.send().then((response) {
-      if (response.statusCode == 200)
-        print("Uploaded!");
+      if (response.statusCode == 200) print("Uploaded!");
     });
   }
 
@@ -202,29 +204,34 @@ class Api {
     var response = await http.get(url);
     if (response.statusCode == 200) {
       return json.decode(response.body);
-    }
-    else {
-      print("Something went wrong with getting all files of user ${Data.userPk}");
+    } else {
+      print(
+          "Something went wrong with getting all files of user ${Data.userPk}");
       return null;
     }
   }
 
   /// Download a file to the phone
   Future<String> downloadFile(filePk, fileName) async {
-    final url = Uri.http(_url, '/bcademy/download/$filePk/');
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      var fileNameParts = fileName.split(".");
-      fileName = fileNameParts[0] + (Data.fileNum++).toString() + "." + fileNameParts[1];
-      var bytes = response.bodyBytes;
-      String dir = (await getExternalStorageDirectory()).path + '/Download';
-      File file = new File('$dir/$fileName');
-      await file.writeAsBytes(bytes);
-      print("Check for hello!");
-      return '$dir/$fileName';
-    }
-    else {
-      print("Something ent wrong downloading the file.");
+    try {
+      // Get all file info (bytes) from the server
+      final url = Uri.http(_url, '/bcademy/download/$filePk/');
+      var response = await http.get(url);
+
+      // Make sure we got an OK
+      if (response.statusCode == 200) {
+        var bytes = response.bodyBytes;  // file data
+        String dir = (await getExternalStorageDirectory()).path + '/Download';
+        File file = new File('$dir/$fileName');
+        await file.writeAsBytes(bytes);  // write to the file
+        return '$dir/$fileName';         // return the path to the new file
+      } else {
+        print("Something went wrong getting the file $fileName.");
+        return '';
+      }
+    } catch (e) {  // in case of error
+      print("Something went wrong with saving the file $fileName. " +
+          e.toString());
       return '';
     }
   }
@@ -235,8 +242,7 @@ class Api {
     var response = await http.post(url, body: json.encode({'search': search}));
     if (response.statusCode == 200) {
       return json.decode(response.body);
-    }
-    else {
+    } else {
       print('Something went wrong with searching small topics.');
       return null;
     }
@@ -248,18 +254,19 @@ class Api {
     var response = await http.post(url, body: json.encode({'search': search}));
     if (response.statusCode == 200) {
       return json.decode(response.body);
-    }
-    else {
+    } else {
       print("Something went wrong with searchong for files");
       return null;
     }
   }
-  
+
   /// Create new user
   /// return 1 for success. return 0 for failure.
   Future<int> register(Map userInfo, bool signIn) async {
     var url;
-    signIn ? url = Uri.http(_url, 'bcademy/users/signin/') : url = Uri.http(_url, 'bcademy/users/create/');
+    signIn
+        ? url = Uri.http(_url, 'bcademy/users/signin/')
+        : url = Uri.http(_url, 'bcademy/users/create/');
     var response = await http.post(url, body: json.encode(userInfo));
 
     if (response.statusCode == 200) {
@@ -267,21 +274,19 @@ class Api {
       Data.userName = info['name'];
       Data.userPk = info['pk'];
       return 1;
-    }
-    else {
+    } else {
       print("Could not create user");
       return 0;
     }
   }
-  
+
   /// A function that gets all the quizzes for a user
   Future<Map> getQuizzes() async {
     final url = Uri.http(_url, 'bcademy/quiz/user/${Data.userPk}/');
     var response = await http.get(url);
     if (response.statusCode == 200) {
       return json.decode(response.body);
-    }
-    else {
+    } else {
       print("could not get the quiz for the user.");
       return null;
     }
@@ -293,8 +298,7 @@ class Api {
     var response = await http.get(url);
     if (response.statusCode == 200) {
       return json.decode(response.body);
-    }
-    else {
+    } else {
       print("could not get quiz $quizPk.");
       return null;
     }
@@ -306,8 +310,7 @@ class Api {
     var response = await http.get(url);
     if (response.statusCode == 200) {
       return json.decode(response.body);
-    }
-    else {
+    } else {
       print("could not get quiz $quizPk questions.");
       return null;
     }
@@ -328,11 +331,9 @@ class Api {
   }
 }
 
-
 /// This class saves data that's important for the entire app.
 class Data {
   static List<Subject> allSubjects;
-  static int fileNum = 0;
   static String userName = "גפן"; // remember to change this
   static int userPk = 1; // remember to change
 
@@ -345,8 +346,7 @@ class Data {
   /// Get a subject by its pk.
   static getSubjectByPk(int pk) {
     for (Subject subject in allSubjects) {
-      if (subject.pk == pk)
-        return subject;
+      if (subject.pk == pk) return subject;
     }
     return null;
   }

@@ -23,7 +23,7 @@ class _SignUpPageState extends State<SignUpPage> {
   var _normalButtonColor = Color(0xff98ee99);
   var _normalButtonText = "הירשם";
   var _warningButtonColor = Colors.red;
-  var _warningButtonText = "שם המשתמש או הססמא\nכבר בשימוש!";
+  var _warningButtonText = "שם המשתמש\nכבר בשימוש!";
   var _valueNotFoundText = "אתה חייב להכניס\nשם מלא, שם משתמש וססמא!";
   double _heightDiff = 30.0;
 
@@ -101,7 +101,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     padding: const EdgeInsets.fromLTRB(24, 8, 8, 8),
                     child: TextField(
                       decoration: const InputDecoration(
-                        hintText: 'השם היפה שלי (שלא יראו)',
+                        hintText: 'השם היפה שלי (שיראו)',
                       ),
                       textDirection: TextDirection.rtl,
                       maxLength: 100,
@@ -138,7 +138,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: TextField(
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                       decoration: const InputDecoration(
-                        hintText: 'שם המשתמש שלי (שיראו)',
+                        hintText: 'שם המשתמש שלי (שלא יראו)',
                       ),
                       textDirection: TextDirection.rtl,
                       maxLength: 100,

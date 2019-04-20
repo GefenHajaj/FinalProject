@@ -1,6 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, \
+    HttpResponseServerError
 from django.utils import timezone
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
@@ -56,26 +57,37 @@ class UserViews:
     @csrf_exempt
     def create_user(request):
         """
-        Create a new user.
+        Creates a new user with the info. Checks whether the username is taken.
+        :param request: the HTTP get request
+        :return: http response.
         """
-        new_user = 0
-        try:
-            info = json.loads(request.body)
-            if User.objects.filter(name=info['user_name']).count() > 0:
-                return HttpResponseBadRequest(json.dumps({"error": "username taken"}))
-            else:
-                new_user = User(name=info['name'],
-                                user_name=info['user_name'],
-                                password=info['password'])
-                new_user.save()
-                return HttpResponse(json.dumps({
-                    'name': new_user.name,
-                    'pk': new_user.pk
-                }))
-        except KeyError as e:
-            if isinstance(new_user, User):
-                new_user.delete()
-            return HttpResponseBadRequest("Could not create user. " + str(e))
+        if request.method == 'POST':  # make sure it's a post.
+            new_user = 0
+            try:
+                info = json.loads(request.body)
+
+                # Check if username is already taken.
+                if User.objects.filter(user_name=info['user_name']).count():
+                    return HttpResponseBadRequest(json.dumps(
+                        {"error": "username taken"}))
+                else:
+                    # Create the new user
+                    new_user = User(name=info['name'],
+                                    user_name=info['user_name'],
+                                    password=info['password'])
+                    new_user.save()
+                    return HttpResponse(json.dumps({
+                        'name': new_user.name,
+                        'pk': new_user.pk
+                    }))
+            except KeyError as e:  # In case we didn't get the info as expected
+                if isinstance(new_user, User):
+                    new_user.delete()  # Delete the new user we created
+                return HttpResponseBadRequest(
+                    "Could not create user - data was not good: " + str(e))
+        else:  # In case we got a GET request.
+            return HttpResponseBadRequest(
+                "Should be a POST request (got something else).")
 
     @staticmethod
     @csrf_exempt
@@ -157,17 +169,37 @@ class SmallTopicViews:
     def search_small_topics(request):
         """
         Returns pks and info about small topics related to the search word.
+        :param request: the HTTP request.
+        :return: HTTP response
         """
-        search = json.loads(request.body)['search']
-        subject_related = SmallTopic.objects.filter(subject__name=search)
-        topics_related = SmallTopic.objects.filter(title__contains=search).\
-            order_by('subject')
-        final_result = {}
-        for result in subject_related:
-            final_result[result.pk] = [result.title, result.subject.name]
-        for result in topics_related:
-            final_result[result.pk] = [result.title, result.subject.name]
-        return HttpResponse(json.dumps(final_result, ensure_ascii=False))
+        if request.method == 'POST':
+            try:
+                search = json.loads(request.body)['search']   # The search word
+                if search:
+                    # search for subject
+                    subject_related = SmallTopic.objects.filter(
+                        subject__name__contains=search)
+                    # search in title
+                    topics_related = SmallTopic.objects.filter(
+                        title__contains=search).order_by('subject')
+                    final_result = {}
+                    # get the results
+                    for result in subject_related:
+                        final_result[result.pk] = [result.title,
+                                                   result.subject.name]
+                    for result in topics_related:
+                        final_result[result.pk] = [result.title,
+                                                   result.subject.name]
+                    return HttpResponse(json.dumps(final_result,
+                                                   ensure_ascii=False))
+                else:  # If no search word
+                    return HttpResponseBadRequest("Must search for something.")
+            except KeyError as e:
+                return HttpResponseBadRequest(
+                    "Did not get the search word. " + str(e))
+        else:
+            return HttpResponseBadRequest(
+                "Should be a POST request (got something else).")
 
 
 class QuestionViews:
@@ -226,6 +258,8 @@ class TestViews:
     def create_test(request):
         """
         Create a new test!
+        :param request: The HTTP request
+        :return: HTTP response
         """
         new_test = 0
         try:
@@ -314,21 +348,34 @@ class DocumentViews:
     def download_file(request, doc_pk):
         """
         Uploading a file for the user to download.
+        :param request: the HTTP request
+        :param doc_pk: the pk of the document the user wants to download
+        :return: HTTP response
         """
-        doc = get_object_or_404(Document, pk=doc_pk)
-        doc_path = doc.file.url.split('/')[2:]
-        doc_path = ("\\".join(doc_path)).replace("%3A", ":")
-        if os.path.isfile(doc_path):
-            with open(doc_path, 'rb') as f:
-                response = HttpResponse(
-                    f.read(),
-                    content_type=mimetypes.guess_type(doc_path)[0]
-                )
-                response['Content-Disposition'] = \
-                    'inline; filename=' + os.path.basename(doc_path)
-                return response
+        if request.method == 'GET':
+            # Getting the document object and the path to it
+            doc = get_object_or_404(Document, pk=doc_pk)
+            doc_path = doc.file.url.replace("%3A", ":") \
+                if "%3A" in doc.file.url else doc.file.url
+
+            if os.path.isfile(doc_path):
+                # Creating the right response with the file data
+                with open(doc_path, 'rb') as f:
+                    # The data and the mimetype
+                    response = HttpResponse(
+                        f.read(),
+                        content_type=mimetypes.guess_type(doc_path)[0]
+                    )
+                    # Make sure it's a file and add its name
+                    response['Content-Disposition'] = \
+                        'inline; filename=' + os.path.basename(doc_path)
+                    return response
+            else:
+                return HttpResponseServerError(
+                    "Could not locate file. See: " + doc_path)
         else:
-            return HttpResponse(doc_path)
+            return HttpResponseBadRequest(
+                "Should be a GET request (got something else).")
 
     @staticmethod
     @csrf_exempt

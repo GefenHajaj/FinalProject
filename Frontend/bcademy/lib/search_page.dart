@@ -75,8 +75,30 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  /// Get a grid of all the files suitable to the search word
   Widget _getFileResultsPage() {
+    // In case the user did not search for anything
     if (search == '' || files == null) {
+      // Text that tells the user to search
+      return Expanded(
+        child: ListView(
+            physics: const NeverScrollableScrollPhysics(),
+            primary: false,
+            shrinkWrap: true,
+            children: [
+              SizedBox(height: 200.0,),
+              Center(child:
+              Text("נסה לחפש משהו...",
+                textDirection: TextDirection.rtl,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 28.0),),),
+            ]
+        ),
+      );
+    }
+    // In case there's nothing suitable for the user's search word
+    else if (files.isEmpty) {
+      // Tell the user we could not find anything :(
       return Expanded(
         child: ListView(
             physics: const NeverScrollableScrollPhysics(),
@@ -84,18 +106,25 @@ class _SearchPageState extends State<SearchPage> {
             shrinkWrap: true,
             children: [
               Container(height: 200.0,),
-              Center(child: Text("נסה לחפש משהו...", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),),
+              Center(child:
+              Text("לא מצאנו קבצים מתאימים\n😧",
+                textDirection: TextDirection.rtl,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 28.0),),),
             ]
         ),
       );
     }
+    // In case we found some results - show them to the user
     else {
+      // Make the list of results (will be used in the grid view):
       final fileTiles = <Widget>[];
       for (String pk in files.keys) {
         fileTiles.add(
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
+                // This function will be called when pressed on a file tile:
                 onTap: () {
                   _goToFilePage(files[pk]);},
                 child: Container(
@@ -105,14 +134,24 @@ class _SearchPageState extends State<SearchPage> {
                   child: Center(child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     textDirection: TextDirection.rtl,
+                    // Some info about the file:
                     children: <Widget>[
-                      AutoSizeText("${files[pk]['subject_name']}", textDirection: TextDirection.rtl, style: TextStyle(fontSize: 30.0), textAlign: TextAlign.center,),
-                      Container(height: 5.0,),
-                      AutoSizeText(files[pk]['info'], textDirection: TextDirection.rtl, style: TextStyle(fontSize: 20.0),),
-                      Container(height: 5.0,),
-                      AutoSizeText("${files[pk]['name']}", style: TextStyle(fontSize: 14.0), textAlign: TextAlign.center,),
-                      Container(height: 8.0,),
-                      AutoSizeText("${files[pk]['day']}.${files[pk]['month']}.${files[pk]['year']}", style: TextStyle(fontSize: 14.0),),
+                      AutoSizeText("${files[pk]['subject_name']}",
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(fontSize: 30.0),
+                        textAlign: TextAlign.center,),
+                      SizedBox(height: 5.0,),
+                      AutoSizeText(files[pk]['info'],
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(fontSize: 20.0),),
+                      SizedBox(height: 5.0,),
+                      AutoSizeText("${files[pk]['name']}",
+                        style: TextStyle(fontSize: 14.0),
+                        textAlign: TextAlign.center,),
+                      SizedBox(height: 8.0,),
+                      AutoSizeText("${files[pk]['day']}."
+                          "${files[pk]['month']}.${files[pk]['year']}",
+                        style: TextStyle(fontSize: 14.0),),
                     ],
                   )),
                 ),
@@ -120,34 +159,19 @@ class _SearchPageState extends State<SearchPage> {
             )
         );
       }
-
-      if (fileTiles.isEmpty) {
-        return Expanded(
-          child: ListView(
-              physics: const NeverScrollableScrollPhysics(),
-            primary: false,
+      // Return the grid view
+      return Expanded(
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: GridView.count(
+            primary: true,
             shrinkWrap: true,
-            children: [
-              Container(height: 200.0,),
-              Center(child: Text("לא מצאנו קבצים מתאימים\n😧", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),),
-            ]
+            crossAxisSpacing: 0,
+            crossAxisCount: 2,
+            children: fileTiles,
           ),
-        );
-      }
-      else {
-        return Expanded(
-          child: Directionality(
-            textDirection: TextDirection.rtl,
-            child: GridView.count(
-              primary: true,
-              shrinkWrap: true,
-              crossAxisSpacing: 0,
-              crossAxisCount: 2,
-              children: fileTiles,
-            ),
-          ),
-        );
-      }
+        ),
+      );
     }
   }
 

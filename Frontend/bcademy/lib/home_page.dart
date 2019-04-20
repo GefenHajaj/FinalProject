@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage> {
   /// Changing the shown page
   void _onIconTap(int pageIndex) {
     setState(() {
-      print(pageIndex);
       _selectedPageIndex = pageIndex;
     });
   }

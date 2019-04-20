@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:bcademy/home_page.dart';
+import 'package:bcademy/sign_in_page.dart';
 
 /// The function that's called when we run the app
 void main() => runApp(BCademy());
 
 
 class BCademy extends StatelessWidget {
-  // This widget is the root of your application.
+  // The root of the application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,7 +18,8 @@ class BCademy extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Rubik',
       ),
-      home: HomePage(), // remember to change
+      home: SignInPage(), // the starting page
+      // routes (pages) we use in the app
       routes: <String, WidgetBuilder> {
         '/tests': (BuildContext context) => new HomePage(),
         '/quizzes': (BuildContext context) => new HomePage(startPage: 2,),
