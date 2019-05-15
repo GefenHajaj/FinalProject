@@ -51,16 +51,22 @@ class _ProfilePageState extends State<ProfilePage> {
           child: InkWell(
             onTap: () {_goToFilePage(_files[pk]);},
             child: Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Color(0xff80deea)),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Color(0xff29b6f6)),
               child: Center(child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 textDirection: TextDirection.rtl,
                 children: <Widget>[
                   AutoSizeText("${_files[pk]['subject_name']}", textDirection: TextDirection.rtl, style: TextStyle(fontSize: 30.0), textAlign: TextAlign.center,),
                   Container(height: 5.0,),
-                  AutoSizeText(_files[pk]['info'], textDirection: TextDirection.rtl, style: TextStyle(fontSize: 20.0),),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                    child: AutoSizeText(_files[pk]['info'], textDirection: TextDirection.rtl, style: TextStyle(fontSize: 20.0),),
+                  ),
                   Container(height: 5.0,),
-                  AutoSizeText("${_files[pk]['name']}", style: TextStyle(fontSize: 14.0), textAlign: TextAlign.center,),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                    child: AutoSizeText("${_files[pk]['name']}", style: TextStyle(fontSize: 14.0), textAlign: TextAlign.center,),
+                  ),
                   Container(height: 8.0,),
                   AutoSizeText("${_files[pk]['day']}.${_files[pk]['month']}.${_files[pk]['year']}", style: TextStyle(fontSize: 14.0),),
                 ],
@@ -111,11 +117,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.transparent,),
-                      borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.redAccent
+                      borderRadius: BorderRadius.circular(5.0),
+                    color: Colors.red
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(3.0),
                     child: Text("התנתק", style: TextStyle(fontWeight: FontWeight.bold),),
                   ),),
               ),

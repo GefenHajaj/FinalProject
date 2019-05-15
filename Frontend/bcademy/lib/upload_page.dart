@@ -22,13 +22,13 @@ class _UploadFilePageState extends State<UploadFilePage> {
   FileType _pickingType;
   TextEditingController _controller = new TextEditingController();
 
-  var _color = Color(0xff81d4fa);
+  var _color = Color(0xff18ffff);
   var _text = "העלה קובץ נבחר";
   var _height = 70.0;
   var _width = 240.0;
   var _size = 24.0;
 
-  final Color _buttonColor = Color(0xff81d4fa);
+  final Color _buttonColor = Color(0xff18ffff);
   final Color _warningColor = Colors.red;
   final String _buttonText = "העלה קובץ נבחר";
   final String _warningText = "לא נבחר קובץ!";
@@ -159,7 +159,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                     RegExp reg = RegExp(r'[^a-zA-Z0-9]');
                     if (reg.hasMatch(value)) {
                       _hasValidMime = false;
-                      return 'Invalid format';
+                      return 'קובץ פורמט לא תקין';
                     }
                     _hasValidMime = true;
                   },
@@ -169,7 +169,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child:Material(
-                    elevation: 10.0,
+                    elevation: 1.0,
                     borderRadius: BorderRadius.circular(50.0),
                     color: Colors.transparent,
                     child: Container(
@@ -254,7 +254,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                 child: Material(
-                    elevation: 10.0,
+                    // elevation: 10.0,
                     borderRadius: BorderRadius.circular(50.0),
                     color: Colors.transparent,
                     child: AnimatedContainer(

@@ -88,7 +88,7 @@ class _TestsPageState extends State<TestsPage> {
               Align(
                 alignment: Alignment(0, 0.8),
                 child: Material(
-                    elevation: 10.0,
+                    // elevation: 10.0,
                     borderRadius: BorderRadius.circular(50.0),
                     color: Colors.transparent,
                     child: Container(

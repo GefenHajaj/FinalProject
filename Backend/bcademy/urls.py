@@ -62,6 +62,11 @@ urlpatterns = [
          views.TestViews.get_test,
          name='get_test'),
 
+    # EX: bcademy/tests/delete/1/
+    path('tests/delete/<int:pk>/',
+         views.TestViews.delete_test,
+         name='delete_test'),
+
     # EX: bcademy/tests/create/
     path('tests/create/',
          views.TestViews.create_test,
@@ -76,6 +81,11 @@ urlpatterns = [
     path('allfiles/<int:user_pk>/',
          views.DocumentViews.get_all_files,
          name='get_all_files'),
+
+    # Ex: bcademy/files/delete/1/
+    path('files/delete/<int:pk>/',
+         views.DocumentViews.delete_file,
+         name='delete_file'),
 
     # EX: bcademy/download/1/
     path('download/<int:doc_pk>/',

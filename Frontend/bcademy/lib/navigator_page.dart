@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:bcademy/structures.dart';
 import 'package:bcademy/study_page.dart';
 import 'package:bcademy/quiz_page.dart';
+import 'package:bcademy/api.dart';
 
 
 class NavigatorPage extends StatefulWidget {
@@ -17,9 +18,9 @@ class NavigatorPage extends StatefulWidget {
 class _NavigatorPageState extends State<NavigatorPage> {
 
   String studyButtonText = "Time to Study!";
-  Color studyButtonColor = Color(0xff00acc1);
+  Color studyButtonColor = Color(0xff00e5ff);
   String quizButtonText = "Take a Quiz!";
-  Color quizButtonColor = Color(0xff81c784);
+  Color quizButtonColor = Color(0xff00e676);
 
   Color appBarColor = Color(0xff80d8ff);
 
@@ -72,6 +73,12 @@ class _NavigatorPageState extends State<NavigatorPage> {
     });
   }
 
+  /// When pressing on the delete sign
+  void _deleteTest() {
+    Api().deleteTest(widget.test.pk);
+    Navigator.of(context).pushNamedAndRemoveUntil('/tests', (Route<dynamic> route) => false);
+  }
+
   /// Small little page (for now!)
   @override
   Widget build(BuildContext context) {
@@ -82,6 +89,14 @@ class _NavigatorPageState extends State<NavigatorPage> {
         elevation: 0.0,
         centerTitle: true,
         backgroundColor: appBarColor,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.delete, color: Colors.black, size: 30,),
+            onPressed: () {
+              _deleteTest();
+            },
+          ),
+        ],
       ),
       body: _getFullPage()
     );

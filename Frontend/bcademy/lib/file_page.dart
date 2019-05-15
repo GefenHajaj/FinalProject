@@ -29,6 +29,11 @@ class _FilePageState extends State<FilePage> {
     OpenFile.open(_filePath);
   }
 
+  void _deleteFile() {
+    Api().deleteFile(widget.fileData['pk']);
+    Navigator.of(context).pushNamedAndRemoveUntil('/profile', (Route<dynamic> route) => false);
+  }
+
   /// Get a the button for downloading
   Widget _getButton() {
     double height = 75.0;             // height of button
@@ -144,6 +149,14 @@ class _FilePageState extends State<FilePage> {
           elevation: 0.0,
           centerTitle: true,
           title: Text("דף קובץ", textDirection: TextDirection.rtl, style: TextStyle(color: Colors.black, fontSize: 24.0),),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.black, size: 30,),
+              onPressed: () {
+                _deleteFile();
+              },
+            ),
+          ],
         ),
         body: _getBody()
     );

@@ -254,6 +254,18 @@ class TestViews:
         return HttpResponse(json.dumps(info, ensure_ascii=False))
 
     @staticmethod
+    def delete_test(request, pk):
+        """
+        Delete a test.
+        :param request: the HTTP request
+        :param pk: the pk of the test we want to delete
+        :return: HTTP response
+        """
+        test = get_object_or_404(Test, pk=pk)
+        test.delete()
+        return HttpResponse('Test {0} deleted.'.format(pk))
+
+    @staticmethod
     @csrf_exempt
     def create_test(request):
         """
@@ -400,6 +412,17 @@ class DocumentViews:
                 }
 
         return HttpResponse(json.dumps(final_result, ensure_ascii=False))
+
+    @staticmethod
+    def delete_file(request, pk):
+        doc = get_object_or_404(Document, pk=pk)
+        path = doc.file.url.replace("%3A", ":") \
+            if "%3A" in doc.file.url else doc.file.url
+
+        if os.path.isfile(path):
+            os.remove(path)
+        doc.delete()
+        return HttpResponse('File {0} deleted.'.format(pk))
 
 
 class QuizViews:

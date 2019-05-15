@@ -20,7 +20,9 @@ class _SearchPageState extends State<SearchPage> {
   String lastSearchFiles = '';
   String search = '';
   int mode = 0; // 0 - topics. 1 - files.
-  Map<int, Widget> modeMap = {0: Text('חפש נושאים'), 1: Text('חפש קבצים')};
+  Map<int, Widget> modeMap = {
+    0: Text('חפש נושאים', style: TextStyle(fontFamily: 'Montserrat',),),
+    1: Text('חפש קבצים', style: TextStyle(fontFamily: 'Montserrat',),)};
 
   final _rowHeight = 100.0;
   final _borderRadius = BorderRadius.circular(20.0);

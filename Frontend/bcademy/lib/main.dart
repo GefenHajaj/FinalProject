@@ -23,6 +23,7 @@ class BCademy extends StatelessWidget {
       routes: <String, WidgetBuilder> {
         '/tests': (BuildContext context) => new HomePage(),
         '/quizzes': (BuildContext context) => new HomePage(startPage: 2,),
+        '/profile': (BuildContext context) => new HomePage(startPage: 4,),
       },
     );
   }

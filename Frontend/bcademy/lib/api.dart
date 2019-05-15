@@ -227,6 +227,7 @@ class Api {
         return '$dir/$fileName';         // return the path to the new file
       } else {
         print("Something went wrong getting the file $fileName.");
+        print(response.body);
         return '';
       }
     } catch (e) {  // in case of error
@@ -328,6 +329,22 @@ class Api {
     final url = Uri.http(_url, 'bcademy/quiz/$quizPk/adduser/');
     var postBody = {'user_pk': Data.userPk};
     http.post(url, body: json.encode(postBody));
+  }
+
+  Future<void> deleteTest(int testPk) async {
+    final url = Uri.http(_url, 'bcademy/tests/delete/$testPk/');
+    var response = await http.get(url);
+    if (response.statusCode != 200) {
+      print('Could not delete test $testPk.');
+    }
+  }
+
+  Future<void> deleteFile(int filePk) async {
+    final url = Uri.http(_url, 'bcademy/files/delete/$filePk/');
+    var response = await http.get(url);
+    if (response.statusCode != 200) {
+      print('Could not delete file $filePk.');
+    }
   }
 }
 
