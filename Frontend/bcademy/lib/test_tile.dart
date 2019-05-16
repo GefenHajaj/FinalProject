@@ -3,8 +3,8 @@ import 'package:meta/meta.dart';
 import 'package:bcademy/structures.dart';
 
 const _rowHeight = 100.0;
-final _borderRadius = BorderRadius.circular(20.0);
-final _color = Color(0xff29b6f6);
+final _borderRadius = BorderRadius.circular(10.0);
+final _color = Color(0xff4fc3f7);
 final _highlightColor = Colors.lightBlue;
 final _splashColor = Colors.lightBlueAccent;
 
@@ -27,6 +27,7 @@ class TestTile extends StatelessWidget {
       child: Material(
         color: _color,
         borderRadius: _borderRadius,
+        elevation: 5.0,
         child: InkWell(
           borderRadius: _borderRadius,
           onTap: () {this.onTap(this.test);},
@@ -53,11 +54,11 @@ class TestTile extends StatelessWidget {
                           "מבחן ב${this.test.subject.name}",
                           textDirection: TextDirection.rtl,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 24.0, fontFamily: 'Gisha'),
+                          style: TextStyle(fontSize: 24.0, fontFamily: 'Gisha', fontWeight: FontWeight.bold),
                         ),
                         Text(
                           "${this.test.dateTaken.day}.${this.test.dateTaken.month}.${this.test.dateTaken.year}",
-                          style: TextStyle(fontSize: 16.0),
+                          style: TextStyle(fontSize: 16.0, color: Color(0xff01579b)),
                         )
                       ],
                     ),

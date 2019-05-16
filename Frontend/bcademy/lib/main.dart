@@ -18,7 +18,7 @@ class BCademy extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Rubik',
       ),
-      home: SignInPage(), // the starting page
+      home: HomePage(), // the starting page
       // routes (pages) we use in the app
       routes: <String, WidgetBuilder> {
         '/tests': (BuildContext context) => new HomePage(),

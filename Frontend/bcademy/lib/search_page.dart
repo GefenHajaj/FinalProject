@@ -25,7 +25,7 @@ class _SearchPageState extends State<SearchPage> {
     1: Text('חפש קבצים', style: TextStyle(fontFamily: 'Montserrat',),)};
 
   final _rowHeight = 100.0;
-  final _borderRadius = BorderRadius.circular(20.0);
+  final _borderRadius = BorderRadius.circular(10.0);
   final _color = Color(0xff80deea);
   final _highlightColor = Colors.lightBlueAccent;
   final _splashColor = Colors.lightBlueAccent;
@@ -209,8 +209,9 @@ class _SearchPageState extends State<SearchPage> {
         var listOfResults = <Widget>[];
         for (String pk in topics.keys) {
           listOfResults.add(Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
             child: Material(
+              elevation: 3.0,
               color: _color,
               borderRadius: _borderRadius,
               child: InkWell(
@@ -241,7 +242,7 @@ class _SearchPageState extends State<SearchPage> {
                                 "${topics[pk][0]}",
                                 textDirection: TextDirection.rtl,
                                 textAlign: TextAlign.start,
-                                style: TextStyle(fontSize: 22.0, fontFamily: 'Gisha'),
+                                style: TextStyle(fontSize: 22.0, fontFamily: 'Gisha', fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
