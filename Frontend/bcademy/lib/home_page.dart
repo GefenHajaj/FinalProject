@@ -70,11 +70,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('BCademy', textAlign: TextAlign.center, style: TextStyle(color: Colors.black, fontFamily: 'Norican', fontSize: 30.0),),
-        centerTitle: true,
-        elevation: 1.0,
-        backgroundColor: Color(0xff80d8ff),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(45.0),
+        child: AppBar(
+          title: Text('BCademy', textAlign: TextAlign.center, style: TextStyle(color: Colors.black, fontFamily: 'Norican', fontSize: 30.0),),
+          centerTitle: true,
+          elevation: 0.0,
+          backgroundColor: Color(0xff80d8ff),
+        ),
       ),
       body: Center(
         child: _getPage(_selectedPageIndex),

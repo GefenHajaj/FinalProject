@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:bcademy/structures.dart';
 
 const _rowHeight = 100.0;

@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 /// This class takes care of communicating with the server.
 class Api {
-  static final String _url = "10.0.2.2:8000";
+  static final String _url = "192.168.1.30:8000";
 
   /// Returns all subjects!
   Future<List<Subject>> getAllSubjects() async {
