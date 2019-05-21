@@ -14,7 +14,7 @@ class QuizzesPage extends StatefulWidget {
 class _QuizzesPageState extends State<QuizzesPage> {
   Map quizzes;
   final _rowHeight = 100.0;
-  final _borderRadius = BorderRadius.circular(20.0);
+  final _borderRadius = BorderRadius.circular(10.0);
   final _color = Color(0xff80deea);
   final _highlightColor = Colors.lightBlueAccent;
   final _splashColor = Colors.lightBlueAccent;
@@ -55,6 +55,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Material(
+                elevation: 5.0,
                 color: _color,
                 borderRadius: _borderRadius,
                 child: InkWell(
@@ -70,7 +71,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: Icon(Icons.help_outline, size: 40.0,),
+                          child: Icon(Data.getIcon(quizzesInfo[index][1]), size: 40.0,),
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -82,10 +83,10 @@ class _QuizzesPageState extends State<QuizzesPage> {
                               child: Align(
                                 alignment: AlignmentDirectional.centerEnd,
                                 child: AutoSizeText(
-                                  "${quizzesInfo[index][0]}",
+                                  "${quizzesInfo[index][0]}", // name of quiz
                                   textDirection: TextDirection.rtl,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(fontSize: 22.0, fontFamily: 'Gisha'),
+                                  style: TextStyle(fontSize: 22.0, fontFamily: 'Gisha', fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
@@ -111,8 +112,21 @@ class _QuizzesPageState extends State<QuizzesPage> {
   Widget build(BuildContext context) {
     if (quizzes == null) {
       _getQuizzes();
-      return new Container(
-        child: CircularProgressIndicator(),
+      return Scaffold(
+        body: Center(
+          child: Container(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(40.0),
+            child: AppBar(
+              title: Text("שאלונים תחרותיים"),
+              centerTitle: true,
+              backgroundColor: Color(0xff29b6f6),
+              elevation: 5.0,
+            )
+        ),
       );
     }
     else {

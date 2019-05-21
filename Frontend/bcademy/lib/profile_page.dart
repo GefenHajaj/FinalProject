@@ -48,29 +48,33 @@ class _ProfilePageState extends State<ProfilePage> {
       fileTiles.add(
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-            onTap: () {_goToFilePage(_files[pk]);},
-            child: Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Color(0xff29b6f6)),
-              child: Center(child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                textDirection: TextDirection.rtl,
-                children: <Widget>[
-                  AutoSizeText("${_files[pk]['subject_name']}", textDirection: TextDirection.rtl, style: TextStyle(fontSize: 30.0), textAlign: TextAlign.center,),
-                  Container(height: 5.0,),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-                    child: AutoSizeText(_files[pk]['info'], textDirection: TextDirection.rtl, style: TextStyle(fontSize: 20.0),),
-                  ),
-                  Container(height: 5.0,),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-                    child: AutoSizeText("${_files[pk]['name']}", style: TextStyle(fontSize: 14.0), textAlign: TextAlign.center,),
-                  ),
-                  Container(height: 8.0,),
-                  AutoSizeText("${_files[pk]['day']}.${_files[pk]['month']}.${_files[pk]['year']}", style: TextStyle(fontSize: 14.0),),
-                ],
-              )),
+          child: Material(
+            elevation: 5.0,
+            borderRadius: BorderRadius.circular(8.0),
+            child: InkWell(
+              onTap: () {_goToFilePage(_files[pk]);},
+              child: Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Color(0xff29b6f6),),
+                child: Center(child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  textDirection: TextDirection.rtl,
+                  children: <Widget>[
+                    AutoSizeText("${_files[pk]['subject_name']}", textDirection: TextDirection.rtl, style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                    SizedBox(height: 5.0,),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                      child: AutoSizeText(_files[pk]['info'], textDirection: TextDirection.rtl,textAlign: TextAlign.center, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
+                    ),
+                    SizedBox(height: 8.0,),
+                    AutoSizeText("${_files[pk]['day']}.${_files[pk]['month']}.${_files[pk]['year']}", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),),
+                    SizedBox(height: 8.0,),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                      child: AutoSizeText("${_files[pk]['name']}", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center, maxLines: 1, minFontSize: 14.0,),
+                    ),
+                  ],
+                )),
+              ),
             ),
           ),
         )
@@ -146,12 +150,25 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     if (_files == null) {
       _getAllFiles();
-      return new Container(
-        child: CircularProgressIndicator(),
+      return Scaffold(
+        body: Center(
+          child: Container(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(40.0),
+            child: AppBar(
+              title: Text("הפרופיל שלי"),
+              centerTitle: true,
+              backgroundColor: Color(0xff29b6f6),
+              elevation: 5.0,
+            )
+        ),
       );
     }
     else {
-      return new Scaffold(
+      return Scaffold(
         body: _getPage(),
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(40.0),

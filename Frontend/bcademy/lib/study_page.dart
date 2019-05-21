@@ -16,64 +16,137 @@ class StudyPage extends StatefulWidget {
 }
 
 class _StudyPageState extends State<StudyPage> {
-  Map<String, String> _smallTopics;
+  // Map<String, String> _smallTopics;
+  bool _gotInfo = false;
+  List _infoCards = [];
+  int _index = 0;
 
   Future<void> _getAllSmallTopics() async {
-    final tempSmallTopics = await Api().getAllSmallTopics(widget.test.pk);
+    final smallTopics = await Api().getAllSmallTopics(widget.test.pk);
     setState(() {
-      _smallTopics = tempSmallTopics;
+      _gotInfo = true;
+      if (smallTopics != null && smallTopics.isNotEmpty) {
+        // Saving the titles and the info of each topic in a convenient way:
+        for (var titleData in zip([smallTopics.keys, smallTopics.values])) {
+          _infoCards.add(
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Material(
+                  elevation: 8.0,
+                  borderRadius: BorderRadius.circular(25.0),
+                  color: Colors.transparent,
+                  child: Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.85,
+                    decoration: BoxDecoration(
+                        color: Color(0xffb2ebf2),
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(color: Colors.black, width: 1.5)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      child: Center(
+                        child: Column(
+                          textDirection: TextDirection.rtl,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Text(
+                              titleData[0],
+                              textAlign: TextAlign.start,
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 10,),
+                            Text(
+                              titleData[1],
+                              textAlign: TextAlign.start,
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(fontSize: 18.0),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+          );
+        }
+      }
+      else {  // should never come here
+        return _infoCards.add(
+            Center(child: Container(child: Text("Something went wrong..."),),)
+        );
+      }
     });
   }
 
-  /// Gets a list of all the info about the test - summary
+  /// Present a card with some of the material. The user can go to the
+  /// next/previous cards by pressing arrow buttons.
   Widget _getSummary() {
     // Make sure we have some topics (should be)
-    if (_smallTopics != null && _smallTopics.isNotEmpty) {
-      // Saving the titles and the info of each topic in a convenient way:
-      List<String> titles = [];
-      List<String> info = [];
-      for (var titleData in zip([_smallTopics.keys, _smallTopics.values])) {
-        titles.add(titleData[0]);
-        info.add(titleData[1]);
-      }
-
-      // The page itself:
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        // Creating a list of widgets
-        child: ListView.builder(
-          itemBuilder: (BuildContext context, int index) {
-            // Each item in the list is a column
-            return Column(
-              // Each column contains a title and the suitable info
-              textDirection: TextDirection.rtl,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                // The title:
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    titles[index],
-                    textDirection: TextDirection.rtl,
-                    style: TextStyle(fontSize: 24.0,
-                        fontWeight: FontWeight.bold),
-                  ),
+    if (_infoCards.isNotEmpty && _index >= 0 && _index < _infoCards.length) {
+      // return all the widgets organized
+      return Stack(
+          children: <Widget>[
+            // tells us what number of card we're watching
+            // out of the total number of cards
+            Align(
+                alignment: Alignment(0, -0.95), // location on screen (x, y)
+                child: Text("${_index+1}/${_infoCards.length}",
+                  style: TextStyle(fontSize: 16.0),)
+            ),
+            // the card with the material itself
+            Align(
+              alignment: Alignment(0, 0),  // location on screen (x, y)
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 40.0, bottom: 10.0),
+                    child: Padding(
+                        padding: EdgeInsets.fromLTRB(12.0, 0, 12, 12),
+                        child:_infoCards[_index] // the correct card
+                    ),
+                  )
                 ),
-                // The info:
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Text(
-                    info[index],
-                    textDirection: TextDirection.rtl,
-                    style: TextStyle(fontSize: 18.0),),
-                )
-              ],
-            );
-          },
-          itemCount: titles.length,  // how many columns (same as info.length)
-        ),
+              ),
+            ),
+            // a right arrow sign. press to move to the next card (if possible)
+            Align(
+              alignment: Alignment(1.05, 0),
+              child: IconButton(
+                icon: Icon(Icons.arrow_forward_ios, color: Colors.grey[800],),
+                onPressed: () {
+                  setState(() {
+                    // increase number of card we're looking at if possible
+                    if (_index < _infoCards.length - 1)
+                      _index++;
+                  });
+                },
+              ),
+            ),
+            // a left arrow sign. press to move to the previous card
+            // (if possible)
+            Align(
+              alignment: Alignment(-1.05, 0),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back_ios, color: Colors.grey[800],),
+                onPressed: () {
+                  setState(() {
+                    // decrease number of card we're looking at if possible
+                    if (_index > 0)
+                      _index--;
+                  });
+                },
+              ),
+            ),
+        ]
       );
     }
+    // in case there are no topics, return text that tells the user that
+    // something went wrong (there are small topics in each test).
     else {  // should never come here
       return Center(child: Container(child: Text("Something went wrong..."),),);
     }
@@ -81,12 +154,23 @@ class _StudyPageState extends State<StudyPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_smallTopics == null) {
+    if (!_gotInfo) {
       _getAllSmallTopics();
-      return Container(
-        height: 50,
-        width: 50,
-        child: CircularProgressIndicator(),
+      return Scaffold(
+          appBar: AppBar(
+            elevation: 0.0,
+            backgroundColor: Color(0xff00acc1),
+            centerTitle: true,
+            title: Text("לומדים למבחן ב${widget.test.subject.name}",
+              style: TextStyle(fontSize: 22.0,),),
+          ),
+          body: Center(
+            child: Container(
+              height: 50,
+              width: 50,
+              child: CircularProgressIndicator(),
+            ),
+          )
       );
     }
     else {

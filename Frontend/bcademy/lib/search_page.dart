@@ -15,10 +15,10 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   Map topics;
-  Map files;
+  Map _files;
   String lastSearchTopics = '';
   String lastSearchFiles = '';
-  String search = '';
+  String _search = '';
   int mode = 0; // 0 - topics. 1 - files.
   Map<int, Widget> modeMap = {
     0: Text('חפש נושאים', style: TextStyle(fontFamily: 'Montserrat',),),
@@ -32,7 +32,7 @@ class _SearchPageState extends State<SearchPage> {
 
   /// Search for topics
   Future<void> _getTopicsResults() async {
-    var tempResult = await Api().searchTopics(search);
+    var tempResult = await Api().searchTopics(_search);
     setState(() {
       topics = tempResult;
     });
@@ -40,18 +40,18 @@ class _SearchPageState extends State<SearchPage> {
   
   /// Search for files
   Future<void> _getFilesResults() async {
-    var tempResult = await Api().searchFiles(search);
+    var tempResult = await Api().searchFiles(_search);
     setState(() {
-      files = tempResult;
+      _files = tempResult;
     });
   }
   
   /// The main search function
   void _searchResults() {
-    if (mode == 0 && lastSearchTopics != search) {
+    if (mode == 0 && lastSearchTopics != _search) {
       _getTopicsResults();
     }
-    else if (mode == 1 && lastSearchFiles != search) {
+    else if (mode == 1 && lastSearchFiles != _search) {
       _getFilesResults();
     }
   }
@@ -80,7 +80,7 @@ class _SearchPageState extends State<SearchPage> {
   /// Get a grid of all the files suitable to the search word
   Widget _getFileResultsPage() {
     // In case the user did not search for anything
-    if (search == '' || files == null) {
+    if (_search == '' || _files == null) {
       // Text that tells the user to search
       return Expanded(
         child: ListView(
@@ -99,7 +99,7 @@ class _SearchPageState extends State<SearchPage> {
       );
     }
     // In case there's nothing suitable for the user's search word
-    else if (files.isEmpty) {
+    else if (_files.isEmpty) {
       // Tell the user we could not find anything :(
       return Expanded(
         child: ListView(
@@ -119,66 +119,105 @@ class _SearchPageState extends State<SearchPage> {
     }
     // In case we found some results - show them to the user
     else {
-      // Make the list of results (will be used in the grid view):
-      final fileTiles = <Widget>[];
-      for (String pk in files.keys) {
-        fileTiles.add(
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: InkWell(
-                // This function will be called when pressed on a file tile:
-                onTap: () {
-                  _goToFilePage(files[pk]);},
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.0),
-                      color: Color(0xff80deea)),
-                  child: Center(child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    textDirection: TextDirection.rtl,
-                    // Some info about the file:
-                    children: <Widget>[
-                      AutoSizeText("${files[pk]['subject_name']}",
+      try {
+        // Make the list of results (will be used in the grid view):
+        final fileTiles = <Widget>[];
+        for (String pk in _files.keys) {
+          Map file = _files[pk];
+          fileTiles.add(
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Material(
+                  elevation: 5.0,
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: InkWell(
+                    // This function will be called when pressed on a file tile:
+                    onTap: () {
+                      _goToFilePage(file);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                          color: Color(0xff80deea)),
+                      child: Center(child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         textDirection: TextDirection.rtl,
-                        style: TextStyle(fontSize: 30.0),
-                        textAlign: TextAlign.center,),
-                      SizedBox(height: 5.0,),
-                      AutoSizeText(files[pk]['info'],
-                        textDirection: TextDirection.rtl,
-                        style: TextStyle(fontSize: 20.0),),
-                      SizedBox(height: 5.0,),
-                      AutoSizeText("${files[pk]['name']}",
-                        style: TextStyle(fontSize: 14.0),
-                        textAlign: TextAlign.center,),
-                      SizedBox(height: 8.0,),
-                      AutoSizeText("${files[pk]['day']}."
-                          "${files[pk]['month']}.${files[pk]['year']}",
-                        style: TextStyle(fontSize: 14.0),),
-                    ],
-                  )),
+                        // Some info about the file:
+                        children: <Widget>[
+                          AutoSizeText("${file['subject_name']}",
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(fontSize: 30.0,
+                            fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,),
+                          SizedBox(height: 5.0,),
+                          AutoSizeText(file['info'],
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(fontSize: 20.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 8.0,),
+                          AutoSizeText("${file['day']}."
+                              "${file['month']}.${file['year']}",
+                            style: TextStyle(fontSize: 14.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 8.0,),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8.0, right: 8.0),
+                            child: AutoSizeText("${file['name']}",
+                              style: TextStyle(fontSize: 14.0,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              minFontSize: 12.0,
+                            ),
+                          ),
+                        ],
+                      )),
+                    ),
+                  ),
                 ),
-              ),
-            )
+              )
+          );
+        }
+        // Return the grid view
+        return Expanded(
+          child: Directionality(
+            textDirection: TextDirection.rtl,
+            child: GridView.count(
+              primary: true,
+              shrinkWrap: true,
+              crossAxisSpacing: 0,
+              crossAxisCount: 2,
+              children: fileTiles,
+            ),
+          ),
         );
       }
-      // Return the grid view
-      return Expanded(
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: GridView.count(
-            primary: true,
-            shrinkWrap: true,
-            crossAxisSpacing: 0,
-            crossAxisCount: 2,
-            children: fileTiles,
-          ),
-        ),
-      );
+      catch (e) {
+          return Expanded(
+            child: ListView(
+                physics: const NeverScrollableScrollPhysics(),
+                primary: false,
+                shrinkWrap: true,
+                children: [
+                  SizedBox(height: 200.0,),
+                  Center(child:
+                  Text("הייתה תקלה בקריאת המידע על הקבצים :(",
+                    textDirection: TextDirection.rtl,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 28.0),),),
+                ]
+            ),
+          );
+      }
     }
   }
 
   Widget _getTopicsPageResults() {
-    if (search == '' || topics == null) {
+    if (_search == '' || topics == null) {
       return Expanded(
         child: ListView(
             physics: const NeverScrollableScrollPhysics(),
@@ -227,7 +266,7 @@ class _SearchPageState extends State<SearchPage> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                        child: Icon(Icons.star, size: 40.0,),
+                        child: Icon(Data.getIcon(topics[pk][1]), size: 40.0,),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -239,7 +278,7 @@ class _SearchPageState extends State<SearchPage> {
                             child: Align(
                               alignment: AlignmentDirectional.centerEnd,
                               child: AutoSizeText(
-                                "${topics[pk][0]}",
+                                "${topics[pk][0]}", // name of topic
                                 textDirection: TextDirection.rtl,
                                 textAlign: TextAlign.start,
                                 style: TextStyle(fontSize: 22.0, fontFamily: 'Gisha', fontWeight: FontWeight.bold),
@@ -287,7 +326,7 @@ class _SearchPageState extends State<SearchPage> {
               textDirection: TextDirection.rtl,
               onFieldSubmitted: (input) {
                 setState(() {
-                  search = input;
+                  _search = input;
                   _searchResults();
                 });
                 },

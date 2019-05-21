@@ -338,18 +338,32 @@ class _QuizPageState extends State<QuizPage> {
   Widget build(BuildContext context) {
     if (_questions == null) {
       _getAllQuestions();
-      return new Container(
-        child: CircularProgressIndicator(),
+      return Scaffold(
+          appBar: AppBar(
+            title: Text("שאלון למבחן ב${widget.subject != null ? widget.subject : widget.test.subject.name}", style: TextStyle(color: Colors.black),),
+            elevation: 0.0,
+            centerTitle: true,
+            backgroundColor: Color(0xffb2ebf2),
+            automaticallyImplyLeading: false,
+          ),
+          body: Center(
+            child: Container(
+              child: CircularProgressIndicator(),
+            ),
+          )
       );
     }
     else {
+      bool showBackButton = false;
+      if (_questions.isEmpty)
+        showBackButton = true;
       return Scaffold(
         appBar: AppBar(
           title: Text("שאלון למבחן ב${widget.subject != null ? widget.subject : widget.test.subject.name}", style: TextStyle(color: Colors.black),),
           elevation: 0.0,
           centerTitle: true,
           backgroundColor: Color(0xffb2ebf2),
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: showBackButton,
         ),
         body: _playQuiz()
       );

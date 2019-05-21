@@ -26,11 +26,13 @@ class _NavigatorPageState extends State<NavigatorPage> {
 
   Widget _buildButton(Function onTapFunc, String text, Color buttonColor) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+      padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 0.0),
       child: Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(10.0),
         color: buttonColor,
         child: Container(
-          height: MediaQuery.of(context).size.height * 0.43,
+          height: MediaQuery.of(context).size.height * 0.41,
           child: InkWell(
             onTap: onTapFunc,
             child: Center(

@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 /// This class takes care of communicating with the server.
 class Api {
-  static final String _url = "192.168.1.30:8000";
+  static final String _url = "10.0.2.2:8000";
 
   /// Returns all subjects!
   Future<List<Subject>> getAllSubjects() async {
@@ -36,15 +36,16 @@ class Api {
       final testInfo = json.decode(response.body);
       final dateCreatedUtc = testInfo['date_created'].split("-");
       final dateTakenUtc = testInfo['date_taken'].split("-");
+      final subject = Data.getSubjectByPk(int.parse(testInfo['subject_pk']));
       return Test(
           pk: testPk,
-          subject: Data.getSubjectByPk(int.parse(testInfo['subject_pk'])),
+          subject: subject,
           dateCreated: DateTime.utc(int.parse(dateCreatedUtc[0]),
               int.parse(dateCreatedUtc[1]), int.parse(dateCreatedUtc[2])),
           dateTaken: DateTime.utc(int.parse(dateTakenUtc[0]),
               int.parse(dateTakenUtc[1]), int.parse(dateTakenUtc[2])),
           smallTopicsPks: testInfo['small_topics'].cast<int>(),
-          icon: Icons.grade);
+          icon: Data.getIcon(subject.name));
 
     } else {
       print("Error getting test (pk = $testPk. Try to check the server.");
@@ -366,5 +367,33 @@ class Data {
       if (subject.pk == pk) return subject;
     }
     return null;
+  }
+
+  /// Get a suitable icon according to the subject name
+  static IconData getIcon(String subject) {
+    IconData icon;
+    switch (subject) {
+      case "אזרחות":
+        icon = Icons.group;
+        break;
+      case "היסטוריה":
+        icon = Icons.account_balance;
+        break;
+      case "מתמטיקה":
+        icon = Icons.iso;
+        break;
+      case "פיזיקה":
+        icon = Icons.lightbulb_outline;
+        break;
+      case "מדעי המחשב":
+        icon = Icons.keyboard;
+        break;
+      case "סייבר":
+        icon = Icons.computer;
+        break;
+      default:
+        icon = Icons.grade;
+    }
+    return icon;
   }
 }

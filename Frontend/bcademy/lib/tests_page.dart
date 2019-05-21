@@ -76,8 +76,21 @@ class _TestsPageState extends State<TestsPage> {
   Widget build(BuildContext context) {
     if (tests == null) {
       _getAllTests();
-      return new Container(
-        child: CircularProgressIndicator(),
+      return Scaffold(
+        body: Center(
+          child: Container(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(40.0),
+            child: AppBar(
+              title: Text("המבחנים שלי"),
+              centerTitle: true,
+              backgroundColor: Color(0xff29b6f6),
+              elevation: 5.0,
+            )
+        ),
       );
     }
     else {

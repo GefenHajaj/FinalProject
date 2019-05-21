@@ -56,7 +56,7 @@ class _ChooseSubjectPageState extends State<ChooseSubjectPage> {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.all(16.0),
-                      child: Icon(Icons.star, size: 50.0,),
+                      child: Icon(Data.getIcon(_subjects[index].name), size: 50.0,),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
