@@ -6,7 +6,7 @@ This app was developed to help teens all over the world to study better and get 
 
 In order to run it, you need to have Django and Flutter installed.
 
-Flutter help: www.flutter.dev
+Flutter help: www.flutter.dev,
 Django help: www.djangoproject.com
 
 The BackEnd folder holds all the files needed to run the server.
