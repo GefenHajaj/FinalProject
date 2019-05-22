@@ -3,6 +3,7 @@ import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
 import 'dart:async';
 import 'package:quiver/iterables.dart';
+import 'send_email_page.dart';
 
 class StudyPage extends StatefulWidget {
   final Test test;
@@ -17,9 +18,10 @@ class StudyPage extends StatefulWidget {
 
 class _StudyPageState extends State<StudyPage> {
   // Map<String, String> _smallTopics;
-  bool _gotInfo = false;
-  List _infoCards = [];
-  int _index = 0;
+  bool _gotInfo = false; // if we got the info (material)
+  List _infoCards = [];  // the card widgets
+  int _index = 0;        // index of current card
+  String _allInfo = "";   // all the info in one long string (ready to be sent as email)
 
   Future<void> _getAllSmallTopics() async {
     final smallTopics = await Api().getAllSmallTopics(widget.test.pk);
@@ -28,6 +30,7 @@ class _StudyPageState extends State<StudyPage> {
       if (smallTopics != null && smallTopics.isNotEmpty) {
         // Saving the titles and the info of each topic in a convenient way:
         for (var titleData in zip([smallTopics.keys, smallTopics.values])) {
+          _allInfo += titleData[0] + "\n\n" + titleData[1] + "\n\n\n";
           _infoCards.add(
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -152,6 +155,16 @@ class _StudyPageState extends State<StudyPage> {
     }
   }
 
+  void _goToEmailPage() {
+    setState(() {
+      Navigator.of(context).push(MaterialPageRoute<Null>(
+          builder: (BuildContext context) {
+            return SendEmailPage(info: _allInfo, subjectName: widget.test.subject.name);
+          }
+      ));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!_gotInfo) {
@@ -181,8 +194,17 @@ class _StudyPageState extends State<StudyPage> {
             centerTitle: true,
             title: Text("לומדים למבחן ב${widget.test.subject.name}",
               style: TextStyle(fontSize: 22.0,),),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.email, color: Colors.white, size: 30,),
+                onPressed: () {
+                  _goToEmailPage();
+                },
+              ),
+            ],
           ),
-          body: _getSummary()
+          body: _getSummary(),
+
       );
     }
   }
