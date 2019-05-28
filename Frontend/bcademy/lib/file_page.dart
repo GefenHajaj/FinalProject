@@ -1,12 +1,16 @@
+/// This page shows information about a file. It allows the user to download
+/// the file directly to the phone.
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/api.dart';
 import 'dart:async';
 import 'package:open_file/open_file.dart';
 
-
+/// The page that shows info about a file and allows to download it
 class FilePage extends StatefulWidget {
-  final fileData;
-  final bool myFile;
+  final Map fileData; // info about the file
+  final bool myFile;  // indicates whether it's a file that belongs to a user
 
   const FilePage({@required this.fileData, @required this.myFile});
 
@@ -18,21 +22,26 @@ class _FilePageState extends State<FilePage> {
   bool _afterDownload = false;
   String _filePath = '';
 
+  /// Download the file.
   Future<void> _downloadFile() async {
-    String tempName = await Api().downloadFile(widget.fileData['pk'], widget.fileData['name']);
+    String tempName = await Api().downloadFile(widget.fileData['pk'],
+        widget.fileData['name']);
     setState(() {
       _filePath = tempName;
       _afterDownload = true;
     });
   }
 
+  /// Open the file - watch in on the phone
   Future<void> _openFile() async {
     OpenFile.open(_filePath);
   }
 
+  /// Delete the file from the server
   void _deleteFile() {
     Api().deleteFile(widget.fileData['pk']);
-    Navigator.of(context).pushNamedAndRemoveUntil('/profile', (Route<dynamic> route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil('/profile',
+            (Route<dynamic> route) => false);
   }
 
   /// Get a the button for downloading
@@ -98,6 +107,7 @@ class _FilePageState extends State<FilePage> {
     );
   }
 
+  /// Get the body of the page, including button and text
   Widget _getBody() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -111,7 +121,8 @@ class _FilePageState extends State<FilePage> {
                   padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                   child: Text("קובץ במקצוע ${widget.fileData['subject_name']}",
                     textDirection: TextDirection.rtl,
-                    style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),),
+                    style: TextStyle(fontSize: 30.0,
+                        fontWeight: FontWeight.bold),),
                 ),
                 Padding(
                   padding: EdgeInsets.all(10.0),
@@ -122,8 +133,12 @@ class _FilePageState extends State<FilePage> {
                 ),
                 Padding(
                   padding: EdgeInsets.all(16.0),
-                  child: Text("תאריך הוספת הקובץ: " + "${widget.fileData['day']}.${widget.fileData['month']}.${widget.fileData['year']}",
-                      textDirection: TextDirection.rtl, textAlign: TextAlign.center,
+                  child: Text("תאריך הוספת הקובץ: " +
+                      "${widget.fileData['day']}."
+                          "${widget.fileData['month']}."
+                          "${widget.fileData['year']}",
+                      textDirection: TextDirection.rtl,
+                      textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 24.0)),
                 ),
                 Padding(
@@ -149,7 +164,8 @@ class _FilePageState extends State<FilePage> {
           backgroundColor: Color(0xff4dd0e1),
           elevation: 0.0,
           centerTitle: true,
-          title: Text("דף קובץ", textDirection: TextDirection.rtl, style: TextStyle(color: Colors.black, fontSize: 24.0),),
+          title: Text("דף קובץ", textDirection: TextDirection.rtl,
+            style: TextStyle(color: Colors.black, fontSize: 24.0),),
           actions: widget.myFile ? <Widget>[
             IconButton(
               icon: Icon(Icons.delete, color: Colors.black, size: 30,),

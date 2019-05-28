@@ -5,6 +5,7 @@ import 'package:bcademy/sign_up_page.dart';
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 
+/// Here, the user signs in to the app.
 class SignInPage extends StatefulWidget {
   const SignInPage({Key key}) : super(key: key);
 
@@ -25,6 +26,7 @@ class _SignInPageState extends State<SignInPage> {
   String userName = "";
   String password = "";
 
+  /// checks whether we can sign in
   void _trySignIn() {
     if (userName != "" && password != "") {
       _signIn();

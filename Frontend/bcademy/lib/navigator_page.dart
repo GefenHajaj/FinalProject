@@ -1,3 +1,7 @@
+/// This is a page that allows you to go study for a test or answer a quiz.
+/// It also tells you the approximate time that you studied for a test.
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:bcademy/structures.dart';
@@ -5,7 +9,7 @@ import 'package:bcademy/study_page.dart';
 import 'package:bcademy/quiz_page.dart';
 import 'package:bcademy/api.dart';
 
-
+/// The navigation page - go study or take a quiz
 class NavigatorPage extends StatefulWidget {
   final Test test;
 
@@ -24,6 +28,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
 
   Color appBarColor = Color(0xff80d8ff);
 
+  /// Build a button that does something
   Widget _buildButton(Function onTapFunc, String text, Color buttonColor) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 0.0),
@@ -36,7 +41,10 @@ class _NavigatorPageState extends State<NavigatorPage> {
           child: InkWell(
             onTap: onTapFunc,
             child: Center(
-              child: Text(text, textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 60.0, fontFamily: 'VarelaRound'),),
+              child: Text(text, textDirection: TextDirection.rtl,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 60.0,
+                    fontFamily: 'VarelaRound'),),
             ),
           ),
         ),
@@ -49,7 +57,10 @@ class _NavigatorPageState extends State<NavigatorPage> {
     return Column(
       children: <Widget>[
         SizedBox(height: 15,),
-        Text(widget.test.millisecondsStudy != 0 ? "זמן נלמד: ${(widget.test.millisecondsStudy/(1000.0 * 60)).toStringAsFixed(0)} דקות" : "עדיין לא למדת למבחן זה!",
+        Text(widget.test.millisecondsStudy != 0
+            ? "זמן נלמד: ${(widget.test.millisecondsStudy/(1000.0 * 60)).
+        toStringAsFixed(0)} דקות" :
+        "עדיין לא למדת למבחן זה!",
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
@@ -60,7 +71,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
     );
   }
 
-  /// What happens when pressing on "Time to Study!" button
+  /// Move to the study page
   void _onStudyTap() {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute<Null>(
@@ -71,7 +82,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
     });
   }
 
-  /// When pressing on "Take a Quiz!" button.
+  /// Go and take a quiz
   void _onQuizTap() {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute<Null>(
@@ -82,19 +93,20 @@ class _NavigatorPageState extends State<NavigatorPage> {
     });
   }
 
-  /// When pressing on the delete sign
+  /// When pressing on the delete sign - delete a test
   void _deleteTest() {
     Api().deleteTest(widget.test.pk);
-    Navigator.of(context).pushNamedAndRemoveUntil('/tests', (Route<dynamic> route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil('/tests',
+            (Route<dynamic> route) => false);
   }
 
-  /// Small little page (for now!)
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffffebee),
       appBar: AppBar(
-        title: Text("מבחן ב${widget.test.subject.name}", style: TextStyle(color: Colors.black),),
+        title: Text("מבחן ב${widget.test.subject.name}",
+          style: TextStyle(color: Colors.black),),
         elevation: 0.0,
         centerTitle: true,
         backgroundColor: appBarColor,

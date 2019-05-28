@@ -1,3 +1,7 @@
+/// This file manages the communication of the app with the server.
+/// It includes all the functions needed to get/post info from/to the server.
+/// Developer: Gefen Hajaj
+
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
@@ -41,10 +45,14 @@ class Api {
       return Test(
           pk: testPk,
           subject: subject,
-          dateCreated: DateTime.utc(int.parse(dateCreatedUtc[0]),
-              int.parse(dateCreatedUtc[1]), int.parse(dateCreatedUtc[2])),
-          dateTaken: DateTime.utc(int.parse(dateTakenUtc[0]),
-              int.parse(dateTakenUtc[1]), int.parse(dateTakenUtc[2])),
+          dateCreated: DateTime.utc(
+              int.parse(dateCreatedUtc[0]),
+              int.parse(dateCreatedUtc[1]), int.parse(dateCreatedUtc[2])
+          ),
+          dateTaken: DateTime.utc(
+              int.parse(dateTakenUtc[0]),
+              int.parse(dateTakenUtc[1]), int.parse(dateTakenUtc[2])
+          ),
           smallTopicsPks: testInfo['small_topics'].cast<int>(),
           icon: Data.getIcon(subject.name),
           millisecondsStudy: testInfo['study_time']
@@ -71,7 +79,8 @@ class Api {
 
     } else {
       print(
-          "Something went wrong with getting all tests. Try to check the server.");
+          "Something went wrong with getting all tests. "
+              "Try to check the server.");
       return null;
     }
   }
@@ -85,7 +94,8 @@ class Api {
 
     } else {
       print(
-          "Something went wrong with getting small topic (pk) $smallTopicPk. Check the server.");
+          "Something went wrong with getting small topic "
+              "(pk) $smallTopicPk. Check the server.");
       return null;
     }
   }
@@ -104,7 +114,8 @@ class Api {
       return smallTopics;
     } else {
       print(
-          "Something went wrong with getting all topics for test (pk) $testPk. Check the server.");
+          "Something went wrong with getting all topics "
+              "for test (pk) $testPk. Check the server.");
       return null;
     }
   }
@@ -253,7 +264,8 @@ class Api {
     }
   }
 
-  /// Search for files and docs on the cloud and get results - your files and others'!
+  /// Search for files and docs on the cloud and get results -
+  /// your files and others'!
   Future<Map> searchFiles(String search) async {
     final url = Uri.http(_url, '/bcademy/search/files/');
     var response = await http.post(url, body: json.encode({'search': search}));
@@ -335,6 +347,7 @@ class Api {
     await http.post(url, body: json.encode(postBody));
   }
 
+  /// Delete a test
   Future<void> deleteTest(int testPk) async {
     final url = Uri.http(_url, 'bcademy/tests/delete/$testPk/');
     var response = await http.get(url);
@@ -343,6 +356,7 @@ class Api {
     }
   }
 
+  /// Delete a file
   Future<void> deleteFile(int filePk) async {
     final url = Uri.http(_url, 'bcademy/files/delete/$filePk/');
     var response = await http.get(url);
@@ -351,6 +365,7 @@ class Api {
     }
   }
 
+  /// Update the time that was studied for a test
   Future<void> updateTestStudyTime(int milliseconds, int pk) async {
     final url = Uri.http(_url, 'bcademy/tests/updatetime/');
     final postBody = {'pk': pk, 'time': milliseconds};
@@ -361,8 +376,8 @@ class Api {
 /// This class saves data that's important for the entire app.
 class Data {
   static List<Subject> allSubjects;
-  static String userName = "גפן"; // remember to change this
-  static int userPk = 1; // remember to change
+  static String userName;
+  static int userPk;
 
   /// This function should be called when first opening the app.
   static void startApp() async {

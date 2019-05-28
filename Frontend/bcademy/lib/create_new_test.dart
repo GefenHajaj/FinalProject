@@ -1,3 +1,6 @@
+/// This page allows the user to create a new test
+/// developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
@@ -5,7 +8,7 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'dart:async';
 
-/// When choosing a subject for the new test.
+/// Choosing a subject for the new test.
 class ChooseSubjectPage extends StatefulWidget {
   const ChooseSubjectPage();
 
@@ -34,6 +37,7 @@ class _ChooseSubjectPageState extends State<ChooseSubjectPage> {
     });
   }
 
+  /// Returns a list of subjects available in the app
   Widget _getSubjectsList() {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
@@ -44,7 +48,8 @@ class _ChooseSubjectPageState extends State<ChooseSubjectPage> {
             borderRadius: _borderRadius,
             child: InkWell(
               borderRadius: _borderRadius,
-              onTap: () {_goToChooseTopics(_subjects[index].name, _subjects[index].pk);},
+              onTap: () {_goToChooseTopics(_subjects[index].name,
+                  _subjects[index].pk);},
               highlightColor: _highlightColor,
               splashColor: _splashColor,
               child: Container(
@@ -56,7 +61,8 @@ class _ChooseSubjectPageState extends State<ChooseSubjectPage> {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.all(16.0),
-                      child: Icon(Data.getIcon(_subjects[index].name), size: 50.0,),
+                      child: Icon(Data.getIcon(_subjects[index].name),
+                        size: 50.0,),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -131,23 +137,28 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
   var _warningButtonColor = Colors.red;
   var _warningButtonText = "אתה חייב לבחור\nלפחות נושא אחד";
 
+  /// Get all the small topics for a specific subject from the server
   Future<void> _getAllSmallTopics() async {
-    final tempSmallTopics = await Api().getAllSubjectSmallTopics(widget.subjectPk);
+    final tempSmallTopics = await Api().getAllSubjectSmallTopics(
+        widget.subjectPk);
     setState(() {
       _smallTopics = tempSmallTopics;
     });
   }
 
+  /// Update the list to show which topics were chosen (change in color)
   void _updateChosenList(int smallTopicPk) {
     _buttonText = _normalButtonText;
     _buttonColor = _normalButtonColor;
     _buttonWidth = _normalButtonWidth;
     _buttonHeight = _normalButtonHeight;
+    // Remove small topic that was chosen and pressed on again
     if (_chosenSmallTopics.contains(smallTopicPk)) {
       setState(() {
         _chosenSmallTopics.remove(smallTopicPk);
       });
     }
+    // Add small topic to chosen list
     else {
       setState(() {
         _chosenSmallTopics.add(smallTopicPk);
@@ -155,7 +166,10 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
     }
   }
 
+  /// Move to the next step - pick a date for the test
   void _goToChooseDate() {
+    // Make sure the user chose at least one topic. If not, change the color,
+    // size and text of buton to tell the user he must pick at least one.
     if (_chosenSmallTopics.isEmpty) {
       setState(() {
         _buttonColor = _warningButtonColor;
@@ -179,7 +193,9 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
     }
   }
 
+  /// Get a list of all the small topics
   Widget _getSmallTopicsList() {
+    // If there are no small topics for a subject
     if (_smallTopics.isEmpty) {
       return Container(
         child: Center(
@@ -199,7 +215,8 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
         return Padding(
           padding: const EdgeInsets.fromLTRB(8.0 ,4, 8, 4),
           child: Material(
-            color: _chosenSmallTopics.contains(_smallTopics[index][0]) ? _chosenColor : _notChosenColor ,
+            color: _chosenSmallTopics.contains(_smallTopics[index][0]) ?
+            _chosenColor : _notChosenColor ,
             borderRadius: _borderRadius,
             child: InkWell(
               borderRadius: _borderRadius,
@@ -352,9 +369,11 @@ class _ChooseDateState extends State<ChooseDate> {
   var _normalDatePickedColor = Color(0xbbb2ff59);
   var _warningDatePickedColor = Colors.red;
 
+  /// Change the date selected.
   void _selectDate(DateTime date) {
     final now = DateTime.now();
     final yesterday = new DateTime(now.year, now.month, now.day - 1);
+    // Return button to original state when changing the date again
     if (!date.isBefore(yesterday)) {
       setState(() {
         _datePickedColor = _normalDatePickedColor;
@@ -372,6 +391,7 @@ class _ChooseDateState extends State<ChooseDate> {
     }
   }
 
+  /// Finish creating a test. Make sure the date picked is in the future/today.
   void _finishCreatingTest() {
     final now = DateTime.now();
     final yesterday = new DateTime(now.year, now.month, now.day - 1);
@@ -384,9 +404,11 @@ class _ChooseDateState extends State<ChooseDate> {
           widget.smallTopics
       );
       new Future.delayed(const Duration(seconds: 3));
-      Navigator.of(context).pushNamedAndRemoveUntil('/tests', (Route<dynamic> route) => false);
+      Navigator.of(context).pushNamedAndRemoveUntil('/tests',
+              (Route<dynamic> route) => false);
 
     }
+    // If the date is in the past - tell the user
     else {
       setState(() {
         _datePickedColor = _warningDatePickedColor;
@@ -398,6 +420,7 @@ class _ChooseDateState extends State<ChooseDate> {
     }
   }
 
+  /// Return the calender as a widget
   Widget _getCalender() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.0),
@@ -415,10 +438,12 @@ class _ChooseDateState extends State<ChooseDate> {
     );
   }
 
+  /// Get the body of the app, with the button and calender
   Widget _getBody() {
     return Stack(
       children: <Widget>[
         _getCalender(),
+        // Button:
         Align(
           alignment: Alignment(0, 0.8),
           child: Material(

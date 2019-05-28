@@ -1,3 +1,6 @@
+/// The home page of the app. Every single screen is a sub-screen of this one.
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/tests_page.dart';
 import 'package:bcademy/api.dart';
@@ -73,7 +76,9 @@ class _HomePageState extends State<HomePage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(45.0),
         child: AppBar(
-          title: Text('BCademy', textAlign: TextAlign.center, style: TextStyle(color: Colors.black, fontFamily: 'Norican', fontSize: 30.0),),
+          title: Text('BCademy', textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.black,
+                fontFamily: 'Norican', fontSize: 30.0),),
           centerTitle: true,
           elevation: 0.0,
           backgroundColor: Color(0xff80d8ff),
@@ -84,11 +89,21 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
-          BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('Search')),
-          BottomNavigationBarItem(icon: Icon(Icons.help_outline), title: Text('Quizzes')),
-          BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('Upload')),
-          BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('Profile')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home), title: Text('בית')
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.search), title: Text('חיפוש')
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.help_outline), title: Text('שאלונים')
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.add), title: Text('העלאה')
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person), title: Text('פרופיל')
+          ),
         ],
         currentIndex: _selectedPageIndex,
         fixedColor: Colors.blue,

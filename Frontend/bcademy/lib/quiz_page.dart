@@ -1,24 +1,34 @@
+/// This page allows the user to answer an interactive quiz and get results
+/// in the end.
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'dart:async';
 
+/// Answer the quiz - quiz page
 class QuizPage extends StatefulWidget {
   final Test test; // use this if this is a quiz fot a test
   final int quizPk;    // for a specific quiz
   final String subject;   // for a specific quiz
-  final List topThreeUsersPks;
-  final List topThreeUsersScores;
+  final List topThreeUsersPks;  // pks of users with best scores
+  final List topThreeUsersScores;  // top three scores
 
-  const QuizPage({this.test, this.quizPk, this.subject, this.topThreeUsersPks, this.topThreeUsersScores});
+  const QuizPage({
+    this.test,
+    this.quizPk,
+    this.subject,
+    this.topThreeUsersPks,
+    this.topThreeUsersScores});
 
   @override
   _QuizPageState createState() => _QuizPageState();
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List _questions; // [[question, [1, answer1], [2, answer2], [3, answer3], [4, answer4]], [question...]]
+  List _questions; // info about all the questions
   int _questionIndex = 0;
   List<int> _pressedWrong= [];
   int _guessesNum = 0;
@@ -26,6 +36,7 @@ class _QuizPageState extends State<QuizPage> {
   bool _wrong = false;
   Stopwatch stopwatch = Stopwatch();
 
+  /// Get all the questions for a quiz from the server
   Future<void> _getAllQuestions() async {
     // Checking whether this is a test quiz or a specific quiz
     if (widget.test != null) {
@@ -42,6 +53,7 @@ class _QuizPageState extends State<QuizPage> {
     }
   }
 
+  /// Get all the text to show when someone finished a quiz
   String _finishQuiz(double score) {
     // checking whether the quiz is a specific one or a test one
     if (widget.test == null) {
@@ -73,6 +85,7 @@ class _QuizPageState extends State<QuizPage> {
     }
   }
 
+  /// Get the box where the question is printed
   Widget _getQuestionBox(String text) {
     return Align(
       alignment: Alignment(0, -0.85),
@@ -108,6 +121,7 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
+  /// Get an answer box a user can press
   Widget _getAnswerBox(int order, List answerData) {
     final int answerNum = answerData[0];
     String answerText = answerData[1];
@@ -198,9 +212,12 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
+  /// Check whether the user answer correctly or not.
   void _tryToAnswer(int questionNum) {
+    // If correct
     if (questionNum == 1) {
       setState(() {
+        // Correct in first attempt
         if (!_wrong) {
           _correctNum++;
         }
@@ -209,6 +226,7 @@ class _QuizPageState extends State<QuizPage> {
         _wrong = false;
       });
     }
+    // If wrong
     else {
       setState(() {
         _guessesNum++;
@@ -222,21 +240,25 @@ class _QuizPageState extends State<QuizPage> {
     }
   }
 
+  /// Allow the user to go back and not answer the quiz
   void _goBack() {
     if (widget.test != null) {
       Navigator.of(context).pop();
     }
     else {
-      Navigator.of(context).pushNamedAndRemoveUntil('/quizzes', (Route<dynamic> route) => false);
+      Navigator.of(context).pushNamedAndRemoveUntil('/quizzes',
+              (Route<dynamic> route) => false);
     }
   }
 
+  /// This function manages the game and shows the entire screen
   Widget _playQuiz() {
     stopwatch.start();
     if (_questions.isEmpty) {
       return Container(
         child: Center(
-          child: Text("עדיין לא כתבנו שאלות לנושאי המבחן שלך.\nחזור בקרוב ונסה שוב!",
+          child: Text(
+            "עדיין לא כתבנו שאלות לנושאי המבחן שלך.\nחזור בקרוב ונסה שוב!",
             textDirection: TextDirection.rtl,
             style: TextStyle(fontSize: 32),
             textAlign: TextAlign.center,
@@ -257,8 +279,11 @@ class _QuizPageState extends State<QuizPage> {
                 style: TextStyle(fontSize: 48),
                 textAlign: TextAlign.center,
               ),
-              Container(height: 150, child: Center(child: Text('🎉', style: TextStyle(fontSize: 100),),),),
-              Text("תשובות נכונות בניסיון ראשון: $_correctNum/${_questions.length}",
+              Container(height: 150, child: Center(child:
+              Text('🎉', style: TextStyle(fontSize: 100),),),
+              ),
+              Text("תשובות"
+                  " נכונות בניסיון ראשון: $_correctNum/${_questions.length}",
                 textDirection: TextDirection.rtl,
                 style: TextStyle(fontSize: 25),
                 textAlign: TextAlign.center,
@@ -319,7 +344,8 @@ class _QuizPageState extends State<QuizPage> {
       List answers = question.sublist(1);
       if (_pressedWrong.isEmpty) {
         answers.shuffle();
-        _questions[_questionIndex] = [text, answers[0], answers[1], answers[2], answers[3]];
+        _questions[_questionIndex] =
+        [text, answers[0], answers[1], answers[2], answers[3]];
       }
       return Stack(
         children: <Widget>[
@@ -340,7 +366,10 @@ class _QuizPageState extends State<QuizPage> {
       _getAllQuestions();
       return Scaffold(
           appBar: AppBar(
-            title: Text("שאלון למבחן ב${widget.subject != null ? widget.subject : widget.test.subject.name}", style: TextStyle(color: Colors.black),),
+            title: Text("שאלון למבחן ב${widget.subject != null
+                ? widget.subject :
+            widget.test.subject.name}",
+              style: TextStyle(color: Colors.black),),
             elevation: 0.0,
             centerTitle: true,
             backgroundColor: Color(0xffb2ebf2),
@@ -359,7 +388,10 @@ class _QuizPageState extends State<QuizPage> {
         showBackButton = true;
       return Scaffold(
         appBar: AppBar(
-          title: Text("שאלון למבחן ב${widget.subject != null ? widget.subject : widget.test.subject.name}", style: TextStyle(color: Colors.black),),
+          title: Text("שאלון למבחן ב${widget.subject != null
+              ? widget.subject :
+          widget.test.subject.name}",
+            style: TextStyle(color: Colors.black),),
           elevation: 0.0,
           centerTitle: true,
           backgroundColor: Color(0xffb2ebf2),

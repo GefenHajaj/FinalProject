@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// A placeholder
+/// A placeholder - not used
 Widget placeHolder(String title) {
   const _padding = EdgeInsets.all(16.0);
 

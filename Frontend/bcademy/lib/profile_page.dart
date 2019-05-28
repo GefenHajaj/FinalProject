@@ -1,3 +1,7 @@
+/// This is the profile page of a user. Here, he can see all his files,
+/// download them and even sign out of the app.
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/api.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -5,6 +9,7 @@ import 'dart:async';
 import 'package:bcademy/file_page.dart';
 import 'package:bcademy/sign_in_page.dart';
 
+/// The profile page
 class ProfilePage extends StatefulWidget {
   const ProfilePage();
 
@@ -15,6 +20,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   Map _files; // {pk: {info: ..., date_created,}, pk2: {}, }
 
+  /// Get info about all the files of a user from the server
   Future<void> _getAllFiles() async {
     final filesInfo = await Api().getUserFiles();
     setState(() {
@@ -22,6 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  /// When pressing on a file tab - go to the file page (show info, download)
   void _goToFilePage(Map fileData) {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute<Null>(
@@ -32,6 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  /// Sign out of the app - go to sign in page.
   void _goToSignInPage() {
     setState(() {
       Navigator.of(context).pushReplacement(MaterialPageRoute<Null>(
@@ -42,6 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  /// Get the entire page - all the tabs, titles and images
   Widget _getPage() {
     final fileTiles = <Widget>[];
     for (String pk in _files.keys) {
@@ -54,20 +63,44 @@ class _ProfilePageState extends State<ProfilePage> {
             child: InkWell(
               onTap: () {_goToFilePage(_files[pk]);},
               child: Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Color(0xffe3f2fd), border: Border.all(color: Color(0xbbb1bfca))),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Color(0xffe3f2fd),
+                    border: Border.all(color: Color(0xbbb1bfca))
+                ),
                 child: Center(child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     textDirection: TextDirection.rtl,
                     children: <Widget>[
-                      AutoSizeText("${_files[pk]['subject_name']}", textDirection: TextDirection.rtl, style: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                      AutoSizeText("${_files[pk]['subject_name']}",
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(fontSize: 26.0,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,),
                       SizedBox(height: 5.0,),
-                      AutoSizeText(_files[pk]['info'], textDirection: TextDirection.rtl,textAlign: TextAlign.center, maxLines: 3, style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
+                      AutoSizeText(_files[pk]['info'],
+                        textDirection: TextDirection.rtl,
+                        textAlign: TextAlign.center,
+                        maxLines: 3, style: TextStyle(fontSize: 16.0,
+                            fontWeight: FontWeight.bold),
+                      ),
                       SizedBox(height: 8.0,),
-                      AutoSizeText("${_files[pk]['day']}.${_files[pk]['month']}.${_files[pk]['year']}", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),),
+                      AutoSizeText("${_files[pk]['day']}."
+                          "${_files[pk]['month']}."
+                          "${_files[pk]['year']}",
+                        style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold),
+                      ),
                       SizedBox(height: 8.0,),
-                      AutoSizeText("${_files[pk]['name']}", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center, maxLines: 1, minFontSize: 14.0,),
+                      AutoSizeText("${_files[pk]['name']}",
+                        style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                        maxLines: 1, minFontSize: 14.0,),
                     ],
                   ),
                 )),
@@ -79,8 +112,15 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     var lastPart;
+    // Tell the user he has no files in case he has none...
     if (fileTiles.isEmpty) {
-      lastPart = [Container(height: 150,), Center(child: Text("עדיין אין שום קבצים 😧", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),)];
+      lastPart = [
+        Container(height: 150,),
+        Center(child: Text(
+          "עדיין אין שום קבצים 😧",
+          textDirection: TextDirection.rtl,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 28.0),),)];
     }
     else {
       lastPart = [Expanded(
@@ -123,7 +163,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
-                    child: Text("התנתק", style: TextStyle(fontWeight: FontWeight.bold),),
+                    child: Text("התנתק", style: TextStyle(
+                        fontWeight: FontWeight.bold),),
                   ),),
               ),
             ),
@@ -135,7 +176,9 @@ class _ProfilePageState extends State<ProfilePage> {
           textDirection: TextDirection.rtl,
           children: <Widget>[Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: Text("כל הקבצים שלי", style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),),
+            child: Text("כל הקבצים שלי", style: TextStyle(
+                fontSize: 30.0, fontWeight: FontWeight.bold),
+            ),
           )],
         ),
         Divider(height: 10.0,),

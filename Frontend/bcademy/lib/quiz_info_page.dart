@@ -1,9 +1,13 @@
+/// This page shows info about a quiz and lets the user answer it.
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:bcademy/api.dart';
 import 'dart:async';
 import 'package:bcademy/quiz_page.dart';
 
+/// Info about a quiz
 class QuizInfoPage extends StatefulWidget {
   final int quizPk;
 
@@ -16,6 +20,7 @@ class QuizInfoPage extends StatefulWidget {
 class _QuizInfoPageState extends State<QuizInfoPage> {
   Map quizInfo;
 
+  /// Get the info about a quiz from the server
   Future<void> _getQuizInfo() async {
     final tempQuizInfo = await Api().getQuiz(widget.quizPk);
     setState(() {
@@ -23,23 +28,28 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
     });
   }
 
+  /// Go to the quiz page and answer it
   void _goToQuizPage() {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute<Null>(
           builder: (BuildContext context) {
-            return QuizPage(quizPk: quizInfo['pk'], subject: quizInfo['subject'],
-              topThreeUsersPks: quizInfo['top_three_users'], topThreeUsersScores: quizInfo['top_three_scores'],);
+            return QuizPage(
+              quizPk: quizInfo['pk'], subject: quizInfo['subject'],
+              topThreeUsersPks: quizInfo['top_three_users'],
+              topThreeUsersScores: quizInfo['top_three_scores'],);
           }
       ));
     });
   }
 
+  /// Arrange the text of top three players
   String _getTopScoresText() {
     List topThreeNames = quizInfo['top_three_names'];
     List topThreeScores = quizInfo['top_three_scores'];
     String text = 'השחקנים הכי טובים:\n';
     for (int i = 0; i < topThreeNames.length; i++) {
-      text += topThreeNames[i] + ' עם תוצאה של ' + topThreeScores[i].toString() + ' שניות\n';
+      text += topThreeNames[i] + ' עם תוצאה של '
+          + topThreeScores[i].toString() + ' שניות\n';
     }
     if (text == 'השחקנים הכי טובים:\n') {
       text = 'עדיין לא שיחקו בשאלון הזה!\nתהיו הראשונים לשחק!';
@@ -47,6 +57,7 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
     return text;
   }
 
+  /// Get the button. When pressed - go to the quiz page (answer quiz)
   Widget _getButton() {
     double height = 75.0;
     double width = 300.0;
@@ -85,6 +96,7 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
     );
   }
 
+  /// Get the full page - all the text and buttons.
   Widget _getPage() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -98,7 +110,8 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
                   padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                   child: Text("${quizInfo['title']}",
                     textDirection: TextDirection.rtl,
-                    style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),),
+                    style: TextStyle(fontSize: 30.0,
+                        fontWeight: FontWeight.bold),),
                 ),
                 Padding(
                   padding: EdgeInsets.all(16.0),
@@ -118,7 +131,8 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
                   child: Text(_getTopScoresText(),
                       textDirection: TextDirection.rtl,
                       textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold)),
+                      style: TextStyle(fontSize: 22.0,
+                          fontWeight: FontWeight.bold)),
                 ),
                 Container(height: 25.0,),
                 _getButton()
@@ -138,7 +152,9 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
             backgroundColor: Color(0xff4dd0e1),
             elevation: 0.0,
             centerTitle: true,
-            title: Text("דף שאלון", textDirection: TextDirection.rtl, style: TextStyle(color: Colors.black, fontSize: 24.0),),
+            title: Text("דף שאלון",
+              textDirection: TextDirection.rtl,
+              style: TextStyle(color: Colors.black, fontSize: 24.0),),
           ),
           body: Container(
             child: CircularProgressIndicator(),
@@ -151,7 +167,9 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
             backgroundColor: Color(0xff4dd0e1),
             elevation: 0.0,
             centerTitle: true,
-            title: Text("דף שאלון", textDirection: TextDirection.rtl, style: TextStyle(color: Colors.black, fontSize: 24.0),),
+            title: Text("דף שאלון",
+              textDirection: TextDirection.rtl,
+              style: TextStyle(color: Colors.black, fontSize: 24.0),),
           ),
           body: _getPage()
       );

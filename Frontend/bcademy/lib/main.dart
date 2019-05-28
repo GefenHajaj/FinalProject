@@ -1,3 +1,7 @@
+/// The run file. This file controls the main design of the app and the
+/// main screen.
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/home_page.dart';
 import 'package:bcademy/sign_in_page.dart';
@@ -5,7 +9,7 @@ import 'package:bcademy/sign_in_page.dart';
 /// The function that's called when we run the app
 void main() => runApp(BCademy());
 
-
+/// The main app
 class BCademy extends StatelessWidget {
   // The root of the application.
   @override
