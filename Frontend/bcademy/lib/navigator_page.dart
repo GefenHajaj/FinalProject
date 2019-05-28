@@ -17,9 +17,9 @@ class NavigatorPage extends StatefulWidget {
 
 class _NavigatorPageState extends State<NavigatorPage> {
 
-  String studyButtonText = "Time to Study!";
+  String studyButtonText = "זמן ללמוד!";
   Color studyButtonColor = Color(0xff00e5ff);
-  String quizButtonText = "Take a Quiz!";
+  String quizButtonText = "שאלון!";
   Color quizButtonColor = Color(0xff00e676);
 
   Color appBarColor = Color(0xff80d8ff);
@@ -32,11 +32,11 @@ class _NavigatorPageState extends State<NavigatorPage> {
         borderRadius: BorderRadius.circular(10.0),
         color: buttonColor,
         child: Container(
-          height: MediaQuery.of(context).size.height * 0.41,
+          height: MediaQuery.of(context).size.height * 0.36,
           child: InkWell(
             onTap: onTapFunc,
             child: Center(
-              child: Text(text, style: TextStyle(fontSize: 60.0, fontFamily: 'PatrickHand'),),
+              child: Text(text, textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 60.0, fontFamily: 'VarelaRound'),),
             ),
           ),
         ),
@@ -44,9 +44,16 @@ class _NavigatorPageState extends State<NavigatorPage> {
     );
   }
 
+  /// Get the full page - the main screen we see
   Widget _getFullPage() {
     return Column(
       children: <Widget>[
+        SizedBox(height: 15,),
+        Text(widget.test.millisecondsStudy != 0 ? "זמן נלמד: ${(widget.test.millisecondsStudy/(1000.0 * 60)).toStringAsFixed(0)} דקות" : "עדיין לא למדת למבחן זה!",
+          textDirection: TextDirection.rtl,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20),
+        ),
         _buildButton(_onStudyTap, this.studyButtonText, this.studyButtonColor),
         _buildButton(_onQuizTap, this.quizButtonText, this.quizButtonColor)
       ],

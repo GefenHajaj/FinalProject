@@ -15,12 +15,12 @@ class TestsPage extends StatefulWidget {
 
 class _TestsPageState extends State<TestsPage> {
   // Just until we connect to the server...
-  List<Test> tests;
+  List<Test> _tests;
 
   Future<void> _getAllTests() async {
     final tempTests = await Api().getAllTests();
     setState(() {
-      tests = tempTests;
+      _tests = tempTests;
     });
   }
 
@@ -35,20 +35,65 @@ class _TestsPageState extends State<TestsPage> {
     });
   }
 
+  /// refresg app
+  void _onRefresh() {
+    setState(() {
+      _tests = null;
+    });
+  }
+
   /// Returns a [ListView] of [TestTile]s.
   Widget _buildTestsWidgetsList() {
-    if (tests.isNotEmpty) {
+    if (_tests.isNotEmpty) {
       return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
-          if (index != tests.length) {
-            return TestTile(test: tests[index], onTap: _onTestTap);
+          if (index == 0) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              textDirection: TextDirection.rtl,
+              children: <Widget>[
+                SizedBox(height: 15,),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: Text(
+                    "המבחן הקרוב:",
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 5,),
+                TestTile(test: _tests[index], onTap: _onTestTap),
+              ],
+            );
+          }
+          else if (index != _tests.length && index == 1) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              textDirection: TextDirection.rtl,
+              children: <Widget>[
+                SizedBox(height: 20,),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: Text(
+                    "המבחנים הבאים:",
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 5,),
+                TestTile(test: _tests[index], onTap: _onTestTap),
+              ],
+            );
+          }
+          else if (index != _tests.length) {
+            return TestTile(test: _tests[index], onTap: _onTestTap);
           }
           else {
             // Another blank tile to be able to see the last test.
             return Container(height: 130.0,);
           }
         },
-        itemCount: tests == null ? 0 : tests.length + 1,
+        itemCount: _tests == null ? 0 : _tests.length + 1,
       );
     }
     else {
@@ -74,7 +119,7 @@ class _TestsPageState extends State<TestsPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (tests == null) {
+    if (_tests == null) {
       _getAllTests();
       return Scaffold(
         body: Center(
@@ -99,14 +144,14 @@ class _TestsPageState extends State<TestsPage> {
             children: <Widget>[
               _buildTestsWidgetsList(),
               Align(
-                alignment: Alignment(0, 0.8),
+                alignment: Alignment(0, 0.85),
                 child: Material(
                     // elevation: 10.0,
                     borderRadius: BorderRadius.circular(50.0),
                     color: Colors.transparent,
                     child: Container(
-                      height: 75.0,
-                      width: 300.0,
+                      height: 60.0,
+                      width: 250.0,
                       decoration: BoxDecoration(
                           color: Color(0xffff3d00),
                           borderRadius: BorderRadius.circular(50.0)
@@ -115,7 +160,7 @@ class _TestsPageState extends State<TestsPage> {
                         borderRadius: BorderRadius.circular(50.0),
                         onTap: _createNewTest,
                         child: Center(
-                          child: Text("צור מבחן חדש",
+                          child: Text("מבחן חדש",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 24.0
@@ -135,6 +180,14 @@ class _TestsPageState extends State<TestsPage> {
               centerTitle: true,
               backgroundColor: Color(0xff29b6f6),
               elevation: 5.0,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.refresh, color: Colors.white, size: 20,),
+                  onPressed: () {
+                    _onRefresh();
+                  },
+                ),
+              ],
             )
         ),
       );
