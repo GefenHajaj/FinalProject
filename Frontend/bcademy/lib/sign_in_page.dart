@@ -77,7 +77,7 @@ class _SignInPageState extends State<SignInPage> {
             child: Stack(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.fromLTRB(15.0, 70.0, 20.0, 0.0),
+                  padding: EdgeInsets.fromLTRB(15.0, 50.0, 20.0, 0.0),
                   child: Text(
                     'ברוכים הבאים',
                     style: TextStyle(fontSize: 80.0, fontWeight: FontWeight.bold),
@@ -85,7 +85,7 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(165.0, 165.0, 0.0, 0.0),
+                  padding: EdgeInsets.fromLTRB(115.0, 145.0, 0.0, 0.0),
                   child: Text(
                     '.',
                     style: TextStyle(
@@ -97,7 +97,7 @@ class _SignInPageState extends State<SignInPage> {
               ],
             ),
           ),
-          SizedBox(height: 50.0,),
+          SizedBox(height: 30.0,),
           Directionality(
             textDirection: TextDirection.rtl,
             child: Padding(
@@ -131,6 +131,7 @@ class _SignInPageState extends State<SignInPage> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(40, 8, 40, 8),
               child: TextField(
+                obscureText: true,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                 decoration: const InputDecoration(
                   labelText: 'סיסמא',
@@ -209,7 +210,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),),
             ),
           ),
-          Container(height: 50.0,)
+          Container(height: 10.0,)
         ],
       ),
     );

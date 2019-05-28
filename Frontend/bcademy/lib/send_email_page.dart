@@ -67,7 +67,7 @@ class _SendEmailPageState extends State<SendEmailPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           textDirection: TextDirection.rtl,
           children: <Widget>[
-            SizedBox(height: 125,),
+            SizedBox(height: 75,),
             Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
@@ -108,7 +108,7 @@ class _SendEmailPageState extends State<SendEmailPage> {
                 ),
               ),
             ),
-            SizedBox(height: 100,),
+            SizedBox(height: 75,),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
               child: Material(

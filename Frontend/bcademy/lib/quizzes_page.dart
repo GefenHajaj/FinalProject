@@ -13,7 +13,7 @@ class QuizzesPage extends StatefulWidget {
 
 class _QuizzesPageState extends State<QuizzesPage> {
   Map quizzes;
-  final _rowHeight = 100.0;
+  final _rowHeight = 90.0;
   final _borderRadius = BorderRadius.circular(10.0);
   final _color = Color(0xff80deea);
   final _highlightColor = Colors.lightBlueAccent;
@@ -43,7 +43,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
       return Center(
         child: Text(
           "אנחנו עובדים על עוד שאלונים...\nחכו עוד קצת!",
-          style: TextStyle(fontSize: 30.0),
+          style: TextStyle(fontSize: 25.0),
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.center,
         ),);
@@ -55,7 +55,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Material(
-                elevation: 5.0,
+                elevation: 3.0,
                 color: _color,
                 borderRadius: _borderRadius,
                 child: InkWell(

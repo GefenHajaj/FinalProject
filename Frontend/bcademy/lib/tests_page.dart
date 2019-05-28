@@ -40,7 +40,45 @@ class _TestsPageState extends State<TestsPage> {
     if (tests.isNotEmpty) {
       return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
-          if (index != tests.length) {
+          if (index == 0) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              textDirection: TextDirection.rtl,
+              children: <Widget>[
+                SizedBox(height: 15,),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: Text(
+                    "המבחן הקרוב:",
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 5,),
+                TestTile(test: tests[index], onTap: _onTestTap),
+              ],
+            );
+          }
+          else if (index != tests.length && index == 1) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              textDirection: TextDirection.rtl,
+              children: <Widget>[
+                SizedBox(height: 20,),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: Text(
+                    "המבחנים הבאים:",
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 5,),
+                TestTile(test: tests[index], onTap: _onTestTap),
+              ],
+            );
+          }
+          else if (index != tests.length) {
             return TestTile(test: tests[index], onTap: _onTestTap);
           }
           else {
@@ -99,14 +137,14 @@ class _TestsPageState extends State<TestsPage> {
             children: <Widget>[
               _buildTestsWidgetsList(),
               Align(
-                alignment: Alignment(0, 0.8),
+                alignment: Alignment(0, 0.85),
                 child: Material(
                     // elevation: 10.0,
                     borderRadius: BorderRadius.circular(50.0),
                     color: Colors.transparent,
                     child: Container(
-                      height: 75.0,
-                      width: 300.0,
+                      height: 60.0,
+                      width: 250.0,
                       decoration: BoxDecoration(
                           color: Color(0xffff3d00),
                           borderRadius: BorderRadius.circular(50.0)
@@ -115,7 +153,7 @@ class _TestsPageState extends State<TestsPage> {
                         borderRadius: BorderRadius.circular(50.0),
                         onTap: _createNewTest,
                         child: Center(
-                          child: Text("צור מבחן חדש",
+                          child: Text("מבחן חדש",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 24.0

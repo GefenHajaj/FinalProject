@@ -23,14 +23,14 @@ class _UploadFilePageState extends State<UploadFilePage> {
   TextEditingController _controller = new TextEditingController();
 
   var _color = Color(0xff18ffff);
-  var _text = "העלה קובץ נבחר";
+  var _text = "העלו קובץ נבחר";
   var _height = 70.0;
   var _width = 240.0;
   var _size = 24.0;
 
   final Color _buttonColor = Color(0xff18ffff);
   final Color _warningColor = Colors.red;
-  final String _buttonText = "העלה קובץ נבחר";
+  final String _buttonText = "העלו קובץ נבחר";
   final String _warningText = "לא נבחר קובץ!";
   final double _buttonHeight = 70.0;
   final double _warningHeight = 90.0;
@@ -183,7 +183,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
                         borderRadius: BorderRadius.circular(50.0),
                         onTap: _openFileExplorer,
                         child: Center(
-                          child: Text("פתח את בוחר הקבצים",
+                          child: Text("פתחו את בוחר הקבצים",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16.0
@@ -231,12 +231,12 @@ class _UploadFilePageState extends State<UploadFilePage> {
                 padding: const EdgeInsets.only(right: 60.0, left: 60.0),
                 child: Directionality(
                   textDirection: TextDirection.rtl,
-                  child: TextFormField(
+                  child: TextField(
                     maxLength: 100,
                     decoration: InputDecoration(labelText: 'מידע נוסף על הקובץ (לא חובה)', labelStyle: TextStyle()),
                     keyboardType: TextInputType.text,
                     textDirection: TextDirection.rtl,
-                    onFieldSubmitted: (value) => setState(() => _info = value),
+                    onChanged: (value) => setState(() => _info = value),
                   ),
                 ),
               ),

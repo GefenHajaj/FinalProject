@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bcademy/structures.dart';
 
-const _rowHeight = 100.0;
+const _rowHeight = 90.0;
 final _borderRadius = BorderRadius.circular(10.0);
 final _color = Color(0xff4fc3f7);
 final _highlightColor = Colors.lightBlue;
@@ -22,11 +22,11 @@ class TestTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.fromLTRB(10.0, 7, 10, 7),
       child: Material(
         color: _color,
         borderRadius: _borderRadius,
-        elevation: 5.0,
+        elevation: 3.0,
         child: InkWell(
           borderRadius: _borderRadius,
           onTap: () {this.onTap(this.test);},
