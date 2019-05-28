@@ -246,10 +246,11 @@ class TestViews:
 
         info = {
             'subject': str(test.subject.name),
-            'subject_pk': str(test.subject.pk),
+            'subject_pk': test.subject.pk,
             'date_created': str(test.date_created.date()),
             'date_taken': str(test.date_taken.date()),
-            'small_topics': small_topics_pks
+            'small_topics': small_topics_pks,
+            'study_time': test.milliseconds_learned
         }
         return HttpResponse(json.dumps(info, ensure_ascii=False))
 
@@ -264,6 +265,21 @@ class TestViews:
         test = get_object_or_404(Test, pk=pk)
         test.delete()
         return HttpResponse('Test {0} deleted.'.format(pk))
+
+    @staticmethod
+    @csrf_exempt
+    def update_study_time(request):
+        """
+        Update the study time of a test
+        :param request: HTTP request
+        :return: HTTP response
+        """
+        info = json.loads(request.body)
+        test = get_object_or_404(Test, pk=info['pk'])
+        if info['time'] < 2147483647:
+            test.milliseconds_learned = info['time']
+            test.save()
+        return HttpResponse("Updated")
 
     @staticmethod
     @csrf_exempt

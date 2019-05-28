@@ -47,7 +47,7 @@ class Test(models.Model):
     date_created = models.DateTimeField('Date Created', auto_now_add=True)
     date_taken = models.DateTimeField('Date due')
     small_topics = models.ManyToManyField(SmallTopic)
-    time_learned = 
+    milliseconds_learned = models.IntegerField(default=0)
 
     def __str__(self):
         return "Test in " + str(self.subject.name) + " due to " \
