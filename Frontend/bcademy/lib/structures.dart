@@ -8,6 +8,7 @@ class Test {
   DateTime dateTaken;
   List<int> smallTopicsPks; // List of small topics pks.
   IconData icon;
+  int millisecondsStudy;
 
   Test({
     @required this.pk,
@@ -15,7 +16,8 @@ class Test {
     @required this.dateCreated,
     @required this.dateTaken,
     @required this.smallTopicsPks,
-    @required this.icon
+    @required this.icon,
+    @required this.millisecondsStudy
   }):   assert(pk != null),
         assert(subject != null),
         assert(dateCreated != null),

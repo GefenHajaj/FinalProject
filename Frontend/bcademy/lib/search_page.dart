@@ -21,10 +21,10 @@ class _SearchPageState extends State<SearchPage> {
   String _search = '';
   int mode = 0; // 0 - topics. 1 - files.
   Map<int, Widget> modeMap = {
-    0: Text('חפש נושאים', style: TextStyle(fontFamily: 'Montserrat',),),
-    1: Text('חפש קבצים', style: TextStyle(fontFamily: 'Montserrat',),)};
+    0: Text('נושאים', style: TextStyle(fontFamily: 'Montserrat',),),
+    1: Text('קבצים', style: TextStyle(fontFamily: 'Montserrat',),)};
 
-  final _rowHeight = 100.0;
+  final _rowHeight = 90.0;
   final _borderRadius = BorderRadius.circular(10.0);
   final _color = Color(0xff80deea);
   final _highlightColor = Colors.lightBlueAccent;
@@ -61,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute<Null>(
           builder: (BuildContext context) {
-            return FilePage(fileData: fileData);
+            return FilePage(fileData: fileData, myFile: false,);
           }
       ));
     });
@@ -88,9 +88,9 @@ class _SearchPageState extends State<SearchPage> {
             primary: false,
             shrinkWrap: true,
             children: [
-              SizedBox(height: 200.0,),
+              SizedBox(height: 150.0,),
               Center(child:
-              Text("נסה לחפש משהו...",
+              Text("חפשו בין כל הקבצים הקיימים!",
                 textDirection: TextDirection.rtl,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 28.0),),),
@@ -128,7 +128,7 @@ class _SearchPageState extends State<SearchPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Material(
-                  elevation: 5.0,
+                  elevation: 2.0,
                   borderRadius: BorderRadius.circular(8.0),
                   child: InkWell(
                     // This function will be called when pressed on a file tile:
@@ -139,42 +139,46 @@ class _SearchPageState extends State<SearchPage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.0),
                           color: Color(0xff80deea)),
-                      child: Center(child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        textDirection: TextDirection.rtl,
-                        // Some info about the file:
-                        children: <Widget>[
-                          AutoSizeText("${file['subject_name']}",
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(fontSize: 30.0,
-                            fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,),
-                          SizedBox(height: 5.0,),
-                          AutoSizeText(file['info'],
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(fontSize: 20.0,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 8.0,),
-                          AutoSizeText("${file['day']}."
-                              "${file['month']}.${file['year']}",
-                            style: TextStyle(fontSize: 14.0,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 8.0,),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8.0),
-                            child: AutoSizeText("${file['name']}",
+                      child: Center(child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          textDirection: TextDirection.rtl,
+                          // Some info about the file:
+                          children: <Widget>[
+                            AutoSizeText("${file['subject_name']}",
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(fontSize: 26.0,
+                              fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,),
+                            SizedBox(height: 5.0,),
+                            AutoSizeText(file['info'],
+                              textAlign: TextAlign.center,
+                              textDirection: TextDirection.rtl,
+                              maxLines: 3,
+                              style: TextStyle(fontSize: 16.0,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 8.0,),
+                            AutoSizeText("${file['day']}."
+                                "${file['month']}.${file['year']}",
                               style: TextStyle(fontSize: 14.0,
                                   fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              minFontSize: 12.0,
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 8.0,),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8.0, right: 8.0),
+                              child: AutoSizeText("${file['name']}",
+                                style: TextStyle(fontSize: 14.0,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                minFontSize: 12.0,
+                              ),
+                            ),
+                          ],
+                        ),
                       )),
                     ),
                   ),
@@ -224,8 +228,8 @@ class _SearchPageState extends State<SearchPage> {
             primary: false,
             shrinkWrap: true,
             children: [
-              Container(height: 200.0,),
-              Center(child: Text("נסה לחפש משהו...", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),),
+              Container(height: 150.0,),
+              Center(child: Text("חפשו בין כל הנושאים הקיימים!", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),),
             ]
         ),
       );
@@ -321,7 +325,7 @@ class _SearchPageState extends State<SearchPage> {
             child: TextFormField(
               decoration: const InputDecoration(
                 hintText: 'מילת החיפוש',
-                labelText: 'מה תרצה לחפש?',
+                labelText: 'מה לחפש?',
               ),
               textDirection: TextDirection.rtl,
               onFieldSubmitted: (input) {

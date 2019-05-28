@@ -38,7 +38,7 @@ class _ChooseSubjectPageState extends State<ChooseSubjectPage> {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8.0, 4, 8, 4),
           child: Material(
             color: _color,
             borderRadius: _borderRadius,
@@ -117,7 +117,7 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
   final _highlightColor = Colors.lightBlueAccent;
   final _splashColor = Colors.lightBlueAccent;
   final _tileHeight = 100.0;
-  final _fontSize = 20.0;
+  final _fontSize = 24.0;
   var _buttonColor = Color(0xffffee58);
   var _buttonText = "סיימתי";
   var _buttonHeight = 75.0;
@@ -185,7 +185,7 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
         child: Center(
           child: Text("עדיין אין נושאים למקצוע הזה.\nחזור בקרוב!",
             textDirection: TextDirection.rtl,
-            style: TextStyle(fontSize: 32),
+            style: TextStyle(fontSize: 28),
             textAlign: TextAlign.center,
           ),
         ),
@@ -197,7 +197,7 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
           return Container(height: 75.0,);
         }
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8.0 ,4, 8, 4),
           child: Material(
             color: _chosenSmallTopics.contains(_smallTopics[index][0]) ? _chosenColor : _notChosenColor ,
             borderRadius: _borderRadius,
@@ -248,8 +248,19 @@ class _ChooseSmallTopicsState extends State<ChooseSmallTopics> {
   Widget build(BuildContext context) {
     if (_smallTopics == null) {
       _getAllSmallTopics();
-      return new Container(
-        child: CircularProgressIndicator(),
+      return Scaffold(
+        body: Center(
+          child: Container(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+        appBar: AppBar(
+          backgroundColor: Color(0xffff3d00),
+          elevation: 0.0,
+          centerTitle: true,
+          title: Text("מבחן ב${widget.subjectName} - בחר נושאים",
+            textDirection: TextDirection.rtl,),
+        ),
       );
     }
     else {
@@ -372,6 +383,7 @@ class _ChooseDateState extends State<ChooseDate> {
           _selectedDate.day,
           widget.smallTopics
       );
+      new Future.delayed(const Duration(seconds: 3));
       Navigator.of(context).pushNamedAndRemoveUntil('/tests', (Route<dynamic> route) => false);
 
     }

@@ -22,6 +22,13 @@ class _StudyPageState extends State<StudyPage> {
   List _infoCards = [];  // the card widgets
   int _index = 0;        // index of current card
   String _allInfo = "";   // all the info in one long string (ready to be sent as email)
+  Stopwatch stopwatch = Stopwatch();  // calculate the time a student studies
+
+  @override
+  void initState() {
+    super.initState();
+    stopwatch.start();
+  }
 
   Future<void> _getAllSmallTopics() async {
     final smallTopics = await Api().getAllSmallTopics(widget.test.pk);
@@ -77,6 +84,51 @@ class _StudyPageState extends State<StudyPage> {
               )
           );
         }
+        _infoCards.add(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Material(
+                elevation: 8.0,
+                borderRadius: BorderRadius.circular(25.0),
+                color: Colors.transparent,
+                child: Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.85,
+                  decoration: BoxDecoration(
+                      color: Color(0xffb2ebf2),
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(color: Colors.black, width: 1.5)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                    child: Center(
+                      child: Column(
+                        textDirection: TextDirection.rtl,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Text(
+                            "סיימת!",
+                            textAlign: TextAlign.start,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 10,),
+                          Text(
+                            "כל הכבוד! רק לא לשכוח לתרגל...",
+                            textAlign: TextAlign.start,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(fontSize: 18.0),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+        );
       }
       else {  // should never come here
         return _infoCards.add(
@@ -98,7 +150,7 @@ class _StudyPageState extends State<StudyPage> {
             // out of the total number of cards
             Align(
                 alignment: Alignment(0, -0.95), // location on screen (x, y)
-                child: Text("${_index+1}/${_infoCards.length}",
+                child: Text("${_index + 1 < _infoCards.length ? _index + 1 : _index}/${_infoCards.length - 1}",
                   style: TextStyle(fontSize: 16.0),)
             ),
             // the card with the material itself
@@ -107,7 +159,7 @@ class _StudyPageState extends State<StudyPage> {
               child: SingleChildScrollView(
                 child: Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 40.0, bottom: 10.0),
+                    padding: const EdgeInsets.only(top: 35.0, bottom: 10.0),
                     child: Padding(
                         padding: EdgeInsets.fromLTRB(12.0, 0, 12, 12),
                         child:_infoCards[_index] // the correct card
@@ -118,7 +170,7 @@ class _StudyPageState extends State<StudyPage> {
             ),
             // a right arrow sign. press to move to the next card (if possible)
             Align(
-              alignment: Alignment(1.05, 0),
+              alignment: Alignment(1.07, 0),
               child: IconButton(
                 icon: Icon(Icons.arrow_forward_ios, color: Colors.grey[800],),
                 onPressed: () {
@@ -133,7 +185,7 @@ class _StudyPageState extends State<StudyPage> {
             // a left arrow sign. press to move to the previous card
             // (if possible)
             Align(
-              alignment: Alignment(-1.05, 0),
+              alignment: Alignment(-1.07, 0),
               child: IconButton(
                 icon: Icon(Icons.arrow_back_ios, color: Colors.grey[800],),
                 onPressed: () {
@@ -189,6 +241,15 @@ class _StudyPageState extends State<StudyPage> {
     else {
       return Scaffold(
           appBar: AppBar(
+            leading: new IconButton(
+              icon: new Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () async {
+                stopwatch.stop();
+                int newTime = stopwatch.elapsedMilliseconds + widget.test.millisecondsStudy;
+                await Api().updateTestStudyTime(newTime, widget.test.pk);
+                Navigator.of(context).pop();
+                },
+            ),
             elevation: 0.0,
             backgroundColor: Color(0xff00acc1),
             centerTitle: true,
@@ -204,7 +265,6 @@ class _StudyPageState extends State<StudyPage> {
             ],
           ),
           body: _getSummary(),
-
       );
     }
   }
@@ -240,12 +300,12 @@ class _ViewTopicState extends State<ViewTopic> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
             child: Text(topicInfo['title'], textDirection: TextDirection.rtl,
               style: TextStyle(fontSize: 26.0),),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(topicInfo['info'], textDirection: TextDirection.rtl,
               style: TextStyle(fontSize: 18.0),),
           )
