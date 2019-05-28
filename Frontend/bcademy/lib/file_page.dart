@@ -1,5 +1,6 @@
 /// This page shows information about a file. It allows the user to download
 /// the file directly to the phone.
+///
 /// Developer: Gefen Hajaj
 
 import 'package:flutter/material.dart';

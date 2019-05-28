@@ -1,4 +1,5 @@
 /// This page shows info about a quiz and lets the user answer it.
+///
 /// Developer: Gefen Hajaj
 
 import 'package:flutter/material.dart';

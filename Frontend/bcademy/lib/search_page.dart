@@ -1,3 +1,8 @@
+/// The search page - here, the user can search for small topics that exist in
+/// the app and for files that he or others have uploaded publicly to the up.
+///
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/api.dart';
 import 'dart:async';
@@ -6,6 +11,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bcademy/file_page.dart';
 import 'package:bcademy/study_page.dart';
 
+/// Search page - search small topics and files
 class SearchPage extends StatefulWidget {
   const SearchPage();
 
@@ -46,7 +52,7 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
   
-  /// The main search function
+  /// The main search function - checks whether we should search files or topics
   void _searchResults() {
     if (mode == 0 && lastSearchTopics != _search) {
       _getTopicsResults();
@@ -67,6 +73,7 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  /// View a small topics (read the info about it)
   void _goToStudyPage(int wantedTopicPk) {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute<Null>(
@@ -220,6 +227,7 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
+  /// Get a list of all the topics that match the search word
   Widget _getTopicsPageResults() {
     if (_search == '' || topics == null) {
       return Expanded(
@@ -229,7 +237,11 @@ class _SearchPageState extends State<SearchPage> {
             shrinkWrap: true,
             children: [
               Container(height: 150.0,),
-              Center(child: Text("חפשו בין כל הנושאים הקיימים!", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),),
+              Center(child: Text(
+                "חפשו בין כל הנושאים הקיימים!",
+                textDirection: TextDirection.rtl,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 28.0),),),
             ]
         ),
       );
@@ -243,7 +255,11 @@ class _SearchPageState extends State<SearchPage> {
               shrinkWrap: true,
               children: [
                 Container(height: 200.0,),
-                Center(child: Text("לא מצאנו נושאים מתאימים\n😧", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),),
+                Center(child: Text(
+                  "לא מצאנו נושאים מתאימים\n😧",
+                  textDirection: TextDirection.rtl,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 28.0),),),
               ]
           ),
         );
@@ -285,7 +301,10 @@ class _SearchPageState extends State<SearchPage> {
                                 "${topics[pk][0]}", // name of topic
                                 textDirection: TextDirection.rtl,
                                 textAlign: TextAlign.start,
-                                style: TextStyle(fontSize: 22.0, fontFamily: 'Gisha', fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    fontSize: 22.0,
+                                    fontFamily: 'Gisha',
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -314,6 +333,8 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
+  /// Get the page - text or results of search and a place to write what
+  /// you want to search
   Widget _getPage() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

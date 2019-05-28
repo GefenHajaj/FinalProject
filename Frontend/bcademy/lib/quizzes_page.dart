@@ -1,9 +1,15 @@
+/// This page shows the user a list of all the quizzes he didn't yet answer.
+/// Let's him choose one and answer it.
+///
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/api.dart';
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bcademy/quiz_info_page.dart';
 
+/// Shows a list of all playable quizzes
 class QuizzesPage extends StatefulWidget {
   const QuizzesPage();
 
@@ -12,22 +18,22 @@ class QuizzesPage extends StatefulWidget {
 }
 
 class _QuizzesPageState extends State<QuizzesPage> {
-  Map quizzes;
+  Map _quizzes;
   final _rowHeight = 90.0;
   final _borderRadius = BorderRadius.circular(10.0);
   final _color = Color(0xff80deea);
   final _highlightColor = Colors.lightBlueAccent;
   final _splashColor = Colors.lightBlueAccent;
 
-
-
+  /// Get info about all quizzes
   Future<void> _getQuizzes() async {
     final tempQuizzes = await Api().getQuizzes();
     setState(() {
-      quizzes = tempQuizzes;
+      _quizzes = tempQuizzes;
     });
   }
-  
+
+  /// When pressing on quiz - go to quiz page.
   void _goToQuizInfoPage(int quizPk) {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute<Null>(
@@ -38,8 +44,9 @@ class _QuizzesPageState extends State<QuizzesPage> {
     });
   }
 
+  /// Get the entire page - a list of quizzes
   Widget _getPage() {
-    if (quizzes.isEmpty) {
+    if (_quizzes.isEmpty) {
       return Center(
         child: Text(
           "אנחנו עובדים על עוד שאלונים...\nחכו עוד קצת!",
@@ -49,7 +56,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
         ),);
     }
     else {
-      final quizzesInfo = quizzes.values.toList();
+      final quizzesInfo = _quizzes.values.toList();
       return ListView.builder(
           itemBuilder: (BuildContext context, int index) {
             return Padding(
@@ -60,7 +67,8 @@ class _QuizzesPageState extends State<QuizzesPage> {
                 borderRadius: _borderRadius,
                 child: InkWell(
                   borderRadius: _borderRadius,
-                  onTap: () {_goToQuizInfoPage(int.parse(quizzes.keys.toList()[index]));},
+                  onTap: () {_goToQuizInfoPage(int.parse(
+                      _quizzes.keys.toList()[index]));},
                   highlightColor: _highlightColor,
                   splashColor: _splashColor,
                   child: Container(
@@ -71,7 +79,8 @@ class _QuizzesPageState extends State<QuizzesPage> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: Icon(Data.getIcon(quizzesInfo[index][1]), size: 40.0,),
+                          child: Icon(Data.getIcon(
+                              quizzesInfo[index][1]), size: 40.0,),
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -86,7 +95,10 @@ class _QuizzesPageState extends State<QuizzesPage> {
                                   "${quizzesInfo[index][0]}", // name of quiz
                                   textDirection: TextDirection.rtl,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(fontSize: 22.0, fontFamily: 'Gisha', fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontSize: 22.0,
+                                      fontFamily: 'Gisha',
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
@@ -110,7 +122,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (quizzes == null) {
+    if (_quizzes == null) {
       _getQuizzes();
       return Scaffold(
         body: Center(

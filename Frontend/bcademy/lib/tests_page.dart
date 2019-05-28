@@ -1,3 +1,10 @@
+/// This is where the user sees all his tests in one place. He can press on one
+/// and go to a navigation page. From there he can take a quiz about it, read
+/// the material of the test and even send it via email to someone.
+/// One of the main screens in the app.
+///
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/structures.dart';
 import 'package:bcademy/test_tile.dart';
@@ -6,6 +13,7 @@ import 'dart:async';
 import 'package:bcademy/create_new_test.dart';
 import 'package:bcademy/navigator_page.dart';
 
+/// The tests page - home screen
 class TestsPage extends StatefulWidget {
   const TestsPage();
   
@@ -17,6 +25,7 @@ class _TestsPageState extends State<TestsPage> {
   // Just until we connect to the server...
   List<Test> _tests;
 
+  /// Get basic info about all the tests from the server
   Future<void> _getAllTests() async {
     final tempTests = await Api().getAllTests();
     setState(() {
@@ -35,14 +44,14 @@ class _TestsPageState extends State<TestsPage> {
     });
   }
 
-  /// refresg app
+  /// refresh app
   void _onRefresh() {
     setState(() {
       _tests = null;
     });
   }
 
-  /// Returns a [ListView] of [TestTile]s.
+  /// Returns a [ListView] of [TestTile]s. Basically a list of all the tests.
   Widget _buildTestsWidgetsList() {
     if (_tests.isNotEmpty) {
       return ListView.builder(
@@ -56,7 +65,8 @@ class _TestsPageState extends State<TestsPage> {
                 Padding(
                   padding: const EdgeInsets.only(right: 10.0),
                   child: Text(
-                    "המבחן הקרוב:",
+                    "המבחן הקרוב: בעוד ${_tests[index].dateTaken.
+                    difference(DateTime.now()).inDays} ימים",
                     textDirection: TextDirection.rtl,
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
@@ -100,7 +110,9 @@ class _TestsPageState extends State<TestsPage> {
       return Align(
         alignment: Alignment(0, -0.2),
         child: SingleChildScrollView(
-          child: Text("עדיין לא יצרת מבחנים!", style: TextStyle(fontSize: 34.0), textDirection: TextDirection.rtl,),
+          child: Text("עדיין לא יצרת מבחנים!",
+            style: TextStyle(fontSize: 34.0),
+            textDirection: TextDirection.rtl,),
         ),
       );
     }
@@ -143,6 +155,7 @@ class _TestsPageState extends State<TestsPage> {
         body: Stack(
             children: <Widget>[
               _buildTestsWidgetsList(),
+              // Button to create a new test
               Align(
                 alignment: Alignment(0, 0.85),
                 child: Material(

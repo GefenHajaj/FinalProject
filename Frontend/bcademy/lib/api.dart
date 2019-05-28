@@ -1,5 +1,6 @@
 /// This file manages the communication of the app with the server.
 /// It includes all the functions needed to get/post info from/to the server.
+///
 /// Developer: Gefen Hajaj
 
 import 'dart:convert';

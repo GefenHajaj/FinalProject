@@ -1,3 +1,7 @@
+/// This file defines the [Test] class and [Subject] class used throughout the
+/// app.
+///
+/// Developer: Gefen Hajaj
 import 'package:flutter/material.dart';
 
 /// A [Test] that holds the data for a test

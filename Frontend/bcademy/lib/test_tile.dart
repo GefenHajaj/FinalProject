@@ -1,3 +1,10 @@
+/// This is a test tile - a new widget that I created that shows a button that
+/// holds information about a test - when it's due and the subject.
+/// When pressing on it - go to navigation page (can study or answer a quiz
+/// about the test)
+///
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/structures.dart';
 
@@ -53,11 +60,17 @@ class TestTile extends StatelessWidget {
                           "מבחן ב${this.test.subject.name}",
                           textDirection: TextDirection.rtl,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 24.0, fontFamily: 'Gisha', fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 24.0,
+                              fontFamily: 'Gisha',
+                              fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "${this.test.dateTaken.day}.${this.test.dateTaken.month}.${this.test.dateTaken.year}",
-                          style: TextStyle(fontSize: 16.0, color: Color(0xff01579b)),
+                          "${this.test.dateTaken.day}."
+                              "${this.test.dateTaken.month}."
+                              "${this.test.dateTaken.year}",
+                          style: TextStyle(fontSize: 16.0,
+                              color: Color(0xff01579b)),
                         )
                       ],
                     ),

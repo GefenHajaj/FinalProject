@@ -1,9 +1,15 @@
+/// Here, the user can upload a file to the server. He can choose it from
+/// everywhere on the phone.
+///
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:bcademy/api.dart';
 import 'package:bcademy/structures.dart';
 
+/// The uploading page
 class UploadFilePage extends StatefulWidget {
   const UploadFilePage();
 
@@ -45,10 +51,12 @@ class _UploadFilePageState extends State<UploadFilePage> {
     _controller.addListener(() => _extension = _controller.text);
   }
 
+  /// Open the local file explorer to allow the user to pick a file to upload.
   void _openFileExplorer() async {
     if (_pickingType != FileType.CUSTOM || _hasValidMime) {
       try {
-        _path = await FilePicker.getFilePath(type: _pickingType, fileExtension: _extension);
+        _path = await FilePicker.getFilePath(type: _pickingType,
+            fileExtension: _extension);
       } on PlatformException catch (e) {
         print("Unsupported operation" + e.toString());
       }
@@ -56,7 +64,8 @@ class _UploadFilePageState extends State<UploadFilePage> {
       if (!mounted) return;
 
       setState(() {
-        _fileName = _path != null ? _path.split('/').last : 'סוג קובץ נבחר לא תקין';
+        _fileName = _path != null ? _path.split('/').last
+            : 'סוג קובץ נבחר לא תקין';
         _color = _buttonColor;
         _height = _buttonHeight;
         _width = _buttonWidth;
@@ -66,6 +75,8 @@ class _UploadFilePageState extends State<UploadFilePage> {
     }
   }
 
+  /// Upload the file to the server (if a file was not picked, the app tells
+  /// that to the user by changing the button.
   void _uploadFile() {
     if (_path != '') {
       if (_info == '') {
@@ -87,6 +98,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
         _fileName = 'לא נבחר קובץ';
       });
     }
+    // A file was not picked
     else {
       setState(() {
         _color = _warningColor;
@@ -98,14 +110,17 @@ class _UploadFilePageState extends State<UploadFilePage> {
     }
   }
 
+  /// Get all the subjects in the app (each file has a subject it belongs to)
   List<DropdownMenuItem> _getSubjectsList() {
     List<DropdownMenuItem> allSubjects = [];
     for (Subject subject in Data.allSubjects) {
-      allSubjects.add(DropdownMenuItem(child: Text(subject.name), value: subject.pk,));
+      allSubjects.add(DropdownMenuItem(
+        child: Text(subject.name), value: subject.pk,));
     }
     return allSubjects;
   }
 
+  /// Get the entire screen
   Widget _getBody() {
     return SingleChildScrollView(
       child: Align(
@@ -119,7 +134,8 @@ class _UploadFilePageState extends State<UploadFilePage> {
                 padding: const EdgeInsets.only(top: 20.0),
                 child: DropdownButton(
                     isExpanded: false,
-                    hint: Text('מאיפה לבחור את הקובץ?', textDirection: TextDirection.rtl,),
+                    hint: Text('מאיפה לבחור את הקובץ?',
+                      textDirection: TextDirection.rtl,),
                     value: _pickingType,
                     items: <DropdownMenuItem>[
                       DropdownMenuItem(
@@ -143,7 +159,8 @@ class _UploadFilePageState extends State<UploadFilePage> {
                         value: FileType.CUSTOM,
                       ),
                     ],
-                    onChanged: (value) => setState(() => _pickingType = value)),
+                    onChanged: (value) => setState(()
+                    => _pickingType = value)),
               ),
               ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 150.0),
@@ -152,7 +169,8 @@ class _UploadFilePageState extends State<UploadFilePage> {
                   maxLength: 20,
                   autovalidate: true,
                   controller: _controller,
-                  decoration: InputDecoration(labelText: 'הכנס סוג קובץ', labelStyle: TextStyle()),
+                  decoration: InputDecoration(labelText: 'הכנס סוג קובץ',
+                      labelStyle: TextStyle()),
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.none,
                   validator: (value) {
@@ -218,11 +236,15 @@ class _UploadFilePageState extends State<UploadFilePage> {
                     child: DropdownButton(
                         value: _subjectPk,
                         items: _getSubjectsList(),
-                        onChanged: (value) => setState(() => _subjectPk = value)),
+                        onChanged: (value) => setState(()
+                        => _subjectPk = value)),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 45.0),
-                    child: Text('בחר נושא מתאים:', textDirection: TextDirection.rtl, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
+                    child: Text('בחר נושא מתאים:',
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(fontSize: 20.0,
+                          fontWeight: FontWeight.bold),),
                   ),
                 ],
               ),
@@ -233,7 +255,9 @@ class _UploadFilePageState extends State<UploadFilePage> {
                   textDirection: TextDirection.rtl,
                   child: TextField(
                     maxLength: 100,
-                    decoration: InputDecoration(labelText: 'מידע נוסף על הקובץ (לא חובה)', labelStyle: TextStyle()),
+                    decoration: InputDecoration(
+                        labelText: 'מידע נוסף על הקובץ (לא חובה)',
+                        labelStyle: TextStyle()),
                     keyboardType: TextInputType.text,
                     textDirection: TextDirection.rtl,
                     onChanged: (value) => setState(() => _info = value),
@@ -245,8 +269,11 @@ class _UploadFilePageState extends State<UploadFilePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Checkbox(value: _isPublic, onChanged: (value) => setState(() => _isPublic = value)),
-                  Text('לפרסם באופן פומבי', textDirection: TextDirection.rtl, style: TextStyle(fontSize: 16.0),)
+                  Checkbox(value: _isPublic, onChanged: (value)
+                  => setState(() => _isPublic = value)),
+                  Text('לפרסם באופן פומבי',
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(fontSize: 16.0),)
                 ],
               ),
               Container(color: Colors.grey, height: 1.0,),

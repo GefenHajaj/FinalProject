@@ -1,11 +1,16 @@
+/// This page allows the user to send an email to himself/a friend that contains
+/// all the material for a specific test, Useful if someone want to send it to
+/// another person or print it.
+///
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
-import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
-import 'dart:async';
-import 'package:quiver/iterables.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
 
+/// Page that allows you to send an email with all the material of a specific
+/// test
 class SendEmailPage extends StatefulWidget {
   final String info;
   final String subjectName;
@@ -31,15 +36,21 @@ class _SendEmailPageState extends State<SendEmailPage> {
   double _normalButtonHeight = 75;
   double _warningButtonHeight = 100;
 
+  /// Checks whether a string is a valid email.
   bool _isEmail(String email) {
-    String regExString = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$";
+    String regExString = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:["
+        r"a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,2"
+        r"53}[a-zA-Z0-9])?)*$";
     RegExp regExp = new RegExp(regExString);
     return regExp.hasMatch(email);
   }
 
+  /// If the email the user typed in is valid, the app sends the email.
+  /// else, it prompts the user that the email is invalid.
   void _trySendEmail() async {
     if (_isEmail(_emailAddress)) {
-      String subject = "חומר למבחן ב${widget.subjectName} שנשלח לך על ידי ${Data.userName} מאפליקציית BCademy";
+      String subject = "חומר למבחן ב${widget.subjectName} שנשלח "
+          "לך על ידי ${Data.userName} מאפליקציית BCademy";
       List<String> recipients = [_emailAddress];
       final MailOptions email = MailOptions(
         body: widget.info + "\n\nנוצר על ידי אפליקציית BCademy",
@@ -59,6 +70,8 @@ class _SendEmailPageState extends State<SendEmailPage> {
     }
   }
 
+  /// Get the entire page - text that tells the user to enter the email address,
+  /// a text input widget and a button (send email).
   Widget _getPage() {
     return Padding(
       padding: EdgeInsets.all(8.0),

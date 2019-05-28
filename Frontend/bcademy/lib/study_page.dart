@@ -1,3 +1,9 @@
+/// This page shows the user all the material for a test in a convenient way -
+/// in cards that let the user study step by step. From here, the user can go
+/// to the page where he can send all the material via email to someone.
+///
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
@@ -5,6 +11,7 @@ import 'dart:async';
 import 'package:quiver/iterables.dart';
 import 'send_email_page.dart';
 
+/// The study page, where a user can read all the material for a test
 class StudyPage extends StatefulWidget {
   final Test test;
 
@@ -21,7 +28,7 @@ class _StudyPageState extends State<StudyPage> {
   bool _gotInfo = false; // if we got the info (material)
   List _infoCards = [];  // the card widgets
   int _index = 0;        // index of current card
-  String _allInfo = "";   // all the info in one long string (ready to be sent as email)
+  String _allInfo = "";   // all the info in one long string (for email)
   Stopwatch stopwatch = Stopwatch();  // calculate the time a student studies
 
   @override
@@ -30,6 +37,8 @@ class _StudyPageState extends State<StudyPage> {
     stopwatch.start();
   }
 
+  /// Get all small topics for a test from the server and make a list of cards -
+  /// each card is one topic.
   Future<void> _getAllSmallTopics() async {
     final smallTopics = await Api().getAllSmallTopics(widget.test.pk);
     setState(() {
@@ -66,7 +75,8 @@ class _StudyPageState extends State<StudyPage> {
                               titleData[0],
                               textAlign: TextAlign.start,
                               textDirection: TextDirection.rtl,
-                              style: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 26.0,
+                                  fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: 10,),
                             Text(
@@ -112,7 +122,8 @@ class _StudyPageState extends State<StudyPage> {
                             "סיימת!",
                             textAlign: TextAlign.start,
                             textDirection: TextDirection.rtl,
-                            style: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 26.0,
+                                fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 10,),
                           Text(
@@ -150,7 +161,8 @@ class _StudyPageState extends State<StudyPage> {
             // out of the total number of cards
             Align(
                 alignment: Alignment(0, -0.95), // location on screen (x, y)
-                child: Text("${_index + 1 < _infoCards.length ? _index + 1 : _index}/${_infoCards.length - 1}",
+                child: Text("${_index + 1 < _infoCards.length ? _index + 1
+                    : _index}/${_infoCards.length - 1}",
                   style: TextStyle(fontSize: 16.0),)
             ),
             // the card with the material itself
@@ -207,11 +219,13 @@ class _StudyPageState extends State<StudyPage> {
     }
   }
 
+  /// Go to the page where you can send all the material to the test via email.
   void _goToEmailPage() {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute<Null>(
           builder: (BuildContext context) {
-            return SendEmailPage(info: _allInfo, subjectName: widget.test.subject.name);
+            return SendEmailPage(info: _allInfo,
+                subjectName: widget.test.subject.name);
           }
       ));
     });
@@ -243,9 +257,12 @@ class _StudyPageState extends State<StudyPage> {
           appBar: AppBar(
             leading: new IconButton(
               icon: new Icon(Icons.arrow_back, color: Colors.white),
+              // When pressing back, let the app know that the student
+              // studied more time and how much time:
               onPressed: () async {
                 stopwatch.stop();
-                int newTime = stopwatch.elapsedMilliseconds + widget.test.millisecondsStudy;
+                int newTime = stopwatch.elapsedMilliseconds +
+                    widget.test.millisecondsStudy;
                 await Api().updateTestStudyTime(newTime, widget.test.pk);
                 Navigator.of(context).pop();
                 },
@@ -270,7 +287,7 @@ class _StudyPageState extends State<StudyPage> {
   }
 }
 
-
+/// View a specific topic (get here from topic search results)
 class ViewTopic extends StatefulWidget {
   final int topicPk;
 
@@ -285,6 +302,7 @@ class ViewTopic extends StatefulWidget {
 class _ViewTopicState extends State<ViewTopic> {
   var topicInfo;
 
+  /// Get the info of the topic from the server
   Future<void> _getTopic() async {
     var tempInfo = await Api().getSmallTopic(widget.topicPk);
     setState(() {
@@ -292,7 +310,7 @@ class _ViewTopicState extends State<ViewTopic> {
     });
   }
 
-  /// Gets a list of all the info
+  /// Show the text to the user and allow him to read it
   Widget _getPage() {
     if (topicInfo != null) {
       return Column(

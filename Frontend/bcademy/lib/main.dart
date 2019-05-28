@@ -1,5 +1,6 @@
 /// The run file. This file controls the main design of the app and the
 /// main screen.
+///
 /// Developer: Gefen Hajaj
 
 import 'package:flutter/material.dart';

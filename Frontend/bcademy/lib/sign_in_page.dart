@@ -1,3 +1,11 @@
+/// This page is the sign in page. If the information the user enters is
+/// invalid, the app prompts the user that he needs to re-enter the info.
+/// In addition, new users can go to the registration page in case they don't
+/// have a user.
+/// This is the first screen the user sees when opening the app.
+///
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/api.dart';
 import 'package:bcademy/home_page.dart';
@@ -39,6 +47,9 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
+  /// Try to sign in. if the sign in process went successfully, the app
+  /// moves to the home page (tests page). Else, tells the user that something
+  /// went wrong (password or username incorrect).
   Future<void> _signIn() async {
     int result = await Api().register(
         {'user_name': userName, 'password': password}, true);
@@ -59,6 +70,7 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
+  /// Go to sign up page (for new users)
   void _goToSignUpPage() {
     setState(() {
       Navigator.of(context).pushReplacement(MaterialPageRoute<Null>(
@@ -69,6 +81,7 @@ class _SignInPageState extends State<SignInPage> {
     });
   }
 
+  /// Get the entire page with all the widgets
   Widget _getPage() {
     return SingleChildScrollView(
       child: Column(

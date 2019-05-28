@@ -1,5 +1,6 @@
 /// This is a page that allows you to go study for a test or answer a quiz.
 /// It also tells you the approximate time that you studied for a test.
+///
 /// Developer: Gefen Hajaj
 
 import 'package:flutter/material.dart';

@@ -1,5 +1,6 @@
 /// This is the profile page of a user. Here, he can see all his files,
 /// download them and even sign out of the app.
+///
 /// Developer: Gefen Hajaj
 
 import 'package:flutter/material.dart';

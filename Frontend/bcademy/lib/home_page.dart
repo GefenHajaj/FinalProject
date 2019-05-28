@@ -1,4 +1,5 @@
 /// The home page of the app. Every single screen is a sub-screen of this one.
+///
 /// Developer: Gefen Hajaj
 
 import 'package:flutter/material.dart';

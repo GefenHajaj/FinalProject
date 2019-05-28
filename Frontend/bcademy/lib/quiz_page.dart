@@ -1,5 +1,6 @@
 /// This page allows the user to answer an interactive quiz and get results
 /// in the end.
+///
 /// Developer: Gefen Hajaj
 
 import 'package:flutter/material.dart';

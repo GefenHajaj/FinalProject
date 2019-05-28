@@ -1,3 +1,8 @@
+/// Sign up page. Here, new users can create new accounts. In addition, they
+/// can go back to the sign in page.
+///
+/// Developer: Gefen Hajaj
+
 import 'package:flutter/material.dart';
 import 'package:bcademy/api.dart';
 import 'package:bcademy/home_page.dart';
@@ -5,6 +10,7 @@ import 'package:bcademy/sign_in_page.dart';
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 
+/// The sign up page
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key key}) : super(key: key);
 
@@ -26,6 +32,7 @@ class _SignUpPageState extends State<SignUpPage> {
   String password = "";
   String name = "";
 
+  /// Try to sign up (if the user entered all the needed info).
   void _trySignUp() {
     if (userName != "" && password != "" && name != "") {
       _signUp();
@@ -38,6 +45,9 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  /// Sign up. if username taken - tells the user that it's taken and orders him
+  /// to enter a new and a different one. In case everything's fine - go to the
+  /// home page (tests page).
   Future<void> _signUp() async {
     int result = await Api().register(
         {'user_name': userName, 'password': password, 'name': name}, false);
@@ -58,6 +68,7 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  /// Go to sign in page
   void _goToSignInPage() {
     setState(() {
       Navigator.of(context).pushReplacement(MaterialPageRoute<Null>(
@@ -68,6 +79,7 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
+  /// Get the entire page with all the widgets
   Widget _getPage() {
     return SingleChildScrollView(
       child: Column(
@@ -81,7 +93,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   padding: EdgeInsets.fromLTRB(135.0, 35.0, 20.0, 0.0),
                   child: Text(
                     'בואו\nנירשם',
-                    style: TextStyle(fontSize: 80.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 80.0,
+                        fontWeight: FontWeight.bold),
                     textDirection: TextDirection.rtl,
                   ),
                 ),
