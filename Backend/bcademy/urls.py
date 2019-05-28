@@ -131,4 +131,9 @@ urlpatterns = [
     path('quiz/<int:quiz_pk>/adduser/',
          views.QuizViews.set_quiz_users,
          name='set_quiz_users'),
+
+    # EX: bcademy/tests/updatetime/
+    path('tests/updatetime/',
+         views.TestViews.update_study_time,
+         name='update_study_time')
 ]

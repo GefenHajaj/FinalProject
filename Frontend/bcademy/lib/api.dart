@@ -8,11 +8,12 @@ import 'package:path_provider/path_provider.dart';
 
 /// This class takes care of communicating with the server.
 class Api {
-  static final String _url = "10.0.2.2:8000";
+  //static final String _url = "10.0.2.2:8000";
+  static final String _url = "192.168.1.30:8000";
 
   /// Returns all subjects!
   Future<List<Subject>> getAllSubjects() async {
-    final url = Uri.http(_url, "/bcademy/subjects/");
+    final url = Uri.http(_url, "/bcademy/subjects/",);
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final subjectsMap = json.decode(response.body);
@@ -36,7 +37,7 @@ class Api {
       final testInfo = json.decode(response.body);
       final dateCreatedUtc = testInfo['date_created'].split("-");
       final dateTakenUtc = testInfo['date_taken'].split("-");
-      final subject = Data.getSubjectByPk(int.parse(testInfo['subject_pk']));
+      final subject = Data.getSubjectByPk(testInfo['subject_pk']);
       return Test(
           pk: testPk,
           subject: subject,
@@ -45,7 +46,9 @@ class Api {
           dateTaken: DateTime.utc(int.parse(dateTakenUtc[0]),
               int.parse(dateTakenUtc[1]), int.parse(dateTakenUtc[2])),
           smallTopicsPks: testInfo['small_topics'].cast<int>(),
-          icon: Data.getIcon(subject.name));
+          icon: Data.getIcon(subject.name),
+          millisecondsStudy: testInfo['study_time']
+      );
 
     } else {
       print("Error getting test (pk = $testPk. Try to check the server.");
@@ -329,7 +332,7 @@ class Api {
   Future<void> setQuizUser(int quizPk) async {
     final url = Uri.http(_url, 'bcademy/quiz/$quizPk/adduser/');
     var postBody = {'user_pk': Data.userPk};
-    http.post(url, body: json.encode(postBody));
+    await http.post(url, body: json.encode(postBody));
   }
 
   Future<void> deleteTest(int testPk) async {
@@ -346,6 +349,12 @@ class Api {
     if (response.statusCode != 200) {
       print('Could not delete file $filePk.');
     }
+  }
+
+  Future<void> updateTestStudyTime(int milliseconds, int pk) async {
+    final url = Uri.http(_url, 'bcademy/tests/updatetime/');
+    final postBody = {'pk': pk, 'time': milliseconds};
+    await http.post(url, body: json.encode(postBody));
   }
 }
 

@@ -78,7 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Stack(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.fromLTRB(190.0, 60.0, 20.0, 0.0),
+                  padding: EdgeInsets.fromLTRB(135.0, 35.0, 20.0, 0.0),
                   child: Text(
                     'בואו\nנירשם',
                     style: TextStyle(fontSize: 80.0, fontWeight: FontWeight.bold),
@@ -86,7 +86,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(175.0, 155.0, 0.0, 0.0),
+                  padding: EdgeInsets.fromLTRB(120.0, 130.0, 0.0, 0.0),
                   child: Text(
                     '.',
                     style: TextStyle(
@@ -98,11 +98,11 @@ class _SignUpPageState extends State<SignUpPage> {
               ],
             ),
           ),
-          SizedBox(height: 15.0,),
+          SizedBox(height: 5.0,),
           Directionality(
             textDirection: TextDirection.rtl,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(30, 8, 30, 8),
+              padding: const EdgeInsets.fromLTRB(30, 0, 30, 8),
               child: TextField(
                 decoration: const InputDecoration(
                     labelText: 'שם מלא',
@@ -160,6 +160,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(30, 8, 30, 8),
               child: TextField(
+                obscureText: true,
                 decoration: const InputDecoration(
                     labelText: 'סיסמא',
                     labelStyle: TextStyle(
@@ -183,7 +184,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
           ),
-          SizedBox(height: 40.0,),
+          SizedBox(height: 20.0,),
           Padding(
             padding: const EdgeInsets.fromLTRB(30.0, 8.0, 30.0, 8.0),
             child: Material(

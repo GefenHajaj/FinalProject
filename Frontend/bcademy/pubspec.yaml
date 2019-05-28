@@ -86,3 +86,6 @@ flutter:
     - family: Rubik
       fonts:
         - asset: fonts/Rubik-Regular.ttf
+    - family: VarelaRound
+      fonts:
+      - asset: fonts/VarelaRound-Regular.ttf

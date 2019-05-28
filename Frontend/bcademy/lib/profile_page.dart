@@ -26,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute<Null>(
           builder: (BuildContext context) {
-            return FilePage(fileData: fileData);
+            return FilePage(fileData: fileData, myFile: true,);
           }
       ));
     });
@@ -49,30 +49,27 @@ class _ProfilePageState extends State<ProfilePage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Material(
-            elevation: 5.0,
+            elevation: 2.0,
             borderRadius: BorderRadius.circular(8.0),
             child: InkWell(
               onTap: () {_goToFilePage(_files[pk]);},
               child: Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Color(0xff29b6f6),),
-                child: Center(child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  textDirection: TextDirection.rtl,
-                  children: <Widget>[
-                    AutoSizeText("${_files[pk]['subject_name']}", textDirection: TextDirection.rtl, style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
-                    SizedBox(height: 5.0,),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-                      child: AutoSizeText(_files[pk]['info'], textDirection: TextDirection.rtl,textAlign: TextAlign.center, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
-                    ),
-                    SizedBox(height: 8.0,),
-                    AutoSizeText("${_files[pk]['day']}.${_files[pk]['month']}.${_files[pk]['year']}", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 8.0,),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-                      child: AutoSizeText("${_files[pk]['name']}", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center, maxLines: 1, minFontSize: 14.0,),
-                    ),
-                  ],
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Color(0xffe3f2fd), border: Border.all(color: Color(0xbbb1bfca))),
+                child: Center(child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    textDirection: TextDirection.rtl,
+                    children: <Widget>[
+                      AutoSizeText("${_files[pk]['subject_name']}", textDirection: TextDirection.rtl, style: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                      SizedBox(height: 5.0,),
+                      AutoSizeText(_files[pk]['info'], textDirection: TextDirection.rtl,textAlign: TextAlign.center, maxLines: 3, style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
+                      SizedBox(height: 8.0,),
+                      AutoSizeText("${_files[pk]['day']}.${_files[pk]['month']}.${_files[pk]['year']}", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),),
+                      SizedBox(height: 8.0,),
+                      AutoSizeText("${_files[pk]['name']}", style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center, maxLines: 1, minFontSize: 14.0,),
+                    ],
+                  ),
                 )),
               ),
             ),
@@ -83,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     var lastPart;
     if (fileTiles.isEmpty) {
-      lastPart = [Container(height: 200,), Center(child: Text("עדיין אין שום קבצים 😧", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),)];
+      lastPart = [Container(height: 150,), Center(child: Text("עדיין אין שום קבצים 😧", textDirection: TextDirection.rtl, textAlign: TextAlign.center, style: TextStyle(fontSize: 28.0),),)];
     }
     else {
       lastPart = [Expanded(

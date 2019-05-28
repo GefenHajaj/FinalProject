@@ -151,7 +151,7 @@ class _QuizPageState extends State<QuizPage> {
         break;
       case 2:
         {
-          align = Alignment(-0.8, 0.75);
+          align = Alignment(-0.8, 0.8);
         }
         break;
       case 3:
@@ -161,7 +161,7 @@ class _QuizPageState extends State<QuizPage> {
         break;
       case 4:
         {
-          align = Alignment(0.8, 0.75);
+          align = Alignment(0.8, 0.8);
         }
         break;
     }
@@ -251,7 +251,7 @@ class _QuizPageState extends State<QuizPage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView(children: <Widget>[
-              Container(height: 20,),
+              Container(height: 10,),
               Text("סיימנו!\nכל הכבוד!",
                 textDirection: TextDirection.rtl,
                 style: TextStyle(fontSize: 48),
@@ -260,17 +260,17 @@ class _QuizPageState extends State<QuizPage> {
               Container(height: 150, child: Center(child: Text('🎉', style: TextStyle(fontSize: 100),),),),
               Text("תשובות נכונות בניסיון ראשון: $_correctNum/${_questions.length}",
                 textDirection: TextDirection.rtl,
-                style: TextStyle(fontSize: 28),
+                style: TextStyle(fontSize: 25),
                 textAlign: TextAlign.center,
               ),
               Text("מספר ניחושים שגויים: $_guessesNum",
                 textDirection: TextDirection.rtl,
-                style: TextStyle(fontSize: 28),
+                style: TextStyle(fontSize: 25),
                 textAlign: TextAlign.center,
               ),
               Text("לקח לך ${stopwatch.elapsedMilliseconds/1000} שניות!",
                 textDirection: TextDirection.rtl,
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(fontSize: 28),
                 textAlign: TextAlign.center,
               ),
               Text(_finishQuiz(stopwatch.elapsedMilliseconds/1000),
@@ -278,7 +278,7 @@ class _QuizPageState extends State<QuizPage> {
                 style: TextStyle(fontSize: 25),
                 textAlign: TextAlign.center,
               ),
-              Container(height: 75,),
+              Container(height: 30,),
               Align(
                 alignment: Alignment(0, 0.85),
                 child: Material(

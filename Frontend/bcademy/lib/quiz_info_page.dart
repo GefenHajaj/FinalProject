@@ -54,9 +54,9 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
     String text = "התחל בשאלון!";
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(20.0),
       child: Material(
-          elevation: 10.0,
+          elevation: 5.0,
           borderRadius: BorderRadius.circular(50.0),
           color: Colors.transparent,
           child: AnimatedContainer(
@@ -118,9 +118,9 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
                   child: Text(_getTopScoresText(),
                       textDirection: TextDirection.rtl,
                       textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
+                      style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold)),
                 ),
-                Container(height: 100.0,),
+                Container(height: 25.0,),
                 _getButton()
               ]
           ),
@@ -133,8 +133,16 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
   Widget build(BuildContext context) {
     if (quizInfo == null) {
       _getQuizInfo();
-      return new Container(
-        child: CircularProgressIndicator(),
+      return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Color(0xff4dd0e1),
+            elevation: 0.0,
+            centerTitle: true,
+            title: Text("דף שאלון", textDirection: TextDirection.rtl, style: TextStyle(color: Colors.black, fontSize: 24.0),),
+          ),
+          body: Container(
+            child: CircularProgressIndicator(),
+          )
       );
     }
     else {

@@ -6,8 +6,9 @@ import 'package:open_file/open_file.dart';
 
 class FilePage extends StatefulWidget {
   final fileData;
+  final bool myFile;
 
-  const FilePage({@required this.fileData});
+  const FilePage({@required this.fileData, @required this.myFile});
 
   @override
   _FilePageState createState() => new _FilePageState();
@@ -67,7 +68,7 @@ class _FilePageState extends State<FilePage> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Material(
-          elevation: 10.0,
+          elevation: 5.0,
           borderRadius: BorderRadius.circular(50.0),
           color: Colors.transparent,
           child: AnimatedContainer(
@@ -113,7 +114,7 @@ class _FilePageState extends State<FilePage> {
                     style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(10.0),
                   child: Text("שם הקובץ:\n${widget.fileData['name']}",
                       textDirection: TextDirection.rtl,
                       textAlign: TextAlign.center,
@@ -122,17 +123,17 @@ class _FilePageState extends State<FilePage> {
                 Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Text("תאריך הוספת הקובץ: " + "${widget.fileData['day']}.${widget.fileData['month']}.${widget.fileData['year']}",
-                      textDirection: TextDirection.rtl,
+                      textDirection: TextDirection.rtl, textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 24.0)),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(10.0),
                   child: Text("מידע נוסף על הקובץ:\n${widget.fileData['info']}",
                       textDirection: TextDirection.rtl,
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 24.0)),
                 ),
-                Container(height: 100.0,),
+                Container(height: 20.0,),
                 _getButton()
               ]
           ),
@@ -149,14 +150,14 @@ class _FilePageState extends State<FilePage> {
           elevation: 0.0,
           centerTitle: true,
           title: Text("דף קובץ", textDirection: TextDirection.rtl, style: TextStyle(color: Colors.black, fontSize: 24.0),),
-          actions: <Widget>[
+          actions: widget.myFile ? <Widget>[
             IconButton(
               icon: Icon(Icons.delete, color: Colors.black, size: 30,),
               onPressed: () {
                 _deleteFile();
               },
             ),
-          ],
+          ]: null,
         ),
         body: _getBody()
     );
