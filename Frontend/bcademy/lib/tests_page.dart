@@ -15,12 +15,12 @@ class TestsPage extends StatefulWidget {
 
 class _TestsPageState extends State<TestsPage> {
   // Just until we connect to the server...
-  List<Test> tests;
+  List<Test> _tests;
 
   Future<void> _getAllTests() async {
     final tempTests = await Api().getAllTests();
     setState(() {
-      tests = tempTests;
+      _tests = tempTests;
     });
   }
 
@@ -35,9 +35,16 @@ class _TestsPageState extends State<TestsPage> {
     });
   }
 
+  /// refresg app
+  void _onRefresh() {
+    setState(() {
+      _tests = null;
+    });
+  }
+
   /// Returns a [ListView] of [TestTile]s.
   Widget _buildTestsWidgetsList() {
-    if (tests.isNotEmpty) {
+    if (_tests.isNotEmpty) {
       return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
@@ -55,11 +62,11 @@ class _TestsPageState extends State<TestsPage> {
                   ),
                 ),
                 SizedBox(height: 5,),
-                TestTile(test: tests[index], onTap: _onTestTap),
+                TestTile(test: _tests[index], onTap: _onTestTap),
               ],
             );
           }
-          else if (index != tests.length && index == 1) {
+          else if (index != _tests.length && index == 1) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               textDirection: TextDirection.rtl,
@@ -74,19 +81,19 @@ class _TestsPageState extends State<TestsPage> {
                   ),
                 ),
                 SizedBox(height: 5,),
-                TestTile(test: tests[index], onTap: _onTestTap),
+                TestTile(test: _tests[index], onTap: _onTestTap),
               ],
             );
           }
-          else if (index != tests.length) {
-            return TestTile(test: tests[index], onTap: _onTestTap);
+          else if (index != _tests.length) {
+            return TestTile(test: _tests[index], onTap: _onTestTap);
           }
           else {
             // Another blank tile to be able to see the last test.
             return Container(height: 130.0,);
           }
         },
-        itemCount: tests == null ? 0 : tests.length + 1,
+        itemCount: _tests == null ? 0 : _tests.length + 1,
       );
     }
     else {
@@ -112,7 +119,7 @@ class _TestsPageState extends State<TestsPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (tests == null) {
+    if (_tests == null) {
       _getAllTests();
       return Scaffold(
         body: Center(
@@ -173,6 +180,14 @@ class _TestsPageState extends State<TestsPage> {
               centerTitle: true,
               backgroundColor: Color(0xff29b6f6),
               elevation: 5.0,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.refresh, color: Colors.white, size: 20,),
+                  onPressed: () {
+                    _onRefresh();
+                  },
+                ),
+              ],
             )
         ),
       );

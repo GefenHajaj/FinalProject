@@ -22,6 +22,13 @@ class _StudyPageState extends State<StudyPage> {
   List _infoCards = [];  // the card widgets
   int _index = 0;        // index of current card
   String _allInfo = "";   // all the info in one long string (ready to be sent as email)
+  Stopwatch stopwatch = Stopwatch();  // calculate the time a student studies
+
+  @override
+  void initState() {
+    super.initState();
+    stopwatch.start();
+  }
 
   Future<void> _getAllSmallTopics() async {
     final smallTopics = await Api().getAllSmallTopics(widget.test.pk);
@@ -234,6 +241,15 @@ class _StudyPageState extends State<StudyPage> {
     else {
       return Scaffold(
           appBar: AppBar(
+            leading: new IconButton(
+              icon: new Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () async {
+                stopwatch.stop();
+                int newTime = stopwatch.elapsedMilliseconds + widget.test.millisecondsStudy;
+                await Api().updateTestStudyTime(newTime, widget.test.pk);
+                Navigator.of(context).pop();
+                },
+            ),
             elevation: 0.0,
             backgroundColor: Color(0xff00acc1),
             centerTitle: true,
@@ -249,7 +265,6 @@ class _StudyPageState extends State<StudyPage> {
             ],
           ),
           body: _getSummary(),
-
       );
     }
   }
@@ -285,12 +300,12 @@ class _ViewTopicState extends State<ViewTopic> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
             child: Text(topicInfo['title'], textDirection: TextDirection.rtl,
               style: TextStyle(fontSize: 26.0),),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(topicInfo['info'], textDirection: TextDirection.rtl,
               style: TextStyle(fontSize: 18.0),),
           )

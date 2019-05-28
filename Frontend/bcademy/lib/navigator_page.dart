@@ -32,7 +32,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         borderRadius: BorderRadius.circular(10.0),
         color: buttonColor,
         child: Container(
-          height: MediaQuery.of(context).size.height * 0.40,
+          height: MediaQuery.of(context).size.height * 0.36,
           child: InkWell(
             onTap: onTapFunc,
             child: Center(
@@ -48,6 +48,12 @@ class _NavigatorPageState extends State<NavigatorPage> {
   Widget _getFullPage() {
     return Column(
       children: <Widget>[
+        SizedBox(height: 15,),
+        Text(widget.test.millisecondsStudy != 0 ? "זמן נלמד: ${(widget.test.millisecondsStudy/(1000.0 * 60)).toStringAsFixed(0)} דקות" : "עדיין לא למדת למבחן זה!",
+          textDirection: TextDirection.rtl,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20),
+        ),
         _buildButton(_onStudyTap, this.studyButtonText, this.studyButtonColor),
         _buildButton(_onQuizTap, this.quizButtonText, this.quizButtonColor)
       ],
