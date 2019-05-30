@@ -1,3 +1,11 @@
+"""
+Here, you can see in a simple, python class way, all the models of the server -
+all the types of information the server works with. Each model is another row
+in our database. Each class has its properties (name, date created...) -
+columns in our database.
+
+Developer: Gefen Hajaj
+"""
 from django.db import models
 from finalproj import settings
 

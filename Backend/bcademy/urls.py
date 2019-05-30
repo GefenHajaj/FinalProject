@@ -1,3 +1,11 @@
+"""
+In this file, you can see all the urls that are available for the app and what
+function they trigger when sending an HTTP request to them. Some URLs require
+different information to work. All URLs return HTTP responses - different ones,
+according to what each function does and whether it succeeded or not.
+
+Developer: Gefen Hajaj
+"""
 from django.urls import path
 from . import views
 
