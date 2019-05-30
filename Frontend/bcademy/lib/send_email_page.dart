@@ -26,8 +26,8 @@ class SendEmailPage extends StatefulWidget {
 
 class _SendEmailPageState extends State<SendEmailPage> {
   String _emailAddress = "";
-  String _buttonText = "שלח אימייל";
-  String _normalButtonText = "שלח אימייל";
+  String _buttonText = "שלחו אימייל";
+  String _normalButtonText = "שלחו אימייל";
   String _warningButtonText = "כתובת אימייל אינה תקינה!";
   Color _buttonColor = Colors.blue;
   Color _normalButtonColor = Colors.blue;
