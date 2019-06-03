@@ -106,8 +106,9 @@ class _SendEmailPageState extends State<SendEmailPage> {
                       focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue)
                       ),
-                      border: OutlineInputBorder()
+                      border: OutlineInputBorder(),
                   ),
+                  keyboardType: TextInputType.emailAddress,
                   textDirection: TextDirection.ltr,
                   maxLength: 100,
                   onChanged: (input) {

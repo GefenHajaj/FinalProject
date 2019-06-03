@@ -22,7 +22,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
   String _path = '';
   String _info = '';
   bool _isPublic = true;
-  int _subjectPk = 4;
+  int _subjectPk = 1;
   String _extension;
   bool _hasValidMime = false;
   FileType _pickingType;

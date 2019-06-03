@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:bcademy/api.dart';
 import 'dart:async';
 import 'package:open_file/open_file.dart';
+import 'create_new_message.dart';
 
 /// The page that shows info about a file and allows to download it
 class FilePage extends StatefulWidget {
@@ -158,6 +159,20 @@ class _FilePageState extends State<FilePage> {
     );
   }
 
+  void _newMessage() {
+    setState(() {
+      Navigator.of(context).push(MaterialPageRoute<Null>(
+          builder: (BuildContext context) {
+            return FindUserPage(
+                contentPk: widget.fileData['pk'],
+                isTest: false,
+                subject: widget.fileData['subject_name']
+            );
+          }
+      ));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,6 +183,12 @@ class _FilePageState extends State<FilePage> {
           title: Text("דף קובץ", textDirection: TextDirection.rtl,
             style: TextStyle(color: Colors.black, fontSize: 24.0),),
           actions: widget.myFile ? <Widget>[
+            IconButton(
+              icon: Icon(Icons.send, color: Colors.black, size: 30,),
+              onPressed: () {
+                _newMessage();
+              },
+            ),
             IconButton(
               icon: Icon(Icons.delete, color: Colors.black, size: 30,),
               onPressed: () {

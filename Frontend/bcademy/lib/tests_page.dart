@@ -53,6 +53,8 @@ class _TestsPageState extends State<TestsPage> {
 
   /// Returns a [ListView] of [TestTile]s. Basically a list of all the tests.
   Widget _buildTestsWidgetsList() {
+    final now = DateTime.now();
+    final lastMidnight = new DateTime(now.year, now.month, now.day);
     if (_tests.isNotEmpty) {
       return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
@@ -65,8 +67,11 @@ class _TestsPageState extends State<TestsPage> {
                 Padding(
                   padding: const EdgeInsets.only(right: 10.0),
                   child: Text(
-                    "המבחן הקרוב: בעוד ${_tests[index].dateTaken.
-                    difference(DateTime.now()).inDays} ימים",
+                    "המבחן הקרוב: ${_tests[index].dateTaken.
+                    difference(lastMidnight).inDays > 0
+                        ? "בעוד " + _tests[index].dateTaken.
+                    difference(lastMidnight).inDays.toString() + " ימים"
+                        : "היום!"}",
                     textDirection: TextDirection.rtl,
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),

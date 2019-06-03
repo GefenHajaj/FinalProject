@@ -9,6 +9,7 @@ import 'package:bcademy/structures.dart';
 import 'package:bcademy/study_page.dart';
 import 'package:bcademy/quiz_page.dart';
 import 'package:bcademy/api.dart';
+import 'package:bcademy/create_new_message.dart';
 
 /// The navigation page - go study or take a quiz
 class NavigatorPage extends StatefulWidget {
@@ -95,10 +96,24 @@ class _NavigatorPageState extends State<NavigatorPage> {
   }
 
   /// When pressing on the delete sign - delete a test
-  void _deleteTest() {
-    Api().deleteTest(widget.test.pk);
+  void _deleteTest() async {
+    await Api().deleteTest(widget.test.pk);
     Navigator.of(context).pushNamedAndRemoveUntil('/tests',
             (Route<dynamic> route) => false);
+  }
+
+  void _newMessage() {
+    setState(() {
+      Navigator.of(context).push(MaterialPageRoute<Null>(
+          builder: (BuildContext context) {
+            return FindUserPage(
+                contentPk: widget.test.pk,
+                isTest: true,
+                subject: widget.test.subject.name
+            );
+          }
+      ));
+    });
   }
 
   @override
@@ -107,11 +122,17 @@ class _NavigatorPageState extends State<NavigatorPage> {
       backgroundColor: Color(0xffffebee),
       appBar: AppBar(
         title: Text("מבחן ב${widget.test.subject.name}",
-          style: TextStyle(color: Colors.black),),
+          style: TextStyle(color: Colors.black, fontSize: 24),),
         elevation: 0.0,
         centerTitle: true,
         backgroundColor: appBarColor,
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.send, color: Colors.black, size: 30,),
+            onPressed: () {
+              _newMessage();
+            },
+          ),
           IconButton(
             icon: Icon(Icons.delete, color: Colors.black, size: 30,),
             onPressed: () {

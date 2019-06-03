@@ -339,10 +339,19 @@ class _ViewTopicState extends State<ViewTopic> {
   Widget build(BuildContext context) {
     if (topicInfo == null) {
       _getTopic();
-      return Container(
-        height: 50,
-        width: 50,
-        child: CircularProgressIndicator(),
+      return Scaffold(
+        body: Center(
+          child: Container(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: Color(0xff00acc1),
+          centerTitle: true,
+          title: Text("צפייה בחומר",
+            style: TextStyle(fontSize: 22.0,),),
+        ),
       );
     }
     else {

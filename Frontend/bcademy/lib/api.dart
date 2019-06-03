@@ -13,8 +13,9 @@ import 'package:path_provider/path_provider.dart';
 
 /// This class takes care of communicating with the server.
 class Api {
-  //static final String _url = "10.0.2.2:8000";
-  static final String _url = "192.168.1.30:8000";
+  //static final String _url = "10.0.2.2:8000";  // avd
+  //static final String _url = "172.20.10.2:8000";  // through hotspot
+  static final String _url = "192.168.1.30:8000";  // for android
 
   /// Returns all subjects!
   Future<List<Subject>> getAllSubjects() async {
@@ -350,7 +351,7 @@ class Api {
 
   /// Delete a test
   Future<void> deleteTest(int testPk) async {
-    final url = Uri.http(_url, 'bcademy/tests/delete/$testPk/');
+    final url = Uri.http(_url, 'bcademy/tests/delete/$testPk/${Data.userPk}/');
     var response = await http.get(url);
     if (response.statusCode != 200) {
       print('Could not delete test $testPk.');
@@ -359,7 +360,7 @@ class Api {
 
   /// Delete a file
   Future<void> deleteFile(int filePk) async {
-    final url = Uri.http(_url, 'bcademy/files/delete/$filePk/');
+    final url = Uri.http(_url, 'bcademy/files/delete/$filePk/${Data.userPk}/');
     var response = await http.get(url);
     if (response.statusCode != 200) {
       print('Could not delete file $filePk.');
@@ -371,6 +372,88 @@ class Api {
     final url = Uri.http(_url, 'bcademy/tests/updatetime/');
     final postBody = {'pk': pk, 'time': milliseconds};
     await http.post(url, body: json.encode(postBody));
+  }
+
+  /// Search for existing users
+  Future<Map> searchUsers(String search) async {
+    final url = Uri.http(_url, '/bcademy/search/users/');
+    var response = await http.post(url, body: json.encode({'search': search}));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      print("Something went wrong with searchong for users");
+      return null;
+    }
+  }
+
+  /// Add a test to a user list
+  Future<void> addTestToUser(int testPk) async {
+    final url = Uri.http(
+        _url, '/bcademy/addtesttouser/${Data.userPk}/$testPk/');
+    var response = await http.get(url);
+    if (response.statusCode != 200) {
+      print("Something went wrong with adding test to user");
+    }
+  }
+
+  /// Add a test to a user list
+  Future<void> addDicToUser(int docPk) async {
+    final url = Uri.http(
+        _url, '/bcademy/adddoctouser/${Data.userPk}/$docPk/');
+    var response = await http.get(url);
+    if (response.statusCode != 200) {
+      print("Something went wrong with adding test to user");
+    }
+  }
+
+  /// Create a new message
+  Future<void> createMessage(int receiverPk, bool isTest,
+      int contentPk, String text) async {
+    final url = Uri.http(_url, '/bcademy/newmsg/');
+    final msgInfo = {
+      'receiver_pk': receiverPk,
+      'sender_name': Data.userName,
+      'is_test': isTest,
+      'content_pk': contentPk,
+      'text': text
+    };
+    final response = await http.post(url, body: json.encode(msgInfo));
+    if (response.statusCode != 200) {
+      print("Something went wrong with creating a message");
+    }
+  }
+
+  /// Delete a message
+  Future<void> deleteMessage(int msgPk) async {
+    final url = Uri.http(_url, '/bcademy/deletemsg/$msgPk/');
+    final response = await http.get(url);
+    if (response.statusCode != 200) {
+      print('Could not delete message $msgPk.');
+    }
+  }
+
+  /// Get all messages of a user
+  Future<Map> getUserAllMessages() async {
+    final url = Uri.http(_url, '/bcademy/users/${Data.userPk}/getmsgs/');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      print('Something went wrong with getting user messages.');
+      return null;
+    }
+  }
+
+  /// Get all messages of a user
+  Future<Map> getMessage(int msgPk) async {
+    final url = Uri.http(_url, '/bcademy/getmsg/$msgPk/');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      print('Something went wrong with getting message $msgPk.');
+      return null;
+    }
   }
 }
 

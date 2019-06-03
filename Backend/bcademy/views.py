@@ -42,6 +42,42 @@ class UserViews:
                 "Should be a Get request (got something else).")
 
     @staticmethod
+    def add_test_to_user(request, user_pk, test_pk):
+        """
+        Add a test to a user, after someone sent it to him
+        :param request: the HTTP get request
+        :param user_pk: the pk of the user we want to add to
+        :param test_pk: the pk of the test
+        :return: HTTP response
+        """
+        if request.method == 'GET':
+            test = get_object_or_404(Test, pk=test_pk)
+            user = get_object_or_404(User, pk=user_pk)
+            test.users.add(user)
+            return HttpResponse("test added to user!")
+        else:
+            return HttpResponseBadRequest(
+                "Should be a Get request (got something else).")
+
+    @staticmethod
+    def add_doc_to_user(request, user_pk, doc_pk):
+        """
+        Add a doc to a user, after someone sent it to him
+        :param request: the HTTP get request
+        :param user_pk: the pk of the user we want to add to
+        :param doc_pk: the pk of the test
+        :return: HTTP response
+        """
+        if request.method == 'GET':
+            doc = get_object_or_404(Document, pk=doc_pk)
+            user = get_object_or_404(User, pk=user_pk)
+            doc.users.add(user)
+            return HttpResponse("doc added to user!")
+        else:
+            return HttpResponseBadRequest(
+                "Should be a Get request (got something else).")
+
+    @staticmethod
     def get_user_tests(request, pk):
         """
         Get all user tests (even in the past).
@@ -51,11 +87,11 @@ class UserViews:
         """
         if request.method == 'GET':
             user = get_object_or_404(User, pk=pk)
-            user_tests = Test.objects.filter(user=user)
+            user_tests = user.test_set.all()
             tests_info = {}
             for test in user_tests:
                 tests_info[test.pk] = test.subject.name
-            return HttpResponse(json.dumps(tests_info))
+            return HttpResponse(json.dumps(tests_info, ensure_ascii=False))
         else:
             return HttpResponseBadRequest(
                 "Should be a Get request (got something else).")
@@ -70,13 +106,12 @@ class UserViews:
         """
         if request.method == 'GET':
             user = get_object_or_404(User, pk=pk)
-            user_tests = Test.objects.filter(user=user,
-                                             date_taken__gte=timezone.now()). \
-                order_by('date_taken')
+            user_tests = user.test_set.all().filter(
+                date_taken__gte=timezone.now())
             tests_info = {}
             for test in user_tests:
                 tests_info[test.pk] = test.subject.name
-            return HttpResponse(json.dumps(tests_info))
+            return HttpResponse(json.dumps(tests_info, ensure_ascii=False))
         else:
             return HttpResponseBadRequest(
                 "Should be a Get request (got something else).")
@@ -96,7 +131,8 @@ class UserViews:
                 info = json.loads(request.body)
 
                 # Check if username is already taken.
-                if User.objects.filter(user_name=info['user_name']).count():
+                if User.objects.filter(user_name=info['user_name']).count() \
+                        or User.objects.filter(name=info['name']).count():
                     return HttpResponseBadRequest(json.dumps(
                         {"error": "username taken"}))
                 else:
@@ -145,6 +181,26 @@ class UserViews:
             except KeyError as e:
                 return HttpResponseBadRequest(
                     "Could not create user. " + str(e))
+        else:
+            return HttpResponseBadRequest(
+                "Should be a POST request (got something else).")
+
+    @staticmethod
+    @csrf_exempt
+    def search_users(request):
+        """
+        Search for a user by the user.name.
+        :param request: HTTP post request
+        :return: HTTP response
+        """
+        if request.method == 'POST':
+            search = json.loads(request.body)['search']
+            all_users = User.objects.filter(name__contains=search)
+            final_result = {}
+            for user in all_users:
+                final_result[user.pk] = user.name
+            return HttpResponse(
+                json.dumps(final_result, ensure_ascii=False))
         else:
             return HttpResponseBadRequest(
                 "Should be a POST request (got something else).")
@@ -340,17 +396,22 @@ class TestViews:
                 "Should be a GET request (got something else).")
 
     @staticmethod
-    def delete_test(request, pk):
+    def delete_test(request, test_pk, user_pk):
         """
-        Delete a test.
+        Delete a test for a user.
         :param request: the HTTP request
-        :param pk: the pk of the test we want to delete
+        :param test_pk: the pk of the test we want to delete
+        :param user_pk: the pk of the user
         :return: HTTP response
         """
         if request.method == 'GET':
-            test = get_object_or_404(Test, pk=pk)
-            test.delete()
-            return HttpResponse('Test {0} deleted.'.format(pk))
+            test = get_object_or_404(Test, pk=test_pk)
+            if user_pk == test.owner_pk:
+                test.delete()
+            else:
+                user = get_object_or_404(User, pk=user_pk)
+                test.users.remove(user)
+            return HttpResponse('Test {0} deleted.'.format(test_pk))
         else:
             return HttpResponseBadRequest(
                 "Should be a GET request (got something else).")
@@ -388,7 +449,7 @@ class TestViews:
                 info = json.loads(request.body)
                 new_test = Test(subject=get_object_or_404(Subject,
                                                           pk=info['subject']),
-                                user=get_object_or_404(User, pk=info['user']),
+                                owner_pk=info['user'],
                                 date_taken=datetime(info['year'],
                                                     info['month'],
                                                     info['day'],
@@ -397,6 +458,7 @@ class TestViews:
                                                     ),
                                 )
                 new_test.save()
+                new_test.users.add(get_object_or_404(User, pk=info['user']))
                 small_topics_pks = list(info['small_topics'])
 
                 for small_topic_pk in small_topics_pks:
@@ -430,7 +492,7 @@ class DocumentViews:
         if request.method == 'POST':
             user = get_object_or_404(User, pk=user_pk)
             subject = get_object_or_404(Subject, pk=subject_pk)
-            new_file = Document(user=user,
+            new_file = Document(owner_pk=user_pk,
                                 subject=subject,
                                 is_public=request.POST['is_public'] == 'True',
                                 info=request.POST['info'])
@@ -438,6 +500,7 @@ class DocumentViews:
                 new_file.save_file(request.FILES[key],
                                    request.POST['file_name'])
             new_file.save()
+            new_file.users.add(user)
             return HttpResponse(json.dumps(new_file.pk))
         else:
             return HttpResponseBadRequest(
@@ -565,16 +628,28 @@ class DocumentViews:
                 "Should be a POST request (got something else).")
 
     @staticmethod
-    def delete_file(request, pk):
+    def delete_file(request, doc_pk, user_pk):
+        """
+        Delete a file for a user
+        :param request: HTTP get request
+        :param doc_pk: pk of document
+        :param user_pk: pk of user
+        :return: HTTP response
+        """
         if request.method == 'GET':
-            doc = get_object_or_404(Document, pk=pk)
-            path = doc.file.url.replace("%3A", ":") \
-                if "%3A" in doc.file.url else doc.file.url
-            # remove the file from the server
-            if os.path.isfile(path):
-                os.remove(path)
-            doc.delete()
-            return HttpResponse('File {0} deleted.'.format(pk))
+            doc = get_object_or_404(Document, pk=doc_pk)
+            if doc.owner_pk == user_pk:
+                path = doc.file.url.replace("%3A", ":") \
+                    if "%3A" in doc.file.url else doc.file.url
+                # remove the file from the server
+                if os.path.isfile(path):
+                    os.remove(path)
+                doc.delete()
+            else:
+                user = get_object_or_404(User, pk=user_pk)
+                doc.users.remove(user)
+
+            return HttpResponse('File {0} deleted.'.format(doc_pk))
         else:
             return HttpResponseBadRequest(
                 "Should be a GET request (got something else).")
@@ -694,3 +769,106 @@ class QuizViews:
         else:
             return HttpResponseBadRequest(
                 "Should be a POST request (got something else).")
+
+
+class MessageViews:
+    @staticmethod
+    @csrf_exempt
+    def create_new_message(request):
+        """
+        Create a new message
+        :param request: HTTP post request
+        :return: HTTP response
+        """
+        new_message = 0
+        if request.method == 'POST':
+            try:
+                info = json.loads(request.body)
+                receiver_user = get_object_or_404(User, pk=info['receiver_pk'])
+                new_message = Message(
+                    sender_name=info['sender_name'],
+                    receiver=receiver_user,
+                    is_test=info['is_test'],
+                    content_pk=info['content_pk'],
+                    text=info['text']
+                )
+                new_message.save()
+                return HttpResponse("message {} created!".
+                                    format(new_message.pk))
+            except (KeyError, ValueError, ObjectDoesNotExist) as e:
+                if isinstance(new_message, Message):
+                    new_message.delete()
+                return HttpResponseBadRequest(
+                    "Could not create message. " + str(e))
+        else:
+            return HttpResponseBadRequest(
+                "Should be a POST request (got something else).")
+
+    @staticmethod
+    def delete_message(request, message_pk):
+        """
+        Delete a message after it's been viewed
+        :param request: HTTP get request
+        :param message_pk: the pk of the message
+        :return: HTTP response
+        """
+        if request.method == "GET":
+            msg = get_object_or_404(Message, pk=message_pk)
+            msg.delete()
+            return HttpResponse("Message {} has been deleted".
+                                format(message_pk))
+        else:
+            return HttpResponseBadRequest(
+                "Should be a GET request (got something else).")
+
+    @staticmethod
+    def get_user_all_messages(request, user_pk):
+        """
+        get all messages for a user
+        :param request: HTTP get request
+        :param user_pk: user pk
+        :return: HTTP response
+        """
+        if request.method == "GET":
+            user = get_object_or_404(User, pk=user_pk)
+            msgs = user.message_set.order_by('-date_created')
+            msgs_info = {}
+            for msg in msgs:
+                sent = "מבחן" if msg.is_test else "קובץ"
+                msgs_info[msg.pk] = msg.sender_name + " שלח לך " + sent
+            return HttpResponse(json.dumps(msgs_info, ensure_ascii=False))
+        else:
+            return HttpResponseBadRequest(
+                "Should be a GET request (got something else).")
+
+    @staticmethod
+    def get_message(request, pk):
+        """
+        Get info about a message
+        :param request: HTTP get request
+        :param pk: pk of message
+        :return: HTTP response
+        """
+        if request.method == "GET":
+            msg = get_object_or_404(Message, pk=pk)
+            if msg.is_test:
+                content = get_object_or_404(Test, pk=msg.content_pk)
+            else:
+                content = get_object_or_404(Document, pk=msg.content_pk)
+
+            msg_info = {
+                'sender_name': msg.sender_name,
+                'is_test': msg.is_test,
+                'subject': content.subject.name,
+                'content_pk': msg.content_pk,
+                'test': msg.text,
+                'date_created': str(msg.date_created.date())
+            }
+
+            return HttpResponse(json.dumps(msg_info, ensure_ascii=False))
+        else:
+            return HttpResponseBadRequest(
+                "Should be a GET request (got something else).")
+
+
+

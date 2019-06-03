@@ -157,8 +157,10 @@ class _QuizInfoPageState extends State<QuizInfoPage> {
               textDirection: TextDirection.rtl,
               style: TextStyle(color: Colors.black, fontSize: 24.0),),
           ),
-          body: Container(
-            child: CircularProgressIndicator(),
+          body: Center(
+            child: Container(
+              child: CircularProgressIndicator(),
+            ),
           )
       );
     }

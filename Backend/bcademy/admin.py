@@ -8,6 +8,7 @@ admin.site.register(Subject)
 admin.site.register(User)
 admin.site.register(Document)
 admin.site.register(Quiz)
+admin.site.register(Message)
 
 
 

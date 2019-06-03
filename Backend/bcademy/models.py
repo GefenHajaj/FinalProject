@@ -17,20 +17,7 @@ class Subject(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
-        return str(self.name) + str(self.pk)
-
-
-class User(models.Model):
-    """
-    A user in our app.
-    """
-    date_created = models.DateTimeField('Date Created', auto_now_add=True)
-    name = models.CharField(max_length=100)
-    user_name = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
-
-    def __str__(self):
-        return str(self.name) + str(self.pk)
+        return str(self.name) + " (" + str(self.pk) + ")"
 
 
 class SmallTopic(models.Model):
@@ -43,7 +30,20 @@ class SmallTopic(models.Model):
     order = models.IntegerField()
 
     def __str__(self):
-        return str(self.title) + str(self.pk)
+        return str(self.title) + " (" + str(self.pk) + ")"
+
+
+class User(models.Model):
+    """
+    A user in our app.
+    """
+    date_created = models.DateTimeField('Date Created', auto_now_add=True)
+    name = models.CharField(max_length=100)
+    user_name = models.CharField(max_length=100)
+    password = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.name) + " (" + str(self.pk) + ")"
 
 
 class Test(models.Model):
@@ -51,7 +51,8 @@ class Test(models.Model):
     A test of a user.
     """
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner_pk = models.IntegerField()
+    users = models.ManyToManyField(User)
     date_created = models.DateTimeField('Date Created', auto_now_add=True)
     date_taken = models.DateTimeField('Date due')
     small_topics = models.ManyToManyField(SmallTopic)
@@ -59,7 +60,7 @@ class Test(models.Model):
 
     def __str__(self):
         return "Test in " + str(self.subject.name) + " due to " \
-               + str(self.date_taken.date()) + str(self.pk)
+               + str(self.date_taken.date()) + " (" + str(self.pk) + ")"
 
 
 class Question(models.Model):
@@ -74,14 +75,15 @@ class Question(models.Model):
     answer4 = models.CharField(max_length=1000)
 
     def __str__(self):
-        return str(self.question_text) + str(self.pk)
+        return str(self.question_text) + " (" + str(self.pk) + ")"
 
 
 class Document(models.Model):
     """
     A file that the user can upload.
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner_pk = models.IntegerField()
+    users = models.ManyToManyField(User)
     file = models.FileField(upload_to=settings.MEDIA_ROOT)
     date_created = models.DateTimeField('Date Created', auto_now_add=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
@@ -92,7 +94,7 @@ class Document(models.Model):
         self.file.save(file_name, file_data)
 
     def __str__(self):
-        return str(self.info) + str(self.pk)
+        return str(self.info) + " (" + str(self.pk) + ")"
 
 
 class Quiz(models.Model):
@@ -108,4 +110,19 @@ class Quiz(models.Model):
     date_created = models.DateTimeField('Date Created', auto_now_add=True)
 
     def __str__(self):
-        return str(self.title) + str(self.pk)
+        return str(self.title) + " (" + str(self.pk) + ")"
+
+
+class Message(models.Model):
+    """
+    A message, containing a test or a document.
+    """
+    sender_name = models.CharField(max_length=100)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_test = models.BooleanField(default=True)  # or a file
+    content_pk = models.IntegerField()
+    text = models.CharField(max_length=1000)
+    date_created = models.DateTimeField('Date Created', auto_now_add=True)
+
+    def __str__(self):
+        return str(self.sender_name) + " (" + str(self.pk) + ")"

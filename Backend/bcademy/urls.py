@@ -70,8 +70,8 @@ urlpatterns = [
          views.TestViews.get_test,
          name='get_test'),
 
-    # EX: bcademy/tests/delete/1/
-    path('tests/delete/<int:pk>/',
+    # EX: bcademy/tests/delete/1/1/
+    path('tests/delete/<int:test_pk>/<int:user_pk>/',
          views.TestViews.delete_test,
          name='delete_test'),
 
@@ -90,8 +90,8 @@ urlpatterns = [
          views.DocumentViews.get_all_files,
          name='get_all_files'),
 
-    # Ex: bcademy/files/delete/1/
-    path('files/delete/<int:pk>/',
+    # Ex: bcademy/files/delete/1/1/
+    path('files/delete/<int:doc_pk>/<int:user_pk>/',
          views.DocumentViews.delete_file,
          name='delete_file'),
 
@@ -143,5 +143,40 @@ urlpatterns = [
     # EX: bcademy/tests/updatetime/
     path('tests/updatetime/',
          views.TestViews.update_study_time,
-         name='update_study_time')
+         name='update_study_time'),
+
+    # EX: bcademy/addtesttouser/1/1/
+    path('addtesttouser/<int:user_pk>/<int:test_pk>/',
+         views.UserViews.add_test_to_user,
+         name='add_test_to_user'),
+
+    # EX: bcademy/adddoctouser/1/1/
+    path('adddoctouser/<int:user_pk>/<int:doc_pk>/',
+         views.UserViews.add_doc_to_user,
+         name='add_doc_to_user'),
+
+    # EX: bcademy/newmsg/
+    path('newmsg/',
+         views.MessageViews.create_new_message,
+         name='create_new_message'),
+
+    # EX: bcademy/deletemsg/1/
+    path('deletemsg/<int:message_pk>/',
+         views.MessageViews.delete_message,
+         name='delete_message'),
+
+    # EX: bcademy/users/1/getmsgs/
+    path('users/<int:user_pk>/getmsgs/',
+         views.MessageViews.get_user_all_messages,
+         name='get_user_all_messages'),
+
+    # EX: bcademy/getmsg/1/
+    path('getmsg/<int:pk>/',
+         views.MessageViews.get_message,
+         name='get_message'),
+
+    # EX: bcademy/search/users/
+    path('search/users/',
+         views.UserViews.search_users,
+         name='search_users')
 ]
