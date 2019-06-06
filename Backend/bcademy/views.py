@@ -861,8 +861,10 @@ class MessageViews:
                 'is_test': msg.is_test,
                 'subject': content.subject.name,
                 'content_pk': msg.content_pk,
-                'test': msg.text,
-                'date_created': str(msg.date_created.date())
+                'text': msg.text,
+                'day': msg.date_created.day,
+                'month': msg.date_created.month,
+                'year': msg.date_created.year
             }
 
             return HttpResponse(json.dumps(msg_info, ensure_ascii=False))
@@ -870,5 +872,14 @@ class MessageViews:
             return HttpResponseBadRequest(
                 "Should be a GET request (got something else).")
 
-
-
+    @staticmethod
+    def has_messages(request, user_pk):
+        """
+        Tells the user whether he has messages and how many of them.
+        :param request: HTTP get request
+        :param user_pk: the pk of the user
+        :return: HTTP response
+        """
+        user = get_object_or_404(User, pk=user_pk)
+        count = user.message_set.count()
+        return HttpResponse(json.dumps({'how_many': count}))

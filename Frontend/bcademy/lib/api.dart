@@ -14,8 +14,8 @@ import 'package:path_provider/path_provider.dart';
 /// This class takes care of communicating with the server.
 class Api {
   //static final String _url = "10.0.2.2:8000";  // avd
-  //static final String _url = "172.20.10.2:8000";  // through hotspot
-  static final String _url = "192.168.1.30:8000";  // for android
+  static final String _url = "172.20.10.2:8000";  // through hotspot
+  //static final String _url = "192.168.1.30:8000";  // for android
 
   /// Returns all subjects!
   Future<List<Subject>> getAllSubjects() async {
@@ -397,7 +397,7 @@ class Api {
   }
 
   /// Add a test to a user list
-  Future<void> addDicToUser(int docPk) async {
+  Future<void> addDocToUser(int docPk) async {
     final url = Uri.http(
         _url, '/bcademy/adddoctouser/${Data.userPk}/$docPk/');
     var response = await http.get(url);
@@ -452,6 +452,42 @@ class Api {
       return json.decode(response.body);
     } else {
       print('Something went wrong with getting message $msgPk.');
+      return {};
+    }
+  }
+
+  /// Check how many messages a user has
+  Future<int> howManyMessages() async {
+    final url = Uri.http(_url, '/bcademy/hasmessages/${Data.userPk}/');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body)['how_many'];
+    } else {
+      print('Something went wrong with getting messages');
+      return 0;
+    }
+  }
+
+  /// Get info about a file
+  Future<Map> getFile(int pk) async {
+    final url = Uri.http(_url, '/bcademy/file/$pk/');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      print('Something went wrong with getting file info');
+      return null;
+    }
+  }
+
+  /// Get small topics of a test
+  Future<Map> getSmallTopicsOfTest(int pk) async {
+    final url = Uri.http(_url, '/bcademy/tests/$pk/smalltopics/');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      print('Something went wrong with getting file info');
       return null;
     }
   }

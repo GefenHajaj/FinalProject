@@ -178,5 +178,10 @@ urlpatterns = [
     # EX: bcademy/search/users/
     path('search/users/',
          views.UserViews.search_users,
-         name='search_users')
+         name='search_users'),
+
+    # EX: bcademy/hasmessages/1/
+    path('hasmessages/<int:user_pk>/',
+         views.MessageViews.has_messages,
+         name='has_messages')
 ]

@@ -3,11 +3,8 @@
 /// developer: Gefen Hajaj
 
 import 'package:flutter/material.dart';
-import 'package:bcademy/structures.dart';
 import 'package:bcademy/api.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'dart:async';
 
 class FindUserPage extends StatefulWidget {
   final int contentPk;

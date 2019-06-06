@@ -9,6 +9,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'dart:async';
 import 'package:bcademy/file_page.dart';
 import 'package:bcademy/sign_in_page.dart';
+import 'package:bcademy/messages_page.dart';
 
 /// The profile page
 class ProfilePage extends StatefulWidget {
@@ -20,12 +21,15 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   Map _files; // {pk: {info: ..., date_created,}, pk2: {}, }
+  int _howManyMessages;
 
   /// Get info about all the files of a user from the server
   Future<void> _getAllFiles() async {
     final filesInfo = await Api().getUserFiles();
+    final hasMsg = await Api().howManyMessages();
     setState(() {
       _files = filesInfo;
+      _howManyMessages = hasMsg;
     });
   }
 
@@ -46,6 +50,17 @@ class _ProfilePageState extends State<ProfilePage> {
       Navigator.of(context).pushReplacement(MaterialPageRoute<Null>(
           builder: (BuildContext context) {
             return SignInPage();
+          }
+      ));
+    });
+  }
+
+  void _goToMessagesPage()
+  {
+    setState(() {
+      Navigator.of(context).push(MaterialPageRoute<Null>(
+          builder: (BuildContext context) {
+            return MessagesPage();
           }
       ));
     });
@@ -146,7 +161,11 @@ class _ProfilePageState extends State<ProfilePage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.person, size: 36.0,),
+              child: IconButton(
+                icon: Icon(_howManyMessages > 0 ? Icons.mail :
+                Icons.mail_outline, size: 36.0),
+                onPressed: () {_goToMessagesPage();},
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(right: 16.0),
@@ -189,7 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_files == null) {
+    if (_files == null || _howManyMessages == null) {
       _getAllFiles();
       return Scaffold(
         body: Center(
