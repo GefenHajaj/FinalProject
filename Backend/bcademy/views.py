@@ -880,6 +880,10 @@ class MessageViews:
         :param user_pk: the pk of the user
         :return: HTTP response
         """
-        user = get_object_or_404(User, pk=user_pk)
-        count = user.message_set.count()
-        return HttpResponse(json.dumps({'how_many': count}))
+        if request.method == "GET":
+            user = get_object_or_404(User, pk=user_pk)
+            count = user.message_set.count()
+            return HttpResponse(json.dumps({'how_many': count}))
+        else:
+            return HttpResponseBadRequest(
+                "Should be a GET request (got something else).")

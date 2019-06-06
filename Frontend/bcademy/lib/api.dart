@@ -22,7 +22,7 @@ class Api {
     final url = Uri.http(_url, "/bcademy/subjects/",);
     final response = await http.get(url);
     if (response.statusCode == 200) {
-      final subjectsMap = json.decode(response.body);
+      final subjectsMap = json.decode(response.body); 
       List<Subject> subjects = [];
       for (String pk in subjectsMap.keys) {
         subjects.add(Subject(pk: int.parse(pk), name: subjectsMap[pk]));
