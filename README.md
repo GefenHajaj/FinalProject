@@ -2,7 +2,8 @@
 Final Project 2019
 
 These are all the files needed to run an app called "BCademy".
-This app was developed to help teens all over the world to study better and get higher grades.
+This app was developed to help teens study better and get higher grades.
+The app was written for Israeli crowd - therefore it is in Hebrew.
 
 # Requierments
 In order to run it, you need to have Django and Flutter installed.
