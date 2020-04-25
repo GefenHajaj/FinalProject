@@ -16,7 +16,7 @@ The FrontEnd folder holds all the files needed to run the app.
 The third folder has some files that document the developing process, including screenshots.
 
 # Screenshots
-![Main Screen](פרויקט%20סיום/screenshots/Screenshot_1555766116.png)
+![Main Screen](פרויקט%20סיום/screenshots/Screenshot_1555766116.png =250x250)
 
 ![Quiz](פרויקט%20סיום/screenshots/Screenshot_1555766049.png)
 
