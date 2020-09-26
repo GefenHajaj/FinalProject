@@ -13,16 +13,16 @@ import 'package:path_provider/path_provider.dart';
 
 /// This class takes care of communicating with the server.
 class Api {
-  //static final String _url = "10.0.2.2:8000";  // avd
-  static final String _url = "172.20.10.2:8000";  // through hotspot
-  //static final String _url = "192.168.1.30:8000";  // for android
+  static final String _url = "10.0.2.2:8000";  // avd
+  // static final String _url = "172.20.10.2:8000";  // through hotspot
+  // static final String _url = "127.0.0.1:8000";  // for android
 
   /// Returns all subjects!
   Future<List<Subject>> getAllSubjects() async {
     final url = Uri.http(_url, "/bcademy/subjects/",);
     final response = await http.get(url);
     if (response.statusCode == 200) {
-      final subjectsMap = json.decode(response.body); 
+      final subjectsMap = json.decode(response.body);
       List<Subject> subjects = [];
       for (String pk in subjectsMap.keys) {
         subjects.add(Subject(pk: int.parse(pk), name: subjectsMap[pk]));
@@ -284,8 +284,8 @@ class Api {
   Future<int> register(Map userInfo, bool signIn) async {
     var url;
     signIn
-        ? url = Uri.http(_url, 'bcademy/users/signin/')
-        : url = Uri.http(_url, 'bcademy/users/create/');
+        ? url = Uri.http(_url, '/bcademy/users/signin/')
+        : url = Uri.http(_url, '/bcademy/users/create/');
     var response = await http.post(url, body: json.encode(userInfo));
 
     if (response.statusCode == 200) {
